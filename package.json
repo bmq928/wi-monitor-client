@@ -29,5 +29,6 @@
   },
   "dependencies": {
     "angular": "^1.7.5",
+    "@uirouter/angularjs": "^1.0.7"
   }
 }

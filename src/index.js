@@ -1,3 +1,5 @@
+import '@uirouter/angularjs'
+
 //import app
 import app from './app'
 
