@@ -1,7 +1,7 @@
 import { Schema } from '../../libs'
-import template from './template.html'
+import template from './sidebar.template.html'
 
-const name = 'app'
+const name = 'sidebar'
 
 
 function controller() {

@@ -1,6 +1,7 @@
-import app from './app/controller'
-
+import app from './app/app.controller'
+import sidebar from './sidebar/sidebar.controller'
 
 export default [
-    app
+    app,
+    sidebar
 ]
