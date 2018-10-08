@@ -1,5 +1,5 @@
-class Schema {
-    constructor(name, template, controller, bindings = {}) {
+class ComponentSchema {
+    constructor(name, template, controller, bindings = {}, transclude = false) {
         this.name = name
         this.options = {
             bindings,
@@ -10,4 +10,4 @@ class Schema {
     }
 }
 
-export default Schema
+export default ComponentSchema

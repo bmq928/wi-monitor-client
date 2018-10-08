@@ -1,6 +1,7 @@
 import angular from 'angular'
 
 import routing from './routing'
+import services from './services'
 import components from './components'
 import pages from './pages'
 
@@ -12,6 +13,11 @@ const app = angular.module(moduleName, dependencies)
 //config
 //routing
 app.config(routing)
+
+// assign all services
+services.forEach(s => {
+    app.service(s.name, s.service)
+})
 
 // assing all components
 components.forEach(c => {

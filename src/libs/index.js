@@ -1,1 +1,2 @@
-export { default as Schema } from './Schema'
+export { default as ComponentSchema } from './ComponentSchema'
+export { default as ServiceSchema } from './ServiceSchema'

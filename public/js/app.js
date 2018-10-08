@@ -36072,6 +36072,613 @@ module.exports = angular;
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/pages/api/api.style.scss":
+/*!*********************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/sass-loader/lib/loader.js!./src/pages/api/api.style.scss ***!
+  \*********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".api .breadcrumb-item a {\n  cursor: pointer; }\n\n.api .breadcrumb-item a:hover {\n  text-decoration: underline;\n  color: #55ce63; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/lib/css-base.js":
+/*!*************************************************!*\
+  !*** ./node_modules/css-loader/lib/css-base.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function (useSourceMap) {
+  var list = []; // return the list of modules as css string
+
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item, useSourceMap);
+
+      if (item[2]) {
+        return "@media " + item[2] + "{" + content + "}";
+      } else {
+        return content;
+      }
+    }).join("");
+  }; // import a list of modules into the list
+
+
+  list.i = function (modules, mediaQuery) {
+    if (typeof modules === "string") modules = [[null, modules, ""]];
+    var alreadyImportedModules = {};
+
+    for (var i = 0; i < this.length; i++) {
+      var id = this[i][0];
+      if (typeof id === "number") alreadyImportedModules[id] = true;
+    }
+
+    for (i = 0; i < modules.length; i++) {
+      var item = modules[i]; // skip already imported module
+      // this implementation is not 100% perfect for weird media query combinations
+      //  when a module is imported multiple times with different media queries.
+      //  I hope this will never occur (Hey this way we have smaller bundles)
+
+      if (typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+        if (mediaQuery && !item[2]) {
+          item[2] = mediaQuery;
+        } else if (mediaQuery) {
+          item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+        }
+
+        list.push(item);
+      }
+    }
+  };
+
+  return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+  var content = item[1] || '';
+  var cssMapping = item[3];
+
+  if (!cssMapping) {
+    return content;
+  }
+
+  if (useSourceMap && typeof btoa === 'function') {
+    var sourceMapping = toComment(cssMapping);
+    var sourceURLs = cssMapping.sources.map(function (source) {
+      return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */';
+    });
+    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+  }
+
+  return [content].join('\n');
+} // Adapted from convert-source-map (MIT)
+
+
+function toComment(sourceMap) {
+  // eslint-disable-next-line no-undef
+  var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+  var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+  return '/*# ' + data + ' */';
+}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/lib/addStyles.js":
+/*!****************************************************!*\
+  !*** ./node_modules/style-loader/lib/addStyles.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getTarget = function (target, parent) {
+  if (parent){
+    return parent.querySelector(target);
+  }
+  return document.querySelector(target);
+};
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(target, parent) {
+                // If passing function in options, then use it for resolve "head" element.
+                // Useful for Shadow Root style i.e
+                // {
+                //   insertInto: function () { return document.querySelector("#foo").shadowRoot }
+                // }
+                if (typeof target === 'function') {
+                        return target();
+                }
+                if (typeof memo[target] === "undefined") {
+			var styleTarget = getTarget.call(this, target, parent);
+			// Special case to return head of iframe instead of iframe itself
+			if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[target] = styleTarget;
+		}
+		return memo[target]
+	};
+})();
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(/*! ./urls */ "./node_modules/style-loader/lib/urls.js");
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+        if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertAt.before, target);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+
+	if(options.attrs.nonce === undefined) {
+		var nonce = getNonce();
+		if (nonce) {
+			options.attrs.nonce = nonce;
+		}
+	}
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function getNonce() {
+	if (false) {}
+
+	return __webpack_require__.nc;
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/lib/urls.js":
+/*!***********************************************!*\
+  !*** ./node_modules/style-loader/lib/urls.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  } // blank or null?
+
+
+  if (!css || typeof css !== "string") {
+    return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/"); // convert each url(...)
+
+  /*
+  This regular expression is just a way to recursively match brackets within
+  a string.
+  	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+     (  = Start a capturing group
+       (?:  = Start a non-capturing group
+           [^)(]  = Match anything that isn't a parentheses
+           |  = OR
+           \(  = Match a start parentheses
+               (?:  = Start another non-capturing groups
+                   [^)(]+  = Match anything that isn't a parentheses
+                   |  = OR
+                   \(  = Match a start parentheses
+                       [^)(]*  = Match anything that isn't a parentheses
+                   \)  = Match a end parentheses
+               )  = End Group
+               *\) = Match anything and then a close parens
+           )  = Close non-capturing group
+           *  = Match anything
+        )  = Close capturing group
+   \)  = Match a close parens
+  	 /gi  = Get all matches, not the first.  Be case insensitive.
+   */
+
+  var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function (fullMatch, origUrl) {
+    // strip quotes (if they exist)
+    var unquotedOrigUrl = origUrl.trim().replace(/^"(.*)"$/, function (o, $1) {
+      return $1;
+    }).replace(/^'(.*)'$/, function (o, $1) {
+      return $1;
+    }); // already a full url? no change
+
+    if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
+      return fullMatch;
+    } // convert the url to a full url
+
+
+    var newUrl;
+
+    if (unquotedOrigUrl.indexOf("//") === 0) {
+      //TODO: should we add protocol?
+      newUrl = unquotedOrigUrl;
+    } else if (unquotedOrigUrl.indexOf("/") === 0) {
+      // path should be relative to the base url
+      newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+    } else {
+      // path should be relative to current directory
+      newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+    } // send back the fixed url(...)
+
+
+    return "url(" + JSON.stringify(newUrl) + ")";
+  }); // send back the fixed css
+
+  return fixedCss;
+};
+
+/***/ }),
+
 /***/ "./node_modules/webpack/buildin/global.js":
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -36112,8 +36719,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var angular__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! angular */ "./node_modules/angular/index.js");
 /* harmony import */ var angular__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(angular__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _routing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routing */ "./src/routing.js");
-/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components */ "./src/components/index.js");
-/* harmony import */ var _pages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages */ "./src/pages/index.js");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services */ "./src/services/index.js");
+/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components */ "./src/components/index.js");
+/* harmony import */ var _pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages */ "./src/pages/index.js");
+
 
 
 
@@ -36124,13 +36733,17 @@ var renderComponent = '<app></app>';
 var app = angular__WEBPACK_IMPORTED_MODULE_0___default.a.module(moduleName, dependencies); //config
 //routing
 
-app.config(_routing__WEBPACK_IMPORTED_MODULE_1__["default"]); // assing all components
+app.config(_routing__WEBPACK_IMPORTED_MODULE_1__["default"]); // assign all services
 
-_components__WEBPACK_IMPORTED_MODULE_2__["default"].forEach(function (c) {
+_services__WEBPACK_IMPORTED_MODULE_2__["default"].forEach(function (s) {
+  app.service(s.name, s.service);
+}); // assing all components
+
+_components__WEBPACK_IMPORTED_MODULE_3__["default"].forEach(function (c) {
   app.component(c.name, c.options);
 }); // assgin all pages
 
-_pages__WEBPACK_IMPORTED_MODULE_3__["default"].forEach(function (p) {
+_pages__WEBPACK_IMPORTED_MODULE_4__["default"].forEach(function (p) {
   app.component(p.name, p.options);
 }); // what to render
 
@@ -36158,7 +36771,7 @@ function controller() {
   var self = this;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["Schema"](name, _app_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _app_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
 
 /***/ }),
 
@@ -36212,7 +36825,7 @@ function controller() {
   var self = this;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["Schema"](name, _navbar_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _navbar_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
 
 /***/ }),
 
@@ -36223,7 +36836,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row page-titles\"> <div class=\"col-md-6 col-8 align-self-center\"> <h3 class=\"text-themecolor m-b-0 m-t-0\">Dashboard</h3> <ol class=breadcrumb> <li class=breadcrumb-item><a href=javascript:void(0)>Home</a></li> <li class=\"breadcrumb-item active\">Dashboard</li> </ol> </div> </div>";
+module.exports = "<div class=\"row page-titles\"> <div class=\"col-md-6 col-8 align-self-center\"> <h3 class=\"text-themecolor m-b-0 m-t-0\">Dashboard</h3> </div> </div>";
 
 /***/ }),
 
@@ -36247,7 +36860,7 @@ function controller() {
   var self = this;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["Schema"](name, _sidebar_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _sidebar_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
 
 /***/ }),
 
@@ -36284,10 +36897,10 @@ function render(component, element) {
 
 /***/ }),
 
-/***/ "./src/libs/Schema.js":
-/*!****************************!*\
-  !*** ./src/libs/Schema.js ***!
-  \****************************/
+/***/ "./src/libs/ComponentSchema.js":
+/*!*************************************!*\
+  !*** ./src/libs/ComponentSchema.js ***!
+  \*************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -36295,10 +36908,11 @@ function render(component, element) {
 __webpack_require__.r(__webpack_exports__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Schema = function Schema(name, template, controller) {
+var ComponentSchema = function ComponentSchema(name, template, controller) {
   var bindings = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+  var transclude = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
 
-  _classCallCheck(this, Schema);
+  _classCallCheck(this, ComponentSchema);
 
   this.name = name;
   this.options = {
@@ -36309,7 +36923,29 @@ var Schema = function Schema(name, template, controller) {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Schema);
+/* harmony default export */ __webpack_exports__["default"] = (ComponentSchema);
+
+/***/ }),
+
+/***/ "./src/libs/ServiceSchema.js":
+/*!***********************************!*\
+  !*** ./src/libs/ServiceSchema.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ServiceSchema = function ServiceSchema(name, service) {
+  _classCallCheck(this, ServiceSchema);
+
+  this.name = name;
+  this.service = service;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (ServiceSchema);
 
 /***/ }),
 
@@ -36317,13 +36953,17 @@ var Schema = function Schema(name, template, controller) {
 /*!***************************!*\
   !*** ./src/libs/index.js ***!
   \***************************/
-/*! exports provided: Schema */
+/*! exports provided: ComponentSchema, ServiceSchema */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Schema__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Schema */ "./src/libs/Schema.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Schema", function() { return _Schema__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+/* harmony import */ var _ComponentSchema__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ComponentSchema */ "./src/libs/ComponentSchema.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ComponentSchema", function() { return _ComponentSchema__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony import */ var _ServiceSchema__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ServiceSchema */ "./src/libs/ServiceSchema.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ServiceSchema", function() { return _ServiceSchema__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
 
 
 
@@ -36341,15 +36981,77 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
 /* harmony import */ var _api_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./api.template.html */ "./src/pages/api/api.template.html");
 /* harmony import */ var _api_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_api_template_html__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _api_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./api.style.scss */ "./src/pages/api/api.style.scss");
+/* harmony import */ var _api_style_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_api_style_scss__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 var name = 'api';
+controller.$inject = ['apiMonitor'];
 
-function controller() {
+function controller(apiMonitor) {
   var self = this;
+
+  self.$onInit = function () {
+    preProcess();
+    init();
+  };
+
+  self.chooseView = function (view) {
+    self.curView = view;
+  };
+
+  function preProcess() {
+    self.curView = 'all';
+    self.listRequest = [];
+    self.meanRequest = [];
+  }
+
+  function init() {
+    apiMonitor.getAll().then(function (val) {
+      return self.listRequest = val;
+    }).then(function () {
+      return console.log(self.listRequest);
+    });
+    apiMonitor.getMean().then(function (val) {
+      return self.meanRequest = val;
+    }).then(function () {
+      return console.log(self.meanRequest);
+    });
+  }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["Schema"](name, _api_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _api_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+
+/***/ }),
+
+/***/ "./src/pages/api/api.style.scss":
+/*!**************************************!*\
+  !*** ./src/pages/api/api.style.scss ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/sass-loader/lib/loader.js!./api.style.scss */ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/pages/api/api.style.scss");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
 
 /***/ }),
 
@@ -36360,7 +37062,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=row> <div class=col-sm-6> <div class=card> <div class=card-block> <h4 class=card-title>Daily Sales</h4> <div class=text-right> <h2 class=\"font-light m-b-0\"><i class=\"ti-arrow-up text-success\"></i> $120</h2> <span class=text-muted>Todays Income</span> </div> <span class=text-success>80%</span> <div class=progress> <div class=\"progress-bar bg-success\" role=progressbar style=width:80%;height:6px aria-valuenow=25 aria-valuemin=0 aria-valuemax=100></div> </div> </div> </div> </div> <div class=col-sm-6> <div class=card> <div class=card-block> <h4 class=card-title>Weekly Sales</h4> <div class=text-right> <h2 class=\"font-light m-b-0\"><i class=\"ti-arrow-up text-info\"></i> $5,000</h2> <span class=text-muted>Todays Income</span> </div> <span class=text-info>30%</span> <div class=progress> <div class=\"progress-bar bg-info\" role=progressbar style=width:30%;height:6px aria-valuenow=25 aria-valuemin=0 aria-valuemax=100></div> </div> </div> </div> </div> </div> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <h4 class=card-title>Revenue Statistics</h4> <div class=flot-chart> <div class=flot-chart-content id=flot-line-chart></div> </div> </div> </div> </div> </div> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <select class=\"custom-select pull-right\"> <option selected=selected>January</option> <option value=1>February</option> <option value=2>March</option> <option value=3>April</option> </select> <h4 class=card-title>Projects of the Month</h4> <div class=\"table-responsive m-t-40\"> <table class=\"table stylish-table\"> <thead> <tr> <th colspan=2>Assigned</th> <th>Name</th> <th>Budget</th> </tr> </thead> <tbody> <tr> <td style=width:50px><span class=round>S</span></td> <td> <h6>Sunil Joshi</h6><small class=text-muted>Web Designer</small> </td> <td>Elite Admin</td> <td>$3.9K</td> </tr> <tr class=active> <td><span class=round> </span></td> <td> <h6>Andrew</h6><small class=text-muted>Project Manager</small> </td> <td>Real Homes</td> <td>$23.9K</td> </tr> <tr> <td><span class=\"round round-success\">B</span></td> <td> <h6>Bhavesh patel</h6><small class=text-muted>Developer</small> </td> <td>MedicalPro Theme</td> <td>$12.9K</td> </tr> <tr> <td><span class=\"round round-primary\">N</span></td> <td> <h6>Nirav Joshi</h6><small class=text-muted>Frontend Eng</small> </td> <td>Elite Admin</td> <td>$10.9K</td> </tr> <tr> <td><span class=\"round round-warning\">M</span></td> <td> <h6>Micheal Doe</h6><small class=text-muted>Content Writer</small> </td> <td>Helping Hands</td> <td>$12.9K</td> </tr> <tr> <td><span class=\"round round-danger\">N</span></td> <td> <h6>Johnathan</h6><small class=text-muted>Graphic</small> </td> <td>Digital Agency</td> <td>$2.6K</td> </tr> </tbody> </table> </div> </div> </div> </div> </div> <div class=row> <div class=col-lg-4> <div class=card> <div class=card-block> <ul class=\"list-inline font-14\"> <li class=p-l-0>20 May 2016</li> <li><a href=javascript:void(0) class=link>3 Comment</a></li> </ul> <h3 class=font-normal>Featured Hydroflora Pots Garden &amp; Outdoors</h3> </div> </div> </div> <div class=col-lg-4> <div class=card> <div class=card-block> <ul class=\"list-inline font-14\"> <li class=p-l-0>20 May 2016</li> <li><a href=javascript:void(0) class=link>3 Comment</a></li> </ul> <h3 class=font-normal>Featured Hydroflora Pots Garden &amp; Outdoors</h3> </div> </div> </div> <div class=col-lg-4> <div class=card> <div class=card-block> <ul class=\"list-inline font-14\"> <li class=p-l-0>20 May 2016</li> <li><a href=javascript:void(0) class=link>3 Comment</a></li> </ul> <h3 class=font-normal>Featured Hydroflora Pots Garden &amp; Outdoors</h3> </div> </div> </div> </div> ";
+module.exports = "<div class=api> <ol class=breadcrumb style=background-color:inherit> <li class=breadcrumb-item> <a style=cursor:pointer ng-click=\"self.chooseView('all')\">All</a> </li> <li class=breadcrumb-item> <a style=cursor:pointer ng-click=\"self.chooseView('mean')\">Mean</a> </li> </ol> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>PID</th> <th>Username</th> <th>IP</th> <th>Path</th> <th>Time</th> <th>Duration</th> </tr> </thead> <tbody> <tr ng-repeat=\"request in self.listRequest track by $index\"> <td ng-bind=request.pid></td> <td ng-bind=request.username></td> <td ng-bind=request.ipaddr></td> <td ng-bind=request.path></td> <td ng-bind=request.time></td> <td ng-bind=\"request.duration + '   ms'\"></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'mean'\"> <thead> <tr> <th>#</th> <th>Username</th> <th>Path</th> <th>Time</th> <th>Mean Duration</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, request) in self.listRequest track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=request.username></td> <td ng-bind=request.path></td> <td ng-bind=request.time></td> <td ng-bind=\"request.duration + ' ms'\"></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -36384,7 +37086,7 @@ function controller() {
   var self = this;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["Schema"](name, _cpu_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _cpu_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
 
 /***/ }),
 
@@ -36395,7 +37097,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>alskdfjl</div>";
+module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Deshmukh</td> <td>Prohaska</td> <td>@Genelia</td> </tr> <tr> <td>2</td> <td>Deshmukh</td> <td>Gaylord</td> <td>@Ritesh</td> </tr> <tr> <td>3</td> <td>Sanghani</td> <td>Gusikowski</td> <td>@Govinda</td> </tr> <tr> <td>4</td> <td>Roshan</td> <td>Rogahn</td> <td>@Hritik</td> </tr> <tr> <td>5</td> <td>Joshi</td> <td>Hickle</td> <td>@Maruti</td> </tr> <tr> <td>6</td> <td>Nigam</td> <td>Eichmann</td> <td>@Sonu</td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -36440,7 +37142,7 @@ function controller() {
   var self = this;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["Schema"](name, _memory_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _memory_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
 
 /***/ }),
 
@@ -36475,7 +37177,7 @@ function controller() {
   var self = this;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["Schema"](name, _process_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _process_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
 
 /***/ }),
 
@@ -36561,6 +37263,101 @@ function config($stateProvider, $urlRouterProvider) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (config);
+
+/***/ }),
+
+/***/ "./src/services/apiMonitor.js":
+/*!************************************!*\
+  !*** ./src/services/apiMonitor.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+
+var name = 'apiMonitor';
+service.$inject = ['constant', '$http'];
+
+function service(constant, $http) {
+  var wi_monitor_backend = constant.WI_MOINTOR_BACKEND;
+
+  var getAll = function getAll() {
+    return new Promise(function (resolve, reject) {
+      var url = wi_monitor_backend + '/monitor-api/all';
+      $http({
+        url: url,
+        method: 'GET'
+      }).then(function (val) {
+        return resolve(val.data);
+      }).catch(function (e) {
+        return reject(e);
+      });
+    });
+  };
+
+  var getMean = function getMean() {
+    return new Promise(function (resolve, reject) {
+      var url = wi_monitor_backend + '/monitor-api/mean/all';
+      $http({
+        url: url,
+        method: 'GET'
+      }).then(function (val) {
+        return resolve(val.data);
+      }).catch(function (e) {
+        return reject(e);
+      });
+    });
+  };
+
+  return {
+    getAll: getAll,
+    getMean: getMean
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+
+/***/ }),
+
+/***/ "./src/services/constant.js":
+/*!**********************************!*\
+  !*** ./src/services/constant.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+
+var name = 'constant';
+
+function service() {
+  return {
+    WI_MOINTOR_BACKEND: 'http://localhost:3001'
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+
+/***/ }),
+
+/***/ "./src/services/index.js":
+/*!*******************************!*\
+  !*** ./src/services/index.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _apiMonitor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiMonitor */ "./src/services/apiMonitor.js");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constant */ "./src/services/constant.js");
+
+
+/* harmony default export */ __webpack_exports__["default"] = ([_apiMonitor__WEBPACK_IMPORTED_MODULE_0__["default"], _constant__WEBPACK_IMPORTED_MODULE_1__["default"]]);
 
 /***/ })
 
