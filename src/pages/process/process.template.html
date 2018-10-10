@@ -17,7 +17,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="(i, server) in self.allServer track by $index">
+                            <tr ng-repeat="(i, server) in self.currentProcessInServer track by $index">
                                 <td ng-bind="i + 1"></td>
                                 <td ng-bind="server.serverName"></td>
                                 <td ng-bind="server.fields[0].domain"></td>
@@ -42,7 +42,7 @@
 </div>
 
 <!-- Modal  -->
-<div class="modal fade" id="__process_show_list_process" role="dialog" data-backdrop="static">
+<div class="modal fade" id="__process_show_list_process" role="dialog">
     <div class="modal-dialog modal-lg">
 
         <!-- Modal content-->

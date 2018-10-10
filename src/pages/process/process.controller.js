@@ -3,8 +3,8 @@ import template from './process.template.html'
 
 const name = 'process'
 
-controller.$inject = ['processMonitor']
-function controller(processMonitor) {
+controller.$inject = ['processMonitor', 'utils']
+function controller(processMonitor, utils) {
     const self = this
 
     self.$onInit = function() {
@@ -14,6 +14,7 @@ function controller(processMonitor) {
 
     self.chooseServer = function(server) {
         self.curServer = server
+        // self.curServer = utils.findCurrentInfo(self.allServer)
     }
 
     self.round = function(num) {
@@ -28,7 +29,7 @@ function controller(processMonitor) {
         self.curServer = {}
         // self.minCpuServer = [] //min cpu in each server at specific time
         // self.maxCpuServer = []  //min cpu in each server at specific time
-        //self.currentProcessInfo = [] //the latest process in each server at specific time
+        self.currentProcessInServer = [] //the latest process in each server at specific time
         // self.currentMinMaxCpusInfo = []
 
         //breadcrumb
@@ -43,10 +44,11 @@ function controller(processMonitor) {
         processMonitor
             .getAll()
             .then(val => self.allServer = val)  
-            .then(() => console.log({
-                'all-server': self.allServer,
-                'currentProcessInfo': self.currentProcessInfo
-            }))
+            .then(() => self.currentProcessInServer = utils.findCurrentInfo(self.allServer))
+            // .then(() => console.log({
+            //     'all-server': self.allServer,
+            //     'currentProcessInServer': self.currentProcessInServer
+            // }))
 
 
         // processMonitor

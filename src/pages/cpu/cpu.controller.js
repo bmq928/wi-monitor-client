@@ -52,7 +52,7 @@ function controller(cpuMonitor, utils) {
             .getAll()
             .then(val => self.allServer = val)
             .then(() => self.currentCpusInfo = utils.findCurrentInfo(self.allServer))
-            // .then(() => console.log(self.allServer))
+            // .then(() => console.log({'self.currentCpusInfo': self.currentCpusInfo}))
 
 
 

@@ -28,17 +28,30 @@ function service() {
 
             if (!fields.length) return null
 
-            const latestVal = fields[fields.length - 1]
+            // const latestVal = fields[fields.length - 1]
 
+            const latestTime = fields[fields.length - 1].time
+            const latestVal = fields.filter(f => f.time === latestTime)
+
+            console.log({latestTime, latestVal})
+
+
+            //for cpu, memory
+            if (latestVal.length === 1) return {
+                serverName,
+                ...latestVal[0]
+            }
+
+            //for process
             return {
                 serverName,
-                ...latestVal
+                fields: latestVal
             }
         })
     }
 
     const capitalize = (str) => {
-        if(str) return str.replace(/\b\w/g, l => l.toUpperCase())
+        if (str) return str.replace(/\b\w/g, l => l.toUpperCase())
 
         return ''
     }

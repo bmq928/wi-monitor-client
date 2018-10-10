@@ -37226,7 +37226,7 @@ function controller(cpuMonitor, utils) {
       return self.allServer = val;
     }).then(function () {
       return self.currentCpusInfo = utils.findCurrentInfo(self.allServer);
-    }); // .then(() => console.log(self.allServer))
+    }); // .then(() => console.log({'self.currentCpusInfo': self.currentCpusInfo}))
 
     cpuMonitor.getMinMax().then(function (val) {
       self.minCpuServer = val.min;
@@ -37405,9 +37405,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'process';
-controller.$inject = ['processMonitor'];
+controller.$inject = ['processMonitor', 'utils'];
 
-function controller(processMonitor) {
+function controller(processMonitor, utils) {
   var self = this;
 
   self.$onInit = function () {
@@ -37416,7 +37416,7 @@ function controller(processMonitor) {
   };
 
   self.chooseServer = function (server) {
-    self.curServer = server;
+    self.curServer = server; // self.curServer = utils.findCurrentInfo(self.allServer)
   };
 
   self.round = function (num) {
@@ -37429,7 +37429,8 @@ function controller(processMonitor) {
     self.allServer = [];
     self.curServer = {}; // self.minCpuServer = [] //min cpu in each server at specific time
     // self.maxCpuServer = []  //min cpu in each server at specific time
-    //self.currentProcessInfo = [] //the latest process in each server at specific time
+
+    self.currentProcessInServer = []; //the latest process in each server at specific time
     // self.currentMinMaxCpusInfo = []
     //breadcrumb
     // self.breadcrumb = [
@@ -37443,11 +37444,12 @@ function controller(processMonitor) {
     processMonitor.getAll().then(function (val) {
       return self.allServer = val;
     }).then(function () {
-      return console.log({
-        'all-server': self.allServer,
-        'currentProcessInfo': self.currentProcessInfo
-      });
-    }); // processMonitor
+      return self.currentProcessInServer = utils.findCurrentInfo(self.allServer);
+    }); // .then(() => console.log({
+    //     'all-server': self.allServer,
+    //     'currentProcessInServer': self.currentProcessInServer
+    // }))
+    // processMonitor
     //     .getCountMinMax()
     //     .then(val => console.log({
     //         'countMinMax': val
@@ -37471,7 +37473,7 @@ function controller(processMonitor) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Time</th> <th></th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.allServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.fields[0].domain></td> <td ng-bind=server.fields[0].time></td> <td> <a class=\"btn hidden-sm-down btn-success\" style=cursor:pointer;color:#fff data-toggle=modal data-target=#__process_show_list_process ng-click=self.chooseServer(server)>Processes Detail </a> </td> </tr> </tbody> </table> </div> </div> </div> </div> </div> <div class=\"modal fade\" id=__process_show_list_process role=dialog data-backdrop=static> <div class=\"modal-dialog modal-lg\"> <div class=modal-content> <div class=modal-header> <h4 class=modal-title style=color:#55ce63 ng-bind=\"'Server: ' + self.curServer.serverName\"></h4> <button type=button class=close data-dismiss=modal>&times;</button> </div> <div class=modal-body> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>Command</th> <th>Count</th> <th>CPU</th> <th>Memory</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.curServer.fields track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.command></td> <td ng-bind=server.count></td> <td ng-bind=self.round(server.cpu)></td> <td ng-bind=self.round(server.memory)></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> </div> </div> </div> </div>";
+module.exports = "<breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Time</th> <th></th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentProcessInServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.fields[0].domain></td> <td ng-bind=server.fields[0].time></td> <td> <a class=\"btn hidden-sm-down btn-success\" style=cursor:pointer;color:#fff data-toggle=modal data-target=#__process_show_list_process ng-click=self.chooseServer(server)>Processes Detail </a> </td> </tr> </tbody> </table> </div> </div> </div> </div> </div> <div class=\"modal fade\" id=__process_show_list_process role=dialog> <div class=\"modal-dialog modal-lg\"> <div class=modal-content> <div class=modal-header> <h4 class=modal-title style=color:#55ce63 ng-bind=\"'Server: ' + self.curServer.serverName\"></h4> <button type=button class=close data-dismiss=modal>&times;</button> </div> <div class=modal-body> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>Command</th> <th>Count</th> <th>CPU</th> <th>Memory</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.curServer.fields track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.command></td> <td ng-bind=server.count></td> <td ng-bind=self.round(server.cpu)></td> <td ng-bind=self.round(server.memory)></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -37931,11 +37933,25 @@ function service() {
     return allData.map(function (_ref3) {
       var serverName = _ref3.serverName,
           fields = _ref3.fields;
-      if (!fields.length) return null;
-      var latestVal = fields[fields.length - 1];
-      return _objectSpread({
+      if (!fields.length) return null; // const latestVal = fields[fields.length - 1]
+
+      var latestTime = fields[fields.length - 1].time;
+      var latestVal = fields.filter(function (f) {
+        return f.time === latestTime;
+      });
+      console.log({
+        latestTime: latestTime,
+        latestVal: latestVal
+      }); //for cpu, memory
+
+      if (latestVal.length === 1) return _objectSpread({
         serverName: serverName
-      }, latestVal);
+      }, latestVal[0]); //for process
+
+      return {
+        serverName: serverName,
+        fields: latestVal
+      };
     });
   };
 
