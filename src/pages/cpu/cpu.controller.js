@@ -3,8 +3,8 @@ import template from './cpu.template.html'
 
 const name = 'cpu'
 
-controller.$inject = ['cpuMonitor']
-function controller(cpuMonitor) {
+controller.$inject = ['cpuMonitor', 'utils']
+function controller(cpuMonitor, utils) {
     const self = this
 
     self.$onInit = function () {
@@ -34,9 +34,9 @@ function controller(cpuMonitor) {
 
         //data
         self.allServer = []
-        self.minCpuServer = []
-        self.maxCpuServer = []
-        self.currentCpusInfo = []
+        self.minCpuServer = [] //min cpu in each server at specific time
+        self.maxCpuServer = []  //min cpu in each server at specific time
+        self.currentCpusInfo = [] //the latest cpu in each server at specific time
         // self.currentMinMaxCpusInfo = []
 
         //breadcrumb
@@ -51,8 +51,8 @@ function controller(cpuMonitor) {
         cpuMonitor
             .getAll()
             .then(val => self.allServer = val)
-            .then(() => self.currentCpusInfo = findCurrentCpusInfo())
-            .then(() => console.log(self.allServer))
+            .then(() => self.currentCpusInfo = utils.findCurrentInfo(self.allServer))
+            // .then(() => console.log(self.allServer))
 
 
 
@@ -62,36 +62,36 @@ function controller(cpuMonitor) {
                 self.minCpuServer = val.min
                 self.maxCpuServer = val.max
             })
-            .then(() => console.log(self.minCpuServer))
+            // .then(() => console.log(self.minCpuServer))
     }
 
-    function findCurrentCpusInfo() {
-        return self.allServer.map(({ serverName, fields }) => {
+    // function findCurrentCpusInfo() {
+    //     return self.allServer.map(({ serverName, fields }) => {
 
-            if (!fields.length) return null
+    //         if (!fields.length) return null
 
-            const latestVal = fields[fields.length - 1]
+    //         const latestVal = fields[fields.length - 1]
 
-            return {
-                serverName,
-                ...latestVal
-            }
-        })
-    }
+    //         return {
+    //             serverName,
+    //             ...latestVal
+    //         }
+    //     })
+    // }
 
-    function findCurrentMinMaxCpusInfo() {
-        const { min, max } = self.minMaxCpuServer
-        const results = []
+    // function findCurrentMinMaxCpusInfo() {
+    //     const { min, max } = self.minMaxCpuServer
+    //     const results = []
 
-        for (const mi in min) {
-            const correspondingMax = max.filter(ma => ma.serverName === mi.serverName)[0]
-            results.push({
-                serverName: mi.serverName,
+    //     for (const mi in min) {
+    //         const correspondingMax = max.filter(ma => ma.serverName === mi.serverName)[0]
+    //         results.push({
+    //             serverName: mi.serverName,
 
-            })
-        }
-        return results
-    }
+    //         })
+    //     }
+    //     return results
+    // }
 }
 
 export default new ComponentSchema(name, template, controller)

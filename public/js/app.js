@@ -37134,16 +37134,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
 /* harmony import */ var _cpu_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cpu.template.html */ "./src/pages/cpu/cpu.template.html");
 /* harmony import */ var _cpu_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_cpu_template_html__WEBPACK_IMPORTED_MODULE_1__);
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 
 var name = 'cpu';
-controller.$inject = ['cpuMonitor'];
+controller.$inject = ['cpuMonitor', 'utils'];
 
-function controller(cpuMonitor) {
+function controller(cpuMonitor, utils) {
   var self = this;
 
   self.$onInit = function () {
@@ -37168,9 +37164,12 @@ function controller(cpuMonitor) {
     self.curView = 'all'; //data
 
     self.allServer = [];
-    self.minCpuServer = [];
-    self.maxCpuServer = [];
-    self.currentCpusInfo = []; // self.currentMinMaxCpusInfo = []
+    self.minCpuServer = []; //min cpu in each server at specific time
+
+    self.maxCpuServer = []; //min cpu in each server at specific time
+
+    self.currentCpusInfo = []; //the latest cpu in each server at specific time
+    // self.currentMinMaxCpusInfo = []
     //breadcrumb
 
     self.breadcrumb = [{
@@ -37195,51 +37194,35 @@ function controller(cpuMonitor) {
     cpuMonitor.getAll().then(function (val) {
       return self.allServer = val;
     }).then(function () {
-      return self.currentCpusInfo = findCurrentCpusInfo();
-    }).then(function () {
-      return console.log(self.allServer);
-    });
+      return self.currentCpusInfo = utils.findCurrentInfo(self.allServer);
+    }); // .then(() => console.log(self.allServer))
+
     cpuMonitor.getMinMax().then(function (val) {
       self.minCpuServer = val.min;
       self.maxCpuServer = val.max;
-    }).then(function () {
-      return console.log(self.minCpuServer);
-    });
-  }
+    }); // .then(() => console.log(self.minCpuServer))
+  } // function findCurrentCpusInfo() {
+  //     return self.allServer.map(({ serverName, fields }) => {
+  //         if (!fields.length) return null
+  //         const latestVal = fields[fields.length - 1]
+  //         return {
+  //             serverName,
+  //             ...latestVal
+  //         }
+  //     })
+  // }
+  // function findCurrentMinMaxCpusInfo() {
+  //     const { min, max } = self.minMaxCpuServer
+  //     const results = []
+  //     for (const mi in min) {
+  //         const correspondingMax = max.filter(ma => ma.serverName === mi.serverName)[0]
+  //         results.push({
+  //             serverName: mi.serverName,
+  //         })
+  //     }
+  //     return results
+  // }
 
-  function findCurrentCpusInfo() {
-    return self.allServer.map(function (_ref) {
-      var serverName = _ref.serverName,
-          fields = _ref.fields;
-      if (!fields.length) return null;
-      var latestVal = fields[fields.length - 1];
-      return _objectSpread({
-        serverName: serverName
-      }, latestVal);
-    });
-  }
-
-  function findCurrentMinMaxCpusInfo() {
-    var _self$minMaxCpuServer = self.minMaxCpuServer,
-        min = _self$minMaxCpuServer.min,
-        max = _self$minMaxCpuServer.max;
-    var results = [];
-
-    var _loop = function _loop(mi) {
-      var correspondingMax = max.filter(function (ma) {
-        return ma.serverName === mi.serverName;
-      })[0];
-      results.push({
-        serverName: mi.serverName
-      });
-    };
-
-    for (var mi in min) {
-      _loop(mi);
-    }
-
-    return results;
-  }
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _cpu_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
@@ -37293,9 +37276,75 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'memory';
+controller.$inject = ['memMonitor', 'utils'];
 
-function controller() {
+function controller(memMonitor, utils) {
   var self = this;
+
+  self.$onInit = function () {
+    preProcess();
+    init();
+  };
+
+  self.chooseView = function (view) {
+    self.curView = view;
+  };
+
+  function preProcess() {
+    self.curView = 'all'; //data
+
+    self.allServer = [];
+    self.minMemServer = []; //min memory in each server at specific time
+
+    self.maxMemServer = []; //max memory in each server at specific time
+
+    self.currentMemInfo = []; //the latest memory in each server at specific time
+    //breadcrumb
+
+    self.breadcrumb = [{
+      path: 'all',
+      func: function func() {
+        return self.chooseView('all');
+      }
+    }, {
+      path: 'min',
+      func: function func() {
+        return self.chooseView('min');
+      }
+    }, {
+      path: 'max',
+      func: function func() {
+        return self.chooseView('max');
+      }
+    }];
+  }
+
+  function init() {
+    memMonitor.getAll().then(function (val) {
+      return self.allServer = val;
+    }).then(function () {
+      return self.currentMemInfo = utils.findCurrentInfo(self.allServer);
+    }).then(function () {
+      return console.log({
+        'mem-all': self.allServer,
+        'cur': self.currentMemInfo
+      });
+    });
+    memMonitor.getMinMax().then(function (val) {
+      self.minMemServer = val.min;
+      self.maxMemServer = val.max;
+    }).then(function () {
+      return console.log({
+        minMemServer: self.minMemServer,
+        maxMemServer: self.maxMemServer
+      });
+    });
+  } // function findCurrentMemInfo() {
+  //     return self.allServer.map(({serverName, fields}) => {
+  //         if(fields)
+  //     })
+  // }
+
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _memory_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
@@ -37309,7 +37358,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>memory</div>";
+module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Available</th> <th>Buff</th> <th>Free</th> <th>Shared</th> <th>Used</th> <th>Total</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentMemInfo track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.available></td> <td ng-bind=server.buff></td> <td ng-bind=server.free></td> <td ng-bind=server.shared></td> <td ng-bind=server.used></td> <td ng-bind=server.total></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'max'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Max Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.maxMemServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.maxUsed></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'min'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Min Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.minMemServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.minUsed></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -37510,13 +37559,11 @@ function service() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./src/utils/index.js");
-
 
 var name = 'cpuMonitor';
-service.$inject = ['constant', '$http'];
+service.$inject = ['constant', '$http', 'utils'];
 
-function service(constant, $http) {
+function service(constant, $http, utils) {
   var wi_monitor_backend = constant.WI_MOINTOR_BACKEND;
 
   var getAll = function getAll() {
@@ -37526,7 +37573,7 @@ function service(constant, $http) {
         url: url,
         method: 'GET'
       }).then(function (val) {
-        return resolve(Object(_utils__WEBPACK_IMPORTED_MODULE_1__["groupByServer"])(val.data));
+        return resolve(utils.groupByServer(val.data));
       }).catch(function (e) {
         return reject(e);
       });
@@ -37574,22 +37621,87 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _apiMonitor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiMonitor */ "./src/services/apiMonitor.js");
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constant */ "./src/services/constant.js");
 /* harmony import */ var _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cpuMonitor */ "./src/services/cpuMonitor.js");
+/* harmony import */ var _memMonitor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./memMonitor */ "./src/services/memMonitor.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils */ "./src/services/utils.js");
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ([_apiMonitor__WEBPACK_IMPORTED_MODULE_0__["default"], _constant__WEBPACK_IMPORTED_MODULE_1__["default"], _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__["default"]]);
+
+
+/* harmony default export */ __webpack_exports__["default"] = ([_apiMonitor__WEBPACK_IMPORTED_MODULE_0__["default"], _constant__WEBPACK_IMPORTED_MODULE_1__["default"], _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__["default"], _memMonitor__WEBPACK_IMPORTED_MODULE_3__["default"], _utils__WEBPACK_IMPORTED_MODULE_4__["default"]]);
 
 /***/ }),
 
-/***/ "./src/utils/groupByServer.js":
+/***/ "./src/services/memMonitor.js":
 /*!************************************!*\
-  !*** ./src/utils/groupByServer.js ***!
+  !*** ./src/services/memMonitor.js ***!
   \************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+
+var name = 'memMonitor';
+service.$inject = ['constant', '$http', 'utils'];
+
+function service(constant, $http, utils) {
+  var wi_monitor_backend = constant.WI_MOINTOR_BACKEND;
+
+  var getAll = function getAll() {
+    return new Promise(function (resolve, reject) {
+      var url = wi_monitor_backend + '/monitor-memory/all';
+      $http({
+        url: url,
+        method: 'GET'
+      }).then(function (val) {
+        return resolve(utils.groupByServer(val.data));
+      }).catch(function (e) {
+        return reject(e);
+      });
+    });
+  };
+
+  var getMinMax = function getMinMax() {
+    return new Promise(function (resolve, reject) {
+      var url = wi_monitor_backend + '/monitor-memory/min-max-used';
+      $http({
+        url: url,
+        method: 'GET'
+      }) // .then(({ data: { min, max } }) => resolve({
+      //     min: groupByServer(min),
+      //     max: groupByServer(max)
+      // }))
+      .then(function (_ref) {
+        var data = _ref.data;
+        return resolve(data);
+      }).catch(function (e) {
+        return reject(e);
+      });
+    });
+  };
+
+  return {
+    getAll: getAll,
+    getMinMax: getMinMax
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+
+/***/ }),
+
+/***/ "./src/services/utils.js":
+/*!*******************************!*\
+  !*** ./src/services/utils.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -37606,66 +37718,74 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var groupByServer = function groupByServer(data) {
-  var dict = {};
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
 
-  try {
-    for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var d = _step.value;
+var name = 'utils';
 
-      var serverName = d.serverName,
-          rest = _objectWithoutProperties(d, ["serverName"]);
+function service() {
+  var groupByServer = function groupByServer(data) {
+    var dict = {};
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
 
-      if (serverName in dict) dict[serverName].push(_objectSpread({}, rest));else dict[serverName] = [_objectSpread({}, rest)];
-    }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
     try {
-      if (!_iteratorNormalCompletion && _iterator.return != null) {
-        _iterator.return();
+      for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var d = _step.value;
+
+        var serverName = d.serverName,
+            rest = _objectWithoutProperties(d, ["serverName"]);
+
+        if (serverName in dict) dict[serverName].push(_objectSpread({}, rest));else dict[serverName] = [_objectSpread({}, rest)];
       }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
     } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
       }
     }
-  }
 
-  var result = Object.entries(dict).map(function (_ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
-        serverName = _ref2[0],
-        fields = _ref2[1];
+    var result = Object.entries(dict).map(function (_ref) {
+      var _ref2 = _slicedToArray(_ref, 2),
+          serverName = _ref2[0],
+          fields = _ref2[1];
 
-    return {
-      serverName: serverName,
-      fields: fields
-    };
-  });
-  return result;
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (groupByServer);
-
-/***/ }),
-
-/***/ "./src/utils/index.js":
-/*!****************************!*\
-  !*** ./src/utils/index.js ***!
-  \****************************/
-/*! exports provided: groupByServer */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _groupByServer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./groupByServer */ "./src/utils/groupByServer.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "groupByServer", function() { return _groupByServer__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+      return {
+        serverName: serverName,
+        fields: fields
+      };
+    });
+    return result;
+  }; // transform data
+  // data just return latest in a specific server
 
 
+  var findCurrentInfo = function findCurrentInfo(allData) {
+    return allData.map(function (_ref3) {
+      var serverName = _ref3.serverName,
+          fields = _ref3.fields;
+      if (!fields.length) return null;
+      var latestVal = fields[fields.length - 1];
+      return _objectSpread({
+        serverName: serverName
+      }, latestVal);
+    });
+  };
+
+  return {
+    groupByServer: groupByServer,
+    findCurrentInfo: findCurrentInfo
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
 
 /***/ })
 
