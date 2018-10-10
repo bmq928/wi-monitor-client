@@ -21,21 +21,45 @@
         </nav>
     </header>
     <!-- Sidebar scroll-->
-    <div class="scroll-sidebar" style="padding-top:0 ">
+    <div class="scroll-sidebar" style="padding-top:5px ">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
                 <li>
-                    <a ui-sref="api" class="waves-effect"><i class="fa fa-wifi m-r-10" aria-hidden="true"></i>API</a>
+                    <a 
+                     ui-sref="api" 
+                     class="waves-effect active"
+                     ng-class="{'active': self.curView === 'api'}"
+                     ng-click="self.handleViewClick('api')">
+                        <i class="fa fa-wifi m-r-10" aria-hidden="true"></i>API
+                    </a>
                 </li>
                 <li>
-                    <a ui-sref="cpu" class="waves-effect"><i class="fa fa-hdd-o m-r-10" aria-hidden="true"></i>CPU</a>
+                    <a 
+                     ui-sref="cpu" 
+                     class="waves-effect"
+                     ng-class="{'active': self.curView === 'cpu'}"
+                     ng-click="self.handleViewClick('cpu')">
+                        <i class="fa fa-hdd-o m-r-10" aria-hidden="true"></i>CPU
+                    </a>
                 </li>
                 <li>
-                    <a ui-sref="memory" class="waves-effect"><i class="fa fa-microchip m-r-10" aria-hidden="true"></i>Memory</a>
+                    <a 
+                     ui-sref="memory" 
+                     class="waves-effect"
+                     ng-class="{'active': self.curView === 'memory'}"
+                     ng-click="self.handleViewClick('memory')">
+                        <i class="fa fa-microchip m-r-10" aria-hidden="true"></i>Memory
+                    </a>
                 </li>
                 <li>
-                    <a ui-sref="process" class="waves-effect"><i class="fa fa-clone m-r-10" aria-hidden="true"></i>Process</a>
+                    <a 
+                     ui-sref="process" 
+                     class="waves-effect"
+                     ng-class="{'active': self.curView === 'process'}"
+                     ng-click="self.handleViewClick('process')">
+                        <i class="fa fa-clone m-r-10" aria-hidden="true"></i>Process
+                    </a>
                 </li>
             </ul>
         </nav>

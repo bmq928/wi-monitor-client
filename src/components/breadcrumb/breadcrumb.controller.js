@@ -5,11 +5,12 @@ import './breadcrumb.style.scss'
 
 const name = 'breadcrumb'
 
-function controller() {
+controller.$inject = ['utils']
+function controller(utils) {
     const self = this
 
     self.capitalize = function(str) {
-        return str.replace(/\b\w/g, l => l.toUpperCase())
+        return utils.capitalize(str)
     }
 }
 

@@ -37,9 +37,16 @@ function service() {
         })
     }
 
+    const capitalize = (str) => {
+        if(str) return str.replace(/\b\w/g, l => l.toUpperCase())
+
+        return ''
+    }
+
     return {
         groupByServer,
-        findCurrentInfo
+        findCurrentInfo,
+        capitalize
     }
 }
 

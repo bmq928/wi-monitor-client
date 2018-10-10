@@ -36769,6 +36769,18 @@ var name = 'app';
 
 function controller() {
   var self = this;
+
+  self.$onInit = function () {
+    preProcess();
+  };
+
+  self.changeView = function (view) {
+    self.curView = view;
+  };
+
+  function preProcess() {
+    self.curView = 'api';
+  }
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _app_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
@@ -36782,7 +36794,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=main-wrapper> <sidebar></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar></navbar> <div ui-view></div> </div> </div> </div>";
+module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <div ui-view></div> </div> </div> </div>";
 
 /***/ }),
 
@@ -36804,14 +36816,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'breadcrumb';
+controller.$inject = ['utils'];
 
-function controller() {
+function controller(utils) {
   var self = this;
 
   self.capitalize = function (str) {
-    return str.replace(/\b\w/g, function (l) {
-      return l.toUpperCase();
-    });
+    return utils.capitalize(str);
   };
 }
 
@@ -36898,12 +36909,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'navbar';
+controller.$inject = ['utils'];
 
-function controller() {
+function controller(utils) {
   var self = this;
+
+  self.$onChanges = function (_ref) {
+    var curView = _ref.curView;
+    self.curView = curView.currentValue;
+  };
+
+  self.getView = function () {
+    return utils.capitalize(self.curView);
+  };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _navbar_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _navbar_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller, {
+  curView: '<'
+}));
 
 /***/ }),
 
@@ -36914,7 +36937,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row page-titles\"> <div class=\"col-md-6 col-8 align-self-center\"> <h3 class=\"text-themecolor m-b-0 m-t-0\">Dashboard</h3> </div> </div>";
+module.exports = "<div class=\"row page-titles\"> <div class=\"col-md-6 col-8 align-self-center\"> <h3 class=\"text-themecolor m-b-0 m-t-0\" ng-bind=self.getView()></h3> </div> </div>";
 
 /***/ }),
 
@@ -36936,9 +36959,17 @@ var name = 'sidebar';
 
 function controller() {
   var self = this;
+
+  self.$onChanges = function (_ref) {
+    var curView = _ref.curView;
+    self.curView = curView.currentValue;
+  };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _sidebar_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _sidebar_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller, {
+  handleViewClick: '<',
+  curView: '<'
+}));
 
 /***/ }),
 
@@ -36949,7 +36980,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<aside class=left-sidebar style=padding:0> <header class=topbar> <nav class=\"navbar top-navbar navbar-toggleable-sm navbar-light\" style=background-color:#fff;vertical-align:middle> <div class=navbar-header style=\"border-bottom:2px solid #9999\"> <a class=navbar-brand href=index.html> <h2 style=color:#55ce63>WI-MONITOR</h2> </a> </div> </nav> </header> <div class=scroll-sidebar style=padding-top:0> <nav class=sidebar-nav> <ul id=sidebarnav> <li> <a ui-sref=api class=waves-effect><i class=\"fa fa-wifi m-r-10\" aria-hidden=true></i>API</a> </li> <li> <a ui-sref=cpu class=waves-effect><i class=\"fa fa-hdd-o m-r-10\" aria-hidden=true></i>CPU</a> </li> <li> <a ui-sref=memory class=waves-effect><i class=\"fa fa-microchip m-r-10\" aria-hidden=true></i>Memory</a> </li> <li> <a ui-sref=process class=waves-effect><i class=\"fa fa-clone m-r-10\" aria-hidden=true></i>Process</a> </li> </ul> </nav> </div> </aside>";
+module.exports = "<aside class=left-sidebar style=padding:0> <header class=topbar> <nav class=\"navbar top-navbar navbar-toggleable-sm navbar-light\" style=background-color:#fff;vertical-align:middle> <div class=navbar-header style=\"border-bottom:2px solid #9999\"> <a class=navbar-brand href=index.html> <h2 style=color:#55ce63>WI-MONITOR</h2> </a> </div> </nav> </header> <div class=scroll-sidebar style=padding-top:5px> <nav class=sidebar-nav> <ul id=sidebarnav> <li> <a ui-sref=api class=\"waves-effect active\" ng-class=\"{'active': self.curView === 'api'}\" ng-click=\"self.handleViewClick('api')\"> <i class=\"fa fa-wifi m-r-10\" aria-hidden=true></i>API </a> </li> <li> <a ui-sref=cpu class=waves-effect ng-class=\"{'active': self.curView === 'cpu'}\" ng-click=\"self.handleViewClick('cpu')\"> <i class=\"fa fa-hdd-o m-r-10\" aria-hidden=true></i>CPU </a> </li> <li> <a ui-sref=memory class=waves-effect ng-class=\"{'active': self.curView === 'memory'}\" ng-click=\"self.handleViewClick('memory')\"> <i class=\"fa fa-microchip m-r-10\" aria-hidden=true></i>Memory </a> </li> <li> <a ui-sref=process class=waves-effect ng-class=\"{'active': self.curView === 'process'}\" ng-click=\"self.handleViewClick('process')\"> <i class=\"fa fa-clone m-r-10\" aria-hidden=true></i>Process </a> </li> </ul> </nav> </div> </aside>";
 
 /***/ }),
 
@@ -37779,9 +37810,17 @@ function service() {
     });
   };
 
+  var capitalize = function capitalize(str) {
+    if (str) return str.replace(/\b\w/g, function (l) {
+      return l.toUpperCase();
+    });
+    return '';
+  };
+
   return {
     groupByServer: groupByServer,
-    findCurrentInfo: findCurrentInfo
+    findCurrentInfo: findCurrentInfo,
+    capitalize: capitalize
   };
 }
 

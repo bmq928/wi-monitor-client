@@ -1,8 +1,10 @@
 <div id="main-wrapper">
-    <sidebar></sidebar>
+    <sidebar
+     handle-view-click="self.changeView" 
+     cur-view="self.curView"></sidebar>
     <div class="page-wrapper">
         <div class="container-fluid">
-            <navbar></navbar>
+            <navbar cur-view="self.curView"></navbar>
             <div ui-view></div>
         </div>
     </div>
