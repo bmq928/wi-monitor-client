@@ -37355,21 +37355,18 @@ function controller(memMonitor, utils) {
       return self.allServer = val;
     }).then(function () {
       return self.currentMemInfo = utils.findCurrentInfo(self.allServer);
-    }).then(function () {
-      return console.log({
-        'mem-all': self.allServer,
-        'cur': self.currentMemInfo
-      });
-    });
+    }); // .then(() => console.log({
+    //     'mem-all': self.allServer,
+    //     'cur': self.currentMemInfo
+    // }))
+
     memMonitor.getMinMax().then(function (val) {
       self.minMemServer = val.min;
       self.maxMemServer = val.max;
-    }).then(function () {
-      return console.log({
-        minMemServer: self.minMemServer,
-        maxMemServer: self.maxMemServer
-      });
-    });
+    }); // .then(() => console.log({
+    //     minMemServer: self.minMemServer,
+    //     maxMemServer: self.maxMemServer
+    // }))
   } // function findCurrentMemInfo() {
   //     return self.allServer.map(({serverName, fields}) => {
   //         if(fields)
@@ -37408,9 +37405,59 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'process';
+controller.$inject = ['processMonitor'];
 
-function controller() {
+function controller(processMonitor) {
   var self = this;
+
+  self.$onInit = function () {
+    preProcess();
+    init();
+  };
+
+  self.chooseServer = function (server) {
+    self.curServer = server;
+  };
+
+  self.round = function (num) {
+    return parseFloat(num).toFixed(2);
+  };
+
+  function preProcess() {
+    // self.curView = 'all'
+    //data
+    self.allServer = [];
+    self.curServer = {}; // self.minCpuServer = [] //min cpu in each server at specific time
+    // self.maxCpuServer = []  //min cpu in each server at specific time
+    //self.currentProcessInfo = [] //the latest process in each server at specific time
+    // self.currentMinMaxCpusInfo = []
+    //breadcrumb
+    // self.breadcrumb = [
+    //     { path: 'all', func: () => self.chooseView('all') },
+    //     { path: 'min', func: () => self.chooseView('min') },
+    //     { path: 'max', func: () => self.chooseView('max') }
+    // ]
+  }
+
+  function init() {
+    processMonitor.getAll().then(function (val) {
+      return self.allServer = val;
+    }).then(function () {
+      return console.log({
+        'all-server': self.allServer,
+        'currentProcessInfo': self.currentProcessInfo
+      });
+    }); // processMonitor
+    //     .getCountMinMax()
+    //     .then(val => console.log({
+    //         'countMinMax': val
+    //     }))
+    // processMonitor
+    //     .getCpuMinMax()
+    //     .then(val => console.log({
+    //         cpuMinMax: val
+    //     }))
+  }
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _process_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
@@ -37424,7 +37471,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>process</div>";
+module.exports = "<breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Time</th> <th></th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.allServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.fields[0].domain></td> <td ng-bind=server.fields[0].time></td> <td> <a class=\"btn hidden-sm-down btn-success\" style=cursor:pointer;color:#fff data-toggle=modal data-target=#__process_show_list_process ng-click=self.chooseServer(server)>Processes Detail </a> </td> </tr> </tbody> </table> </div> </div> </div> </div> </div> <div class=\"modal fade\" id=__process_show_list_process role=dialog data-backdrop=static> <div class=\"modal-dialog modal-lg\"> <div class=modal-content> <div class=modal-header> <h4 class=modal-title style=color:#55ce63 ng-bind=\"'Server: ' + self.curServer.serverName\"></h4> <button type=button class=close data-dismiss=modal>&times;</button> </div> <div class=modal-body> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>Command</th> <th>Count</th> <th>CPU</th> <th>Memory</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.curServer.fields track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.command></td> <td ng-bind=server.count></td> <td ng-bind=self.round(server.cpu)></td> <td ng-bind=self.round(server.memory)></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -37654,12 +37701,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cpuMonitor */ "./src/services/cpuMonitor.js");
 /* harmony import */ var _memMonitor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./memMonitor */ "./src/services/memMonitor.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils */ "./src/services/utils.js");
+/* harmony import */ var _processMonitor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./processMonitor */ "./src/services/processMonitor.js");
 
 
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ([_apiMonitor__WEBPACK_IMPORTED_MODULE_0__["default"], _constant__WEBPACK_IMPORTED_MODULE_1__["default"], _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__["default"], _memMonitor__WEBPACK_IMPORTED_MODULE_3__["default"], _utils__WEBPACK_IMPORTED_MODULE_4__["default"]]);
+
+/* harmony default export */ __webpack_exports__["default"] = ([_apiMonitor__WEBPACK_IMPORTED_MODULE_0__["default"], _constant__WEBPACK_IMPORTED_MODULE_1__["default"], _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__["default"], _memMonitor__WEBPACK_IMPORTED_MODULE_3__["default"], _utils__WEBPACK_IMPORTED_MODULE_4__["default"], _processMonitor__WEBPACK_IMPORTED_MODULE_5__["default"]]);
 
 /***/ }),
 
@@ -37716,6 +37765,86 @@ function service(constant, $http, utils) {
   return {
     getAll: getAll,
     getMinMax: getMinMax
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+
+/***/ }),
+
+/***/ "./src/services/processMonitor.js":
+/*!****************************************!*\
+  !*** ./src/services/processMonitor.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+
+var name = 'processMonitor';
+service.$inject = ['constant', '$http', 'utils'];
+
+function service(constant, $http, utils) {
+  var wi_monitor_backend = constant.WI_MOINTOR_BACKEND;
+
+  var getAll = function getAll() {
+    return new Promise(function (resolve, reject) {
+      var url = wi_monitor_backend + '/monitor-process/all';
+      $http({
+        url: url,
+        method: 'GET'
+      }).then(function (val) {
+        return resolve(utils.groupByServer(val.data));
+      }).catch(function (e) {
+        return reject(e);
+      });
+    });
+  };
+
+  var getCountMinMax = function getCountMinMax() {
+    return new Promise(function (resolve, reject) {
+      var url = wi_monitor_backend + '/monitor-process/count/min-max';
+      $http({
+        url: url,
+        method: 'GET'
+      }) // .then(({ data: { min, max } }) => resolve({
+      //     min: groupByServer(min),
+      //     max: groupByServer(max)
+      // }))
+      .then(function (_ref) {
+        var data = _ref.data;
+        return resolve(data);
+      }).catch(function (e) {
+        return reject(e);
+      });
+    });
+  };
+
+  var getCpuMinMax = function getCpuMinMax() {
+    return new Promise(function (resolve, reject) {
+      var url = wi_monitor_backend + '/monitor-process/cpu/min-max';
+      $http({
+        url: url,
+        method: 'GET'
+      }) // .then(({ data: { min, max } }) => resolve({
+      //     min: groupByServer(min),
+      //     max: groupByServer(max)
+      // }))
+      .then(function (_ref2) {
+        var data = _ref2.data;
+        return resolve(data);
+      }).catch(function (e) {
+        return reject(e);
+      });
+    });
+  };
+
+  return {
+    getAll: getAll,
+    getCountMinMax: getCountMinMax,
+    getCpuMinMax: getCpuMinMax
   };
 }
 

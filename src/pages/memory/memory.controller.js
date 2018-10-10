@@ -38,10 +38,10 @@ function controller(memMonitor, utils) {
             .getAll()
             .then(val => self.allServer = val)
             .then(() => self.currentMemInfo = utils.findCurrentInfo(self.allServer))
-            .then(() => console.log({
-                'mem-all': self.allServer,
-                'cur': self.currentMemInfo
-            }))
+            // .then(() => console.log({
+            //     'mem-all': self.allServer,
+            //     'cur': self.currentMemInfo
+            // }))
 
         memMonitor
             .getMinMax()
@@ -49,10 +49,10 @@ function controller(memMonitor, utils) {
                 self.minMemServer = val.min
                 self.maxMemServer = val.max
             })
-            .then(() => console.log({
-                minMemServer: self.minMemServer,
-                maxMemServer: self.maxMemServer
-            }))
+            // .then(() => console.log({
+            //     minMemServer: self.minMemServer,
+            //     maxMemServer: self.maxMemServer
+            // }))
     }
 
     // function findCurrentMemInfo() {
