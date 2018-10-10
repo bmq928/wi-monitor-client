@@ -1,0 +1,6 @@
+<ol class="breadcrumb" style="background-color:inherit">
+    <li class="breadcrumb-item" ng-repeat="paf in self.pathAndFunc track by $index">
+        <a style="cursor:pointer;" ng-click="paf.func()" ng-bind="self.capitalize(paf.path)"></a>
+    </li>
+    
+</ol>

@@ -1,6 +1,6 @@
 import { ComponentSchema } from '../../libs'
 import template from './api.template.html'
-import './api.style.scss'
+// import './api.style.scss'
 
 const name = 'api'
 
@@ -21,20 +21,27 @@ function controller(apiMonitor) {
 
         self.curView = 'all'
 
+        //data
         self.listRequest = []
         self.meanRequest = []
+
+        //breadcrumb
+        self.breadcrumb = [
+            {path: 'all', func: () => self.chooseView('all')},
+            {path: 'mean', func: () => self.chooseView('mean')}
+        ]
     }
 
     function init() {
         apiMonitor
             .getAll()
             .then(val => self.listRequest = val)
-            .then(() => console.log(self.listRequest))
+            // .then(() => console.log(self.listRequest))
 
         apiMonitor
             .getMean()
             .then(val => self.meanRequest = val)
-            .then(() => console.log(self.meanRequest))
+            // .then(() => console.log(self.meanRequest))
     }
 }
 

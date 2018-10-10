@@ -36072,10 +36072,10 @@ module.exports = angular;
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/pages/api/api.style.scss":
-/*!*********************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/sass-loader/lib/loader.js!./src/pages/api/api.style.scss ***!
-  \*********************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/breadcrumb/breadcrumb.style.scss":
+/*!****************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/sass-loader/lib/loader.js!./src/components/breadcrumb/breadcrumb.style.scss ***!
+  \****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -36084,7 +36084,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".api .breadcrumb-item a {\n  cursor: pointer; }\n\n.api .breadcrumb-item a:hover {\n  text-decoration: underline;\n  color: #55ce63; }\n", ""]);
+exports.push([module.i, "ol.breadcrumb .breadcrumb-item a {\n  cursor: pointer; }\n\nol.breadcrumb .breadcrumb-item a:hover {\n  text-decoration: underline;\n  color: #55ce63; }\n", ""]);
 
 // exports
 
@@ -36786,6 +36786,82 @@ module.exports = "<div id=main-wrapper> <sidebar></sidebar> <div class=page-wrap
 
 /***/ }),
 
+/***/ "./src/components/breadcrumb/breadcrumb.controller.js":
+/*!************************************************************!*\
+  !*** ./src/components/breadcrumb/breadcrumb.controller.js ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
+/* harmony import */ var _breadcrumb_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./breadcrumb.template.html */ "./src/components/breadcrumb/breadcrumb.template.html");
+/* harmony import */ var _breadcrumb_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_breadcrumb_template_html__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _breadcrumb_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./breadcrumb.style.scss */ "./src/components/breadcrumb/breadcrumb.style.scss");
+/* harmony import */ var _breadcrumb_style_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_breadcrumb_style_scss__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var name = 'breadcrumb';
+
+function controller() {
+  var self = this;
+
+  self.capitalize = function (str) {
+    return str.replace(/\b\w/g, function (l) {
+      return l.toUpperCase();
+    });
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _breadcrumb_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller, {
+  pathAndFunc: '<'
+}));
+
+/***/ }),
+
+/***/ "./src/components/breadcrumb/breadcrumb.style.scss":
+/*!*********************************************************!*\
+  !*** ./src/components/breadcrumb/breadcrumb.style.scss ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/sass-loader/lib/loader.js!./breadcrumb.style.scss */ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/breadcrumb/breadcrumb.style.scss");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/components/breadcrumb/breadcrumb.template.html":
+/*!************************************************************!*\
+  !*** ./src/components/breadcrumb/breadcrumb.template.html ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<ol class=breadcrumb style=background-color:inherit> <li class=breadcrumb-item ng-repeat=\"paf in self.pathAndFunc track by $index\"> <a style=cursor:pointer ng-click=paf.func() ng-bind=self.capitalize(paf.path)></a> </li> </ol>";
+
+/***/ }),
+
 /***/ "./src/components/index.js":
 /*!*********************************!*\
   !*** ./src/components/index.js ***!
@@ -36798,10 +36874,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_app_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app/app.controller */ "./src/components/app/app.controller.js");
 /* harmony import */ var _sidebar_sidebar_controller__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sidebar/sidebar.controller */ "./src/components/sidebar/sidebar.controller.js");
 /* harmony import */ var _navbar_navbar_controller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./navbar/navbar.controller */ "./src/components/navbar/navbar.controller.js");
+/* harmony import */ var _breadcrumb_breadcrumb_controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./breadcrumb/breadcrumb.controller */ "./src/components/breadcrumb/breadcrumb.controller.js");
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ([_app_app_controller__WEBPACK_IMPORTED_MODULE_0__["default"], _sidebar_sidebar_controller__WEBPACK_IMPORTED_MODULE_1__["default"], _navbar_navbar_controller__WEBPACK_IMPORTED_MODULE_2__["default"]]);
+
+/* harmony default export */ __webpack_exports__["default"] = ([_app_app_controller__WEBPACK_IMPORTED_MODULE_0__["default"], _sidebar_sidebar_controller__WEBPACK_IMPORTED_MODULE_1__["default"], _navbar_navbar_controller__WEBPACK_IMPORTED_MODULE_2__["default"], _breadcrumb_breadcrumb_controller__WEBPACK_IMPORTED_MODULE_3__["default"]]);
 
 /***/ }),
 
@@ -36981,10 +37059,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
 /* harmony import */ var _api_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./api.template.html */ "./src/pages/api/api.template.html");
 /* harmony import */ var _api_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_api_template_html__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _api_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./api.style.scss */ "./src/pages/api/api.style.scss");
-/* harmony import */ var _api_style_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_api_style_scss__WEBPACK_IMPORTED_MODULE_2__);
 
-
+ // import './api.style.scss'
 
 var name = 'api';
 controller.$inject = ['apiMonitor'];
@@ -37002,56 +37078,36 @@ function controller(apiMonitor) {
   };
 
   function preProcess() {
-    self.curView = 'all';
+    self.curView = 'all'; //data
+
     self.listRequest = [];
-    self.meanRequest = [];
+    self.meanRequest = []; //breadcrumb
+
+    self.breadcrumb = [{
+      path: 'all',
+      func: function func() {
+        return self.chooseView('all');
+      }
+    }, {
+      path: 'mean',
+      func: function func() {
+        return self.chooseView('mean');
+      }
+    }];
   }
 
   function init() {
     apiMonitor.getAll().then(function (val) {
       return self.listRequest = val;
-    }).then(function () {
-      return console.log(self.listRequest);
-    });
+    }); // .then(() => console.log(self.listRequest))
+
     apiMonitor.getMean().then(function (val) {
       return self.meanRequest = val;
-    }).then(function () {
-      return console.log(self.meanRequest);
-    });
+    }); // .then(() => console.log(self.meanRequest))
   }
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _api_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
-
-/***/ }),
-
-/***/ "./src/pages/api/api.style.scss":
-/*!**************************************!*\
-  !*** ./src/pages/api/api.style.scss ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/sass-loader/lib/loader.js!./api.style.scss */ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/pages/api/api.style.scss");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
 
 /***/ }),
 
@@ -37062,7 +37118,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=api> <ol class=breadcrumb style=background-color:inherit> <li class=breadcrumb-item> <a style=cursor:pointer ng-click=\"self.chooseView('all')\">All</a> </li> <li class=breadcrumb-item> <a style=cursor:pointer ng-click=\"self.chooseView('mean')\">Mean</a> </li> </ol> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>PID</th> <th>Username</th> <th>IP</th> <th>Path</th> <th>Time</th> <th>Duration</th> </tr> </thead> <tbody> <tr ng-repeat=\"request in self.listRequest track by $index\"> <td ng-bind=request.pid></td> <td ng-bind=request.username></td> <td ng-bind=request.ipaddr></td> <td ng-bind=request.path></td> <td ng-bind=request.time></td> <td ng-bind=\"request.duration + '   ms'\"></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'mean'\"> <thead> <tr> <th>#</th> <th>Username</th> <th>Path</th> <th>Time</th> <th>Mean Duration</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, request) in self.listRequest track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=request.username></td> <td ng-bind=request.path></td> <td ng-bind=request.time></td> <td ng-bind=\"request.duration + ' ms'\"></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> </div>";
+module.exports = "<div class=api> <breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>PID</th> <th>Username</th> <th>IP</th> <th>Path</th> <th>Time</th> <th>Duration</th> </tr> </thead> <tbody> <tr ng-repeat=\"request in self.listRequest track by $index\"> <td ng-bind=request.pid></td> <td ng-bind=request.username></td> <td ng-bind=request.ipaddr></td> <td ng-bind=request.path></td> <td ng-bind=request.time></td> <td ng-bind=\"request.duration + '   ms'\"></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'mean'\"> <thead> <tr> <th>#</th> <th>Username</th> <th>Path</th> <th>Time</th> <th>Mean Duration</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, request) in self.listRequest track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=request.username></td> <td ng-bind=request.path></td> <td ng-bind=request.time></td> <td ng-bind=\"request.duration + ' ms'\"></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -37078,12 +37134,112 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
 /* harmony import */ var _cpu_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cpu.template.html */ "./src/pages/cpu/cpu.template.html");
 /* harmony import */ var _cpu_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_cpu_template_html__WEBPACK_IMPORTED_MODULE_1__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 var name = 'cpu';
+controller.$inject = ['cpuMonitor'];
 
-function controller() {
+function controller(cpuMonitor) {
   var self = this;
+
+  self.$onInit = function () {
+    preProcess();
+    init();
+  }; // self.currentCpusInfo = function () {
+  //     return self.allServer.map(({ serverName, fields }) => {
+  //         const nearestVal = fields.length ? fields[fields.length - 1] : null
+  //         return {
+  //             serverName,
+  //             ...nearestVal
+  //         }
+  //     })
+  // }
+
+
+  self.chooseView = function (view) {
+    self.curView = view;
+  };
+
+  function preProcess() {
+    self.curView = 'all'; //data
+
+    self.allServer = [];
+    self.minCpuServer = [];
+    self.maxCpuServer = [];
+    self.currentCpusInfo = []; // self.currentMinMaxCpusInfo = []
+    //breadcrumb
+
+    self.breadcrumb = [{
+      path: 'all',
+      func: function func() {
+        return self.chooseView('all');
+      }
+    }, {
+      path: 'min',
+      func: function func() {
+        return self.chooseView('min');
+      }
+    }, {
+      path: 'max',
+      func: function func() {
+        return self.chooseView('max');
+      }
+    }];
+  }
+
+  function init() {
+    cpuMonitor.getAll().then(function (val) {
+      return self.allServer = val;
+    }).then(function () {
+      return self.currentCpusInfo = findCurrentCpusInfo();
+    }).then(function () {
+      return console.log(self.allServer);
+    });
+    cpuMonitor.getMinMax().then(function (val) {
+      self.minCpuServer = val.min;
+      self.maxCpuServer = val.max;
+    }).then(function () {
+      return console.log(self.minCpuServer);
+    });
+  }
+
+  function findCurrentCpusInfo() {
+    return self.allServer.map(function (_ref) {
+      var serverName = _ref.serverName,
+          fields = _ref.fields;
+      if (!fields.length) return null;
+      var latestVal = fields[fields.length - 1];
+      return _objectSpread({
+        serverName: serverName
+      }, latestVal);
+    });
+  }
+
+  function findCurrentMinMaxCpusInfo() {
+    var _self$minMaxCpuServer = self.minMaxCpuServer,
+        min = _self$minMaxCpuServer.min,
+        max = _self$minMaxCpuServer.max;
+    var results = [];
+
+    var _loop = function _loop(mi) {
+      var correspondingMax = max.filter(function (ma) {
+        return ma.serverName === mi.serverName;
+      })[0];
+      results.push({
+        serverName: mi.serverName
+      });
+    };
+
+    for (var mi in min) {
+      _loop(mi);
+    }
+
+    return results;
+  }
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _cpu_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
@@ -37097,7 +37253,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead> <tbody> <tr> <td>1</td> <td>Deshmukh</td> <td>Prohaska</td> <td>@Genelia</td> </tr> <tr> <td>2</td> <td>Deshmukh</td> <td>Gaylord</td> <td>@Ritesh</td> </tr> <tr> <td>3</td> <td>Sanghani</td> <td>Gusikowski</td> <td>@Govinda</td> </tr> <tr> <td>4</td> <td>Roshan</td> <td>Rogahn</td> <td>@Hritik</td> </tr> <tr> <td>5</td> <td>Joshi</td> <td>Hickle</td> <td>@Maruti</td> </tr> <tr> <td>6</td> <td>Nigam</td> <td>Eichmann</td> <td>@Sonu</td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
+module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Current Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentCpusInfo track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.cpuUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'max'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Max Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.maxCpuServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.maxUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'min'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Min Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.minCpuServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.minUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -37344,6 +37500,68 @@ function service() {
 
 /***/ }),
 
+/***/ "./src/services/cpuMonitor.js":
+/*!************************************!*\
+  !*** ./src/services/cpuMonitor.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./src/utils/index.js");
+
+
+var name = 'cpuMonitor';
+service.$inject = ['constant', '$http'];
+
+function service(constant, $http) {
+  var wi_monitor_backend = constant.WI_MOINTOR_BACKEND;
+
+  var getAll = function getAll() {
+    return new Promise(function (resolve, reject) {
+      var url = wi_monitor_backend + '/monitor-cpu/all';
+      $http({
+        url: url,
+        method: 'GET'
+      }).then(function (val) {
+        return resolve(Object(_utils__WEBPACK_IMPORTED_MODULE_1__["groupByServer"])(val.data));
+      }).catch(function (e) {
+        return reject(e);
+      });
+    });
+  };
+
+  var getMinMax = function getMinMax() {
+    return new Promise(function (resolve, reject) {
+      var url = wi_monitor_backend + '/monitor-cpu/min-max';
+      $http({
+        url: url,
+        method: 'GET'
+      }) // .then(({ data: { min, max } }) => resolve({
+      //     min: groupByServer(min),
+      //     max: groupByServer(max)
+      // }))
+      .then(function (_ref) {
+        var data = _ref.data;
+        return resolve(data);
+      }).catch(function (e) {
+        return reject(e);
+      });
+    });
+  };
+
+  return {
+    getAll: getAll,
+    getMinMax: getMinMax
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+
+/***/ }),
+
 /***/ "./src/services/index.js":
 /*!*******************************!*\
   !*** ./src/services/index.js ***!
@@ -37355,9 +37573,99 @@ function service() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _apiMonitor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiMonitor */ "./src/services/apiMonitor.js");
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constant */ "./src/services/constant.js");
+/* harmony import */ var _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cpuMonitor */ "./src/services/cpuMonitor.js");
 
 
-/* harmony default export */ __webpack_exports__["default"] = ([_apiMonitor__WEBPACK_IMPORTED_MODULE_0__["default"], _constant__WEBPACK_IMPORTED_MODULE_1__["default"]]);
+
+/* harmony default export */ __webpack_exports__["default"] = ([_apiMonitor__WEBPACK_IMPORTED_MODULE_0__["default"], _constant__WEBPACK_IMPORTED_MODULE_1__["default"], _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__["default"]]);
+
+/***/ }),
+
+/***/ "./src/utils/groupByServer.js":
+/*!************************************!*\
+  !*** ./src/utils/groupByServer.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var groupByServer = function groupByServer(data) {
+  var dict = {};
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var d = _step.value;
+
+      var serverName = d.serverName,
+          rest = _objectWithoutProperties(d, ["serverName"]);
+
+      if (serverName in dict) dict[serverName].push(_objectSpread({}, rest));else dict[serverName] = [_objectSpread({}, rest)];
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  var result = Object.entries(dict).map(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        serverName = _ref2[0],
+        fields = _ref2[1];
+
+    return {
+      serverName: serverName,
+      fields: fields
+    };
+  });
+  return result;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (groupByServer);
+
+/***/ }),
+
+/***/ "./src/utils/index.js":
+/*!****************************!*\
+  !*** ./src/utils/index.js ***!
+  \****************************/
+/*! exports provided: groupByServer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _groupByServer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./groupByServer */ "./src/utils/groupByServer.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "groupByServer", function() { return _groupByServer__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+
 
 /***/ })
 
