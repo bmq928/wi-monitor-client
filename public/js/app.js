@@ -37621,7 +37621,7 @@ var name = 'constant';
 
 function service() {
   return {
-    WI_MOINTOR_BACKEND: 'http://localhost:3001'
+    WI_MOINTOR_BACKEND: 'http://localhost:3002'
   };
 }
 
