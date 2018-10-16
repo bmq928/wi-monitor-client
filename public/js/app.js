@@ -37621,7 +37621,8 @@ var name = 'constant';
 
 function service() {
   return {
-    WI_MOINTOR_BACKEND: 'http://localhost:3002'
+    // WI_MOINTOR_BACKEND: 'http://localhost:3002'
+    WI_MOINTOR_BACKEND: 'http://monitor-2.dev.i2g.cloud'
   };
 }
 
