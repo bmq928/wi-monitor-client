@@ -36103,7 +36103,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".tabs {\n  margin-bottom: 15px;\n  /***** REQUIRED STYLES *****/ }\n  .tabs .badge-labeled {\n    padding-top: 0;\n    padding-bottom: 0;\n    padding-right: 0.2rem;\n    margin-right: 3px; }\n  .tabs .badge-labeled i {\n    padding: 0.25em 0.3rem;\n    cursor: pointer;\n    position: relative;\n    display: inline-block;\n    right: -0.2em;\n    background-color: #000000;\n    background-color: rgba(0, 0, 0, 0.2);\n    border-left: solid 1px rgba(255, 255, 255, 0.5);\n    border-radius: 0 0.25rem 0.25rem 0; }\n", ""]);
+exports.push([module.i, ".tabs {\n  margin-bottom: 15px;\n  /***** REQUIRED STYLES *****/ }\n  .tabs .badge-labeled {\n    padding-top: 0;\n    padding-bottom: 0;\n    padding-right: 0.2rem;\n    margin-right: 3px;\n    cursor: pointer; }\n    .tabs .badge-labeled:active {\n      background-color: black; }\n  .tabs .badge-labeled i {\n    padding: 0.25em 0.3rem;\n    cursor: pointer;\n    position: relative;\n    display: inline-block;\n    right: -0.2em;\n    background-color: #000000;\n    background-color: rgba(0, 0, 0, 0.2);\n    border-left: solid 1px rgba(255, 255, 255, 0.5);\n    border-radius: 0 0.25rem 0.25rem 0; }\n", ""]);
 
 // exports
 
@@ -36726,50 +36726,6 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./src/app.js":
-/*!********************!*\
-  !*** ./src/app.js ***!
-  \********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var angular__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! angular */ "./node_modules/angular/index.js");
-/* harmony import */ var angular__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(angular__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _routing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routing */ "./src/routing.js");
-/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services */ "./src/services/index.js");
-/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components */ "./src/components/index.js");
-/* harmony import */ var _pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages */ "./src/pages/index.js");
-
-
-
-
-
-var moduleName = 'wi-monitor';
-var dependencies = ['ui.router'];
-var renderComponent = '<app></app>';
-var app = angular__WEBPACK_IMPORTED_MODULE_0___default.a.module(moduleName, dependencies); //config
-//routing
-
-app.config(_routing__WEBPACK_IMPORTED_MODULE_1__["default"]); // assign all services
-
-_services__WEBPACK_IMPORTED_MODULE_2__["default"].forEach(function (s) {
-  app.service(s.name, s.service);
-}); // assing all components
-
-_components__WEBPACK_IMPORTED_MODULE_3__["default"].forEach(function (c) {
-  app.component(c.name, c.options);
-}); // assgin all pages
-
-_pages__WEBPACK_IMPORTED_MODULE_4__["default"].forEach(function (p) {
-  app.component(p.name, p.options);
-}); // what to render
-
-/* harmony default export */ __webpack_exports__["default"] = (renderComponent);
-
-/***/ }),
-
 /***/ "./src/components/app/app.controller.js":
 /*!**********************************************!*\
   !*** ./src/components/app/app.controller.js ***!
@@ -36785,20 +36741,38 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'app';
+controller.$inject = ['agent'];
 
-function controller() {
+function controller(agent) {
   var self = this;
 
   self.$onInit = function () {
     preProcess();
+    init();
   };
 
   self.changeView = function (view) {
     self.curView = view;
   };
 
+  self.agentTabOnClick = function (id) {};
+
   function preProcess() {
-    self.curView = 'interface';
+    self.curView = 'interface'; //agents
+
+    self.agents = [];
+    self.curAgentId = null;
+  }
+
+  function init() {
+    //get all agent
+    agent.allAgents().then(function (data) {
+      return self.agents = data;
+    }).then(function () {
+      if (self.agents && self.agents.length) {
+        self.curAgentId = self.agents[0].idAgent;
+      }
+    });
   }
 }
 
@@ -36813,7 +36787,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <tabs></tabs> <div ui-view></div> </div> </div> </div>";
+module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <tabs list-agent=self.agents></tabs> <div ui-view></div> </div> </div> </div>";
 
 /***/ }),
 
@@ -37028,6 +37002,14 @@ controller.$inject = ['utils'];
 function controller(utils) {
   var self = this;
 
+  self.$onChanges = function (_ref) {
+    var listAgent = _ref.listAgent;
+    if (listAgent) self.listAgent = listAgent.currentValue;
+    console.log({
+      'tabs.listAgents': self.listAgent
+    });
+  };
+
   self.capitalize = function (str) {
     return utils.capitalize(str);
   };
@@ -37076,7 +37058,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=tabs> <div class=container> <div class=row> <span class=\"badge badge-default badge-labeled\">default<i class=\"fa fa-times\"></i></span> <span class=\"badge badge-default badge-labeled\">default<i class=\"fa fa-times\"></i></span> </div> </div> </div>";
+module.exports = "<div class=tabs> <div class=container> <div class=row> <span class=\"badge badge-default badge-labeled\" ng-repeat=\"agent in self.listAgent track by $index\"> {{agent.name}} <i class=\"fa fa-times\"></i> </span> </div> </div> </div>";
 
 /***/ }),
 
@@ -37090,11 +37072,11 @@ module.exports = "<div class=tabs> <div class=container> <div class=row> <span c
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _uirouter_angularjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @uirouter/angularjs */ "./node_modules/@uirouter/angularjs/lib-esm/index.js");
-/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app */ "./src/app.js");
+/* harmony import */ var _module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./module */ "./src/module.js");
  //import app
 
 
-render(_app__WEBPACK_IMPORTED_MODULE_1__["default"], document.getElementById('root-app'));
+render(_module__WEBPACK_IMPORTED_MODULE_1__["default"], document.getElementById('root-app'));
 
 function render(component, element) {
   element.innerHTML = component;
@@ -37174,6 +37156,50 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/module.js":
+/*!***********************!*\
+  !*** ./src/module.js ***!
+  \***********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var angular__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! angular */ "./node_modules/angular/index.js");
+/* harmony import */ var angular__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(angular__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _routing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routing */ "./src/routing.js");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services */ "./src/services/index.js");
+/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components */ "./src/components/index.js");
+/* harmony import */ var _pages__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages */ "./src/pages/index.js");
+
+
+
+
+
+var moduleName = 'wi-monitor';
+var dependencies = ['ui.router'];
+var renderComponent = '<app></app>';
+var app = angular__WEBPACK_IMPORTED_MODULE_0___default.a.module(moduleName, dependencies); //config
+//routing
+
+app.config(_routing__WEBPACK_IMPORTED_MODULE_1__["default"]); // assign all services
+
+_services__WEBPACK_IMPORTED_MODULE_2__["default"].forEach(function (s) {
+  app.service(s.name, s.service);
+}); // assing all components
+
+_components__WEBPACK_IMPORTED_MODULE_3__["default"].forEach(function (c) {
+  app.component(c.name, c.options);
+}); // assgin all pages
+
+_pages__WEBPACK_IMPORTED_MODULE_4__["default"].forEach(function (p) {
+  app.component(p.name, p.options);
+}); // what to render
+
+/* harmony default export */ __webpack_exports__["default"] = (renderComponent);
+
+/***/ }),
+
 /***/ "./src/pages/cpu/cpu.controller.js":
 /*!*****************************************!*\
   !*** ./src/pages/cpu/cpu.controller.js ***!
@@ -37188,10 +37214,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _cpu_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_cpu_template_html__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var name = 'cpu';
-controller.$inject = ['cpuMonitor', 'utils'];
+var name = 'cpu'; // controller.$inject = ['cpuMonitor', 'utils']
 
-function controller(cpuMonitor, utils) {
+function controller() {
   var self = this;
 
   self.$onInit = function () {
@@ -37269,10 +37294,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _harddisk_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_harddisk_template_html__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var name = 'harddisk';
-controller.$inject = ['memMonitor', 'utils'];
+var name = 'harddisk'; // controller.$inject = ['memMonitor', 'utils']
 
-function controller(memMonitor, utils) {
+function controller() {
   var self = this;
 
   self.$onInit = function () {
@@ -37285,34 +37309,10 @@ function controller(memMonitor, utils) {
   };
 
   function preProcess() {
-    self.curView = 'all'; //data
-
-    self.allServer = [];
-    self.minMemServer = []; //min harddisk in each server at specific time
-
-    self.maxMemServer = []; //max harddisk in each server at specific time
-
-    self.currentMemInfo = []; //the latest harddisk in each server at specific time
+    self.curView = 'all';
   }
 
-  function init() {
-    memMonitor.getAll().then(function (val) {
-      return self.allServer = val;
-    }).then(function () {
-      return self.currentMemInfo = utils.findCurrentInfo(self.allServer);
-    }); // .then(() => console.log({
-    //     'mem-all': self.allServer,
-    //     'cur': self.currentMemInfo
-    // }))
-
-    memMonitor.getMinMax().then(function (val) {
-      self.minMemServer = val.min;
-      self.maxMemServer = val.max;
-    }); // .then(() => console.log({
-    //     minMemServer: self.minMemServer,
-    //     maxMemServer: self.maxMemServer
-    // }))
-  } // function findCurrentMemInfo() {
+  function init() {} // function findCurrentMemInfo() {
   //     return self.allServer.map(({serverName, fields}) => {
   //         if(fields)
   //     })
@@ -37374,10 +37374,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _interface_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_interface_template_html__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var name = 'interface';
-controller.$inject = ['memMonitor', 'utils'];
+var name = 'interface'; // controller.$inject = ['memMonitor', 'utils']
 
-function controller(memMonitor, utils) {
+function controller() {
   var self = this;
 
   self.$onInit = function () {
@@ -37429,10 +37428,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _memory_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_memory_template_html__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var name = 'memory';
-controller.$inject = ['memMonitor', 'utils'];
+var name = 'memory'; // controller.$inject = ['memMonitor', 'utils']
 
-function controller(memMonitor, utils) {
+function controller() {
   var self = this;
 
   self.$onInit = function () {
@@ -37555,10 +37553,10 @@ function config($stateProvider, $urlRouterProvider) {
 
 /***/ }),
 
-/***/ "./src/services/apiMonitor.js":
-/*!************************************!*\
-  !*** ./src/services/apiMonitor.js ***!
-  \************************************/
+/***/ "./src/services/agent.js":
+/*!*******************************!*\
+  !*** ./src/services/agent.js ***!
+  \*******************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -37566,43 +37564,37 @@ function config($stateProvider, $urlRouterProvider) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
 
-var name = 'apiMonitor';
-service.$inject = ['constant', '$http'];
+var name = 'agent';
+service.$inject = ['utils', 'constant', '$q'];
 
-function service(constant, $http) {
-  var wi_monitor_backend = constant.WI_MOINTOR_BACKEND;
-
-  var getAll = function getAll() {
-    return new Promise(function (resolve, reject) {
-      var url = wi_monitor_backend + '/monitor-api/all';
-      $http({
-        url: url,
-        method: 'GET'
-      }).then(function (val) {
-        return resolve(val.data);
-      }).catch(function (e) {
-        return reject(e);
+function service(utils, constant, $q) {
+  var allAgents = function allAgents() {
+    var path = '/agent/list';
+    var url = constant.backendUrl + path;
+    return $q(function (resolve, reject) {
+      utils.fetchPOST(url, {}).then(function (data) {
+        return resolve(data);
+      }).catch(function (err) {
+        return reject(err);
       });
     });
   };
 
-  var getMean = function getMean() {
-    return new Promise(function (resolve, reject) {
-      var url = wi_monitor_backend + '/monitor-api/mean/all';
-      $http({
-        url: url,
-        method: 'GET'
-      }).then(function (val) {
-        return resolve(val.data);
-      }).catch(function (e) {
-        return reject(e);
+  var newAgent = function newAgent(data) {
+    var path = '/agent/list';
+    var url = constant.backendUrl + path;
+    return $q(function (resolve, reject) {
+      utils.fetchPOST(url, data).then(function (data) {
+        return resolve(data);
+      }).catch(function (err) {
+        return reject(err);
       });
     });
   };
 
   return {
-    getAll: getAll,
-    getMean: getMean
+    allAgents: allAgents,
+    newAgent: newAgent
   };
 }
 
@@ -37626,67 +37618,7 @@ var name = 'constant';
 function service() {
   return {
     // WI_MOINTOR_BACKEND: 'http://localhost:3002'
-    WI_MOINTOR_BACKEND: 'http://monitor-2.dev.i2g.cloud'
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
-
-/***/ }),
-
-/***/ "./src/services/cpuMonitor.js":
-/*!************************************!*\
-  !*** ./src/services/cpuMonitor.js ***!
-  \************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
-
-var name = 'cpuMonitor';
-service.$inject = ['constant', '$http', 'utils'];
-
-function service(constant, $http, utils) {
-  var wi_monitor_backend = constant.WI_MOINTOR_BACKEND;
-
-  var getAll = function getAll() {
-    return new Promise(function (resolve, reject) {
-      var url = wi_monitor_backend + '/monitor-cpu/all';
-      $http({
-        url: url,
-        method: 'GET'
-      }).then(function (val) {
-        return resolve(utils.groupByServer(val.data));
-      }).catch(function (e) {
-        return reject(e);
-      });
-    });
-  };
-
-  var getMinMax = function getMinMax() {
-    return new Promise(function (resolve, reject) {
-      var url = wi_monitor_backend + '/monitor-cpu/min-max';
-      $http({
-        url: url,
-        method: 'GET'
-      }) // .then(({ data: { min, max } }) => resolve({
-      //     min: groupByServer(min),
-      //     max: groupByServer(max)
-      // }))
-      .then(function (_ref) {
-        var data = _ref.data;
-        return resolve(data);
-      }).catch(function (e) {
-        return reject(e);
-      });
-    });
-  };
-
-  return {
-    getAll: getAll,
-    getMinMax: getMinMax
+    backendUrl: 'http://monitor.api.i2g.cloud'
   };
 }
 
@@ -37703,159 +37635,21 @@ function service(constant, $http, utils) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _apiMonitor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiMonitor */ "./src/services/apiMonitor.js");
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constant */ "./src/services/constant.js");
-/* harmony import */ var _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cpuMonitor */ "./src/services/cpuMonitor.js");
-/* harmony import */ var _memMonitor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./memMonitor */ "./src/services/memMonitor.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils */ "./src/services/utils.js");
-/* harmony import */ var _processMonitor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./processMonitor */ "./src/services/processMonitor.js");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constant */ "./src/services/constant.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./src/services/utils.js");
+/* harmony import */ var _agent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./agent */ "./src/services/agent.js");
+// import apiMonitor from './apiMonitor'
+ // import cpuMonitor from './cpuMonitor'
+// import memMonitor from './memMonitor'
+
+ // import processMonitor from './processMonitor'
 
 
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ([_apiMonitor__WEBPACK_IMPORTED_MODULE_0__["default"], _constant__WEBPACK_IMPORTED_MODULE_1__["default"], _cpuMonitor__WEBPACK_IMPORTED_MODULE_2__["default"], _memMonitor__WEBPACK_IMPORTED_MODULE_3__["default"], _utils__WEBPACK_IMPORTED_MODULE_4__["default"], _processMonitor__WEBPACK_IMPORTED_MODULE_5__["default"]]);
-
-/***/ }),
-
-/***/ "./src/services/memMonitor.js":
-/*!************************************!*\
-  !*** ./src/services/memMonitor.js ***!
-  \************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
-
-var name = 'memMonitor';
-service.$inject = ['constant', '$http', 'utils'];
-
-function service(constant, $http, utils) {
-  var wi_monitor_backend = constant.WI_MOINTOR_BACKEND;
-
-  var getAll = function getAll() {
-    return new Promise(function (resolve, reject) {
-      var url = wi_monitor_backend + '/monitor-memory/all';
-      $http({
-        url: url,
-        method: 'GET'
-      }).then(function (val) {
-        return resolve(utils.groupByServer(val.data));
-      }).catch(function (e) {
-        return reject(e);
-      });
-    });
-  };
-
-  var getMinMax = function getMinMax() {
-    return new Promise(function (resolve, reject) {
-      var url = wi_monitor_backend + '/monitor-memory/min-max-used';
-      $http({
-        url: url,
-        method: 'GET'
-      }) // .then(({ data: { min, max } }) => resolve({
-      //     min: groupByServer(min),
-      //     max: groupByServer(max)
-      // }))
-      .then(function (_ref) {
-        var data = _ref.data;
-        return resolve(data);
-      }).catch(function (e) {
-        return reject(e);
-      });
-    });
-  };
-
-  return {
-    getAll: getAll,
-    getMinMax: getMinMax
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
-
-/***/ }),
-
-/***/ "./src/services/processMonitor.js":
-/*!****************************************!*\
-  !*** ./src/services/processMonitor.js ***!
-  \****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
-
-var name = 'processMonitor';
-service.$inject = ['constant', '$http', 'utils'];
-
-function service(constant, $http, utils) {
-  var wi_monitor_backend = constant.WI_MOINTOR_BACKEND;
-
-  var getAll = function getAll() {
-    return new Promise(function (resolve, reject) {
-      var url = wi_monitor_backend + '/monitor-process/all';
-      $http({
-        url: url,
-        method: 'GET'
-      }).then(function (val) {
-        return resolve(utils.groupByServer(val.data));
-      }).catch(function (e) {
-        return reject(e);
-      });
-    });
-  };
-
-  var getCountMinMax = function getCountMinMax() {
-    return new Promise(function (resolve, reject) {
-      var url = wi_monitor_backend + '/monitor-process/count/min-max';
-      $http({
-        url: url,
-        method: 'GET'
-      }) // .then(({ data: { min, max } }) => resolve({
-      //     min: groupByServer(min),
-      //     max: groupByServer(max)
-      // }))
-      .then(function (_ref) {
-        var data = _ref.data;
-        return resolve(data);
-      }).catch(function (e) {
-        return reject(e);
-      });
-    });
-  };
-
-  var getCpuMinMax = function getCpuMinMax() {
-    return new Promise(function (resolve, reject) {
-      var url = wi_monitor_backend + '/monitor-process/cpu/min-max';
-      $http({
-        url: url,
-        method: 'GET'
-      }) // .then(({ data: { min, max } }) => resolve({
-      //     min: groupByServer(min),
-      //     max: groupByServer(max)
-      // }))
-      .then(function (_ref2) {
-        var data = _ref2.data;
-        return resolve(data);
-      }).catch(function (e) {
-        return reject(e);
-      });
-    });
-  };
-
-  return {
-    getAll: getAll,
-    getCountMinMax: getCountMinMax,
-    getCpuMinMax: getCpuMinMax
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+/* harmony default export */ __webpack_exports__["default"] = ([// apiMonitor,
+_constant__WEBPACK_IMPORTED_MODULE_0__["default"], // cpuMonitor,
+// memMonitor,
+_utils__WEBPACK_IMPORTED_MODULE_1__["default"], _agent__WEBPACK_IMPORTED_MODULE_2__["default"] // processMonitor
+]);
 
 /***/ }),
 
@@ -37869,98 +37663,11 @@ function service(constant, $http, utils) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 
 var name = 'utils';
-service.$inject = ['$http'];
+service.$inject = ['$http', '$q'];
 
-function service($http) {
-  var groupByServer = function groupByServer(data) {
-    var dict = {};
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-      for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var d = _step.value;
-
-        var serverName = d.serverName,
-            rest = _objectWithoutProperties(d, ["serverName"]);
-
-        if (serverName in dict) dict[serverName].push(_objectSpread({}, rest));else dict[serverName] = [_objectSpread({}, rest)];
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
-    }
-
-    var result = Object.entries(dict).map(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 2),
-          serverName = _ref2[0],
-          fields = _ref2[1];
-
-      return {
-        serverName: serverName,
-        fields: fields
-      };
-    });
-    return result;
-  }; // transform data
-  // data just return latest in a specific server
-
-
-  var findCurrentInfo = function findCurrentInfo(allData) {
-    return allData.map(function (_ref3) {
-      var serverName = _ref3.serverName,
-          fields = _ref3.fields;
-      if (!fields.length) return null; // const latestVal = fields[fields.length - 1]
-
-      var latestTime = fields[fields.length - 1].time;
-      var latestVal = fields.filter(function (f) {
-        return f.time === latestTime;
-      });
-      console.log({
-        latestTime: latestTime,
-        latestVal: latestVal
-      }); //for cpu, memory
-
-      if (latestVal.length === 1) return _objectSpread({
-        serverName: serverName
-      }, latestVal[0]); //for process
-
-      return {
-        serverName: serverName,
-        fields: latestVal
-      };
-    });
-  };
-
+function service($http, $q) {
   var capitalize = function capitalize(str) {
     if (str) return str.replace(/\b\w/g, function (l) {
       return l.toUpperCase();
@@ -37968,25 +37675,31 @@ function service($http) {
     return '';
   };
 
-  function fetchPOST(url, data, success, fail) {
+  function fetchPOST(url, data) {
     // const token = 'f82e62d7c3ea69cc12b5cdb8d621dab6';
     // const token = localStorage.getItem('jwt-token')
-    console.log('some');
-    return $http({
-      url: url,
-      // headers: { 'Authorization': 'Bearer ' + token },
-      method: 'POST',
-      data: Object.assign({}, data)
-    }).then(function (resp) {
-      console.log('fetch');
-      console.log(resp);
-    });
-  }
+    return $q(function (resolve, reject) {
+      return $http({
+        url: url,
+        // headers: { 'Authorization': 'Bearer ' + token },
+        method: 'POST',
+        data: Object.assign({}, data)
+      }).then(function (_ref) {
+        var data = _ref.data;
 
-  fetchPOST('http://monitor.api.i2g.cloud/agent/list', {});
+        if (data.code === 200) {
+          resolve(data.content);
+        } else {
+          reject(data.content);
+        }
+      }).catch(function (err) {
+        return reject(err);
+      });
+    });
+  } // fetchPOST('http://monitor.api.i2g.cloud/agent/new').catch(err => console.log(err))
+
+
   return {
-    groupByServer: groupByServer,
-    findCurrentInfo: findCurrentInfo,
     capitalize: capitalize,
     fetchPOST: fetchPOST
   };

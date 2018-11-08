@@ -3,8 +3,8 @@ import template from './interface.template.html'
 
 const name = 'interface'
 
-controller.$inject = ['memMonitor', 'utils']
-function controller(memMonitor, utils) {
+// controller.$inject = ['memMonitor', 'utils']
+function controller() {
     const self = this
 
     self.$onInit = function () {

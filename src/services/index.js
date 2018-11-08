@@ -1,15 +1,17 @@
-import apiMonitor from './apiMonitor'
+// import apiMonitor from './apiMonitor'
 import constant from './constant'
-import cpuMonitor from './cpuMonitor'
-import memMonitor from './memMonitor'
+// import cpuMonitor from './cpuMonitor'
+// import memMonitor from './memMonitor'
 import utils from './utils'
-import processMonitor from './processMonitor'
+// import processMonitor from './processMonitor'
+import agent from './agent'
 
 export default [
-    apiMonitor,
+    // apiMonitor,
     constant,
-    cpuMonitor,
-    memMonitor,
+    // cpuMonitor,
+    // memMonitor,
     utils,
-    processMonitor
+    agent
+    // processMonitor
 ]

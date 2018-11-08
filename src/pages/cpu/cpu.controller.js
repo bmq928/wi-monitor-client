@@ -3,8 +3,8 @@ import template from './cpu.template.html'
 
 const name = 'cpu'
 
-controller.$inject = ['cpuMonitor', 'utils']
-function controller(cpuMonitor, utils) {
+// controller.$inject = ['cpuMonitor', 'utils']
+function controller() {
     const self = this
 
     self.$onInit = function () {

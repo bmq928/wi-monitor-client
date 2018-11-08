@@ -3,8 +3,8 @@ import template from './memory.template.html'
 
 const name = 'memory'
 
-controller.$inject = ['memMonitor', 'utils']
-function controller(memMonitor, utils) {
+// controller.$inject = ['memMonitor', 'utils']
+function controller() {
     const self = this
 
     self.$onInit = function () {

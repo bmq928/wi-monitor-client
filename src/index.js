@@ -1,7 +1,7 @@
 import '@uirouter/angularjs'
 
 //import app
-import app from './app'
+import app from './module'
 
 
 render(app, document.getElementById('root-app'))
