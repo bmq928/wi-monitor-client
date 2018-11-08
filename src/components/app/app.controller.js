@@ -15,7 +15,7 @@ function controller() {
     }
 
     function preProcess() {
-        self.curView = 'api'
+        self.curView = 'interface'
     }
 }
 

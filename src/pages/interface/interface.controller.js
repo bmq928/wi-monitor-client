@@ -1,7 +1,7 @@
 import { ComponentSchema } from '../../libs'
-import template from './memory.template.html'
+import template from './interface.template.html'
 
-const name = 'memory'
+const name = 'interface'
 
 controller.$inject = ['memMonitor', 'utils']
 function controller(memMonitor, utils) {
@@ -17,20 +17,18 @@ function controller(memMonitor, utils) {
     }
 
     function preProcess() {
-        self.curView = 'all'
+        // self.curView = 'all'
 
-        
+        // //data
+        // self.allServer = []
+        // self.minMemServer = [] //min interface in each server at specific time
+        // self.maxMemServer = [] //max interface in each server at specific time
+        // self.currentMemInfo = [] //the latest interface in each server at specific time
     }
 
     function init() {
         
     }
-
-    // function findCurrentMemInfo() {
-    //     return self.allServer.map(({serverName, fields}) => {
-    //         if(fields)
-    //     })
-    // }
 }
 
 export default new ComponentSchema(name, template, controller)

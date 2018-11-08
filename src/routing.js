@@ -6,7 +6,9 @@ function config($stateProvider, $urlRouterProvider) {
         memory: 'memory',
         cpu: 'cpu',
         process: 'process',
-        login: 'login'
+        login: 'login',
+        interface: 'interface',
+        harddisk: 'harddisk'
     }
 
     function createUrl(view) {
@@ -18,10 +20,6 @@ function config($stateProvider, $urlRouterProvider) {
     }
 
     $stateProvider
-        .state(views.api, {
-            url: createUrl(views.api),
-            template: createComponent(views.api)
-        })
         .state(views.memory, {
             url: createUrl(views.memory),
             template: createComponent(views.memory)
@@ -30,9 +28,13 @@ function config($stateProvider, $urlRouterProvider) {
             url: createUrl(views.cpu),
             template: createComponent(views.cpu)
         })
-        .state(views.process, {
-            url: createUrl(views.process),
-            template: createComponent(views.process)            
+        .state(views.harddisk, {
+            url: createUrl(views.harddisk),
+            template: createComponent(views.harddisk)
+        })
+        .state(views.interface, {
+            url: createUrl(views.interface),
+            template: createComponent(views.interface)
         })
         .state(views.login, {
             //just a fake url for login
@@ -40,6 +42,15 @@ function config($stateProvider, $urlRouterProvider) {
             url: createUrl(views.login),
             template: '<div></div>'
         })
+        // .state(views.api, {
+        //     url: createUrl(views.api),
+        //     template: createComponent(views.api)
+        // })
+        // .state(views.process, {
+        //     url: createUrl(views.process),
+        //     template: createComponent(views.process)            
+        // })
+        
         // .state(login, {
         //     url: createUrl(login),
         //     template: createComponent(login),
@@ -50,7 +61,7 @@ function config($stateProvider, $urlRouterProvider) {
         //     }
         // })
 
-    $urlRouterProvider.otherwise(createUrl(views.api))
+    $urlRouterProvider.otherwise(createUrl(views.interface))
 
 
 
@@ -59,7 +70,7 @@ function config($stateProvider, $urlRouterProvider) {
     }
 
     function goToDashboard($state) {
-        $state.go(views.api)
+        $state.go(views.cpu)
     }
 
     function isLogin(){

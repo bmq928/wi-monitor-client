@@ -1,11 +1,15 @@
-import api from './api/api.controller'
+// import api from './api/api.controller'
 import cpu from './cpu/cpu.controller'
 import memory from './memory/memory.controller'
-import process from './process/process.controller'
+import harddisk from './harddisk/harddisk.controller'
+import interfacePage from './interface/interface.controller'
+// import process from './process/process.controller'
 
 export default [
-    api,
+    // api,
+    interfacePage,
     cpu,
     memory,
-    process
+    harddisk
+    // process
 ]

@@ -32,37 +32,10 @@ function controller(cpuMonitor, utils) {
 
         self.curView = 'all'
 
-        //data
-        self.allServer = []
-        self.minCpuServer = [] //min cpu in each server at specific time
-        self.maxCpuServer = []  //min cpu in each server at specific time
-        self.currentCpusInfo = [] //the latest cpu in each server at specific time
-        // self.currentMinMaxCpusInfo = []
-
-        //breadcrumb
-        self.breadcrumb = [
-            { path: 'all', func: () => self.chooseView('all') },
-            { path: 'min', func: () => self.chooseView('min') },
-            { path: 'max', func: () => self.chooseView('max') }
-        ]
     }
 
     function init() {
-        cpuMonitor
-            .getAll()
-            .then(val => self.allServer = val)
-            .then(() => self.currentCpusInfo = utils.findCurrentInfo(self.allServer))
-            // .then(() => console.log({'self.currentCpusInfo': self.currentCpusInfo}))
-
-
-
-        cpuMonitor
-            .getMinMax()
-            .then(val => {
-                self.minCpuServer = val.min
-                self.maxCpuServer = val.max
-            })
-            // .then(() => console.log(self.minCpuServer))
+        
     }
 
     // function findCurrentCpusInfo() {

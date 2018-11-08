@@ -36103,7 +36103,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".tabs {\n  /***** REQUIRED STYLES *****/ }\n  .tabs .badge-labeled {\n    padding-top: 0;\n    padding-bottom: 0;\n    padding-right: 0.2rem;\n    margin-right: 3px; }\n  .tabs .badge-labeled i {\n    padding: 0.25em 0.3rem;\n    cursor: pointer;\n    position: relative;\n    display: inline-block;\n    right: -0.2em;\n    background-color: #000000;\n    background-color: rgba(0, 0, 0, 0.2);\n    border-left: solid 1px rgba(255, 255, 255, 0.5);\n    border-radius: 0 0.25rem 0.25rem 0; }\n", ""]);
+exports.push([module.i, ".tabs {\n  margin-bottom: 15px;\n  /***** REQUIRED STYLES *****/ }\n  .tabs .badge-labeled {\n    padding-top: 0;\n    padding-bottom: 0;\n    padding-right: 0.2rem;\n    margin-right: 3px; }\n  .tabs .badge-labeled i {\n    padding: 0.25em 0.3rem;\n    cursor: pointer;\n    position: relative;\n    display: inline-block;\n    right: -0.2em;\n    background-color: #000000;\n    background-color: rgba(0, 0, 0, 0.2);\n    border-left: solid 1px rgba(255, 255, 255, 0.5);\n    border-radius: 0 0.25rem 0.25rem 0; }\n", ""]);
 
 // exports
 
@@ -36798,7 +36798,7 @@ function controller() {
   };
 
   function preProcess() {
-    self.curView = 'api';
+    self.curView = 'interface';
   }
 }
 
@@ -37001,7 +37001,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<aside class=left-sidebar style=padding:0> <header class=topbar> <nav class=\"navbar top-navbar navbar-toggleable-sm navbar-light\" style=background-color:#fff;vertical-align:middle> <div class=navbar-header style=\"border-bottom:2px solid #9999\"> <a class=navbar-brand href=index.html> <h2 style=color:#55ce63>WI-MONITOR</h2> </a> </div> </nav> </header> <div class=scroll-sidebar style=padding-top:5px> <nav class=sidebar-nav> <ul id=sidebarnav> <li> <a ui-sref=api class=\"waves-effect active\" ng-class=\"{'active': self.curView === 'api'}\" ng-click=\"self.handleViewClick('api')\"> <i class=\"fa fa-wifi m-r-10\" aria-hidden=true></i>API </a> </li> <li> <a ui-sref=cpu class=waves-effect ng-class=\"{'active': self.curView === 'cpu'}\" ng-click=\"self.handleViewClick('cpu')\"> <i class=\"fa fa-hdd-o m-r-10\" aria-hidden=true></i>CPU </a> </li> <li> <a ui-sref=memory class=waves-effect ng-class=\"{'active': self.curView === 'memory'}\" ng-click=\"self.handleViewClick('memory')\"> <i class=\"fa fa-microchip m-r-10\" aria-hidden=true></i>Memory </a> </li> <li> <a ui-sref=process class=waves-effect ng-class=\"{'active': self.curView === 'process'}\" ng-click=\"self.handleViewClick('process')\"> <i class=\"fa fa-clone m-r-10\" aria-hidden=true></i>Process </a> </li> </ul> </nav> </div> </aside>";
+module.exports = "<aside class=left-sidebar style=padding:0> <header class=topbar> <nav class=\"navbar top-navbar navbar-toggleable-sm navbar-light\" style=background-color:#fff;vertical-align:middle> <div class=navbar-header style=\"border-bottom:2px solid #9999\"> <a class=navbar-brand href=index.html> <h2 style=color:#55ce63>WI-MONITOR</h2> </a> </div> </nav> </header> <div class=scroll-sidebar style=padding-top:5px> <nav class=sidebar-nav> <ul id=sidebarnav> <li> <a ui-sref=interface class=waves-effect ng-class=\"{'active': self.curView === 'interface'}\" ng-click=\"self.handleViewClick('interface')\"> <i class=\"fa fa-microchip m-r-10\" aria-hidden=true></i>Interface </a> </li> <li> <a ui-sref=cpu class=waves-effect ng-class=\"{'active': self.curView === 'cpu'}\" ng-click=\"self.handleViewClick('cpu')\"> <i class=\"fa fa-server m-r-10\" aria-hidden=true></i>CPU </a> </li> <li> <a ui-sref=memory class=waves-effect ng-class=\"{'active': self.curView === 'memory'}\" ng-click=\"self.handleViewClick('memory')\"> <i class=\"fa fa-archive m-r-10\" aria-hidden=true></i>Memory </a> </li> <li> <a ui-sref=harddisk class=waves-effect ng-class=\"{'active': self.curView === 'harddisk'}\" ng-click=\"self.handleViewClick('harddisk')\"> <i class=\"fa fa-hdd-o m-r-10\" aria-hidden=true></i>Harddisk </a> </li> </ul> </nav> </div> </aside>";
 
 /***/ }),
 
@@ -37174,81 +37174,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/pages/api/api.controller.js":
-/*!*****************************************!*\
-  !*** ./src/pages/api/api.controller.js ***!
-  \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
-/* harmony import */ var _api_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./api.template.html */ "./src/pages/api/api.template.html");
-/* harmony import */ var _api_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_api_template_html__WEBPACK_IMPORTED_MODULE_1__);
-
- // import './api.style.scss'
-
-var name = 'api';
-controller.$inject = ['apiMonitor'];
-
-function controller(apiMonitor) {
-  var self = this;
-
-  self.$onInit = function () {
-    preProcess();
-    init();
-  };
-
-  self.chooseView = function (view) {
-    self.curView = view;
-  };
-
-  function preProcess() {
-    self.curView = 'all'; //data
-
-    self.listRequest = [];
-    self.meanRequest = []; //breadcrumb
-
-    self.breadcrumb = [{
-      path: 'all',
-      func: function func() {
-        return self.chooseView('all');
-      }
-    }, {
-      path: 'mean',
-      func: function func() {
-        return self.chooseView('mean');
-      }
-    }];
-  }
-
-  function init() {
-    apiMonitor.getAll().then(function (val) {
-      return self.listRequest = val;
-    }); // .then(() => console.log(self.listRequest))
-
-    apiMonitor.getMean().then(function (val) {
-      return self.meanRequest = val;
-    }); // .then(() => console.log(self.meanRequest))
-  }
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _api_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
-
-/***/ }),
-
-/***/ "./src/pages/api/api.template.html":
-/*!*****************************************!*\
-  !*** ./src/pages/api/api.template.html ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div class=api> <breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>PID</th> <th>Username</th> <th>IP</th> <th>Path</th> <th>Time</th> <th>Duration</th> </tr> </thead> <tbody> <tr ng-repeat=\"request in self.listRequest track by $index\"> <td ng-bind=request.pid></td> <td ng-bind=request.username></td> <td ng-bind=request.ipaddr></td> <td ng-bind=request.path></td> <td ng-bind=request.time></td> <td ng-bind=\"request.duration + '   ms'\"></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'mean'\"> <thead> <tr> <th>#</th> <th>Username</th> <th>Path</th> <th>Time</th> <th>Mean Duration</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, request) in self.listRequest track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=request.username></td> <td ng-bind=request.path></td> <td ng-bind=request.time></td> <td ng-bind=\"request.duration + ' ms'\"></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> </div>";
-
-/***/ }),
-
 /***/ "./src/pages/cpu/cpu.controller.js":
 /*!*****************************************!*\
   !*** ./src/pages/cpu/cpu.controller.js ***!
@@ -37288,47 +37213,10 @@ function controller(cpuMonitor, utils) {
   };
 
   function preProcess() {
-    self.curView = 'all'; //data
-
-    self.allServer = [];
-    self.minCpuServer = []; //min cpu in each server at specific time
-
-    self.maxCpuServer = []; //min cpu in each server at specific time
-
-    self.currentCpusInfo = []; //the latest cpu in each server at specific time
-    // self.currentMinMaxCpusInfo = []
-    //breadcrumb
-
-    self.breadcrumb = [{
-      path: 'all',
-      func: function func() {
-        return self.chooseView('all');
-      }
-    }, {
-      path: 'min',
-      func: function func() {
-        return self.chooseView('min');
-      }
-    }, {
-      path: 'max',
-      func: function func() {
-        return self.chooseView('max');
-      }
-    }];
+    self.curView = 'all';
   }
 
-  function init() {
-    cpuMonitor.getAll().then(function (val) {
-      return self.allServer = val;
-    }).then(function () {
-      return self.currentCpusInfo = utils.findCurrentInfo(self.allServer);
-    }); // .then(() => console.log({'self.currentCpusInfo': self.currentCpusInfo}))
-
-    cpuMonitor.getMinMax().then(function (val) {
-      self.minCpuServer = val.min;
-      self.maxCpuServer = val.max;
-    }); // .then(() => console.log(self.minCpuServer))
-  } // function findCurrentCpusInfo() {
+  function init() {} // function findCurrentCpusInfo() {
   //     return self.allServer.map(({ serverName, fields }) => {
   //         if (!fields.length) return null
   //         const latestVal = fields[fields.length - 1]
@@ -37363,7 +37251,87 @@ function controller(cpuMonitor, utils) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Current Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentCpusInfo track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.cpuUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'max'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Max Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.maxCpuServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.maxUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'min'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Min Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.minCpuServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.minUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
+module.exports = " <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Current Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentCpusInfo track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.cpuUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'max'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Max Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.maxCpuServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.maxUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'min'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Min Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.minCpuServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.minUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
+
+/***/ }),
+
+/***/ "./src/pages/harddisk/harddisk.controller.js":
+/*!***************************************************!*\
+  !*** ./src/pages/harddisk/harddisk.controller.js ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
+/* harmony import */ var _harddisk_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./harddisk.template.html */ "./src/pages/harddisk/harddisk.template.html");
+/* harmony import */ var _harddisk_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_harddisk_template_html__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var name = 'harddisk';
+controller.$inject = ['memMonitor', 'utils'];
+
+function controller(memMonitor, utils) {
+  var self = this;
+
+  self.$onInit = function () {
+    preProcess();
+    init();
+  };
+
+  self.chooseView = function (view) {
+    self.curView = view;
+  };
+
+  function preProcess() {
+    self.curView = 'all'; //data
+
+    self.allServer = [];
+    self.minMemServer = []; //min harddisk in each server at specific time
+
+    self.maxMemServer = []; //max harddisk in each server at specific time
+
+    self.currentMemInfo = []; //the latest harddisk in each server at specific time
+  }
+
+  function init() {
+    memMonitor.getAll().then(function (val) {
+      return self.allServer = val;
+    }).then(function () {
+      return self.currentMemInfo = utils.findCurrentInfo(self.allServer);
+    }); // .then(() => console.log({
+    //     'mem-all': self.allServer,
+    //     'cur': self.currentMemInfo
+    // }))
+
+    memMonitor.getMinMax().then(function (val) {
+      self.minMemServer = val.min;
+      self.maxMemServer = val.max;
+    }); // .then(() => console.log({
+    //     minMemServer: self.minMemServer,
+    //     maxMemServer: self.maxMemServer
+    // }))
+  } // function findCurrentMemInfo() {
+  //     return self.allServer.map(({serverName, fields}) => {
+  //         if(fields)
+  //     })
+  // }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _harddisk_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+
+/***/ }),
+
+/***/ "./src/pages/harddisk/harddisk.template.html":
+/*!***************************************************!*\
+  !*** ./src/pages/harddisk/harddisk.template.html ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div>HARDdisk</div>";
 
 /***/ }),
 
@@ -37376,15 +37344,74 @@ module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div c
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_api_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./api/api.controller */ "./src/pages/api/api.controller.js");
-/* harmony import */ var _cpu_cpu_controller__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cpu/cpu.controller */ "./src/pages/cpu/cpu.controller.js");
-/* harmony import */ var _memory_memory_controller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./memory/memory.controller */ "./src/pages/memory/memory.controller.js");
-/* harmony import */ var _process_process_controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./process/process.controller */ "./src/pages/process/process.controller.js");
+/* harmony import */ var _cpu_cpu_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./cpu/cpu.controller */ "./src/pages/cpu/cpu.controller.js");
+/* harmony import */ var _memory_memory_controller__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./memory/memory.controller */ "./src/pages/memory/memory.controller.js");
+/* harmony import */ var _harddisk_harddisk_controller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./harddisk/harddisk.controller */ "./src/pages/harddisk/harddisk.controller.js");
+/* harmony import */ var _interface_interface_controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./interface/interface.controller */ "./src/pages/interface/interface.controller.js");
+// import api from './api/api.controller'
 
 
 
+ // import process from './process/process.controller'
 
-/* harmony default export */ __webpack_exports__["default"] = ([_api_api_controller__WEBPACK_IMPORTED_MODULE_0__["default"], _cpu_cpu_controller__WEBPACK_IMPORTED_MODULE_1__["default"], _memory_memory_controller__WEBPACK_IMPORTED_MODULE_2__["default"], _process_process_controller__WEBPACK_IMPORTED_MODULE_3__["default"]]);
+/* harmony default export */ __webpack_exports__["default"] = ([// api,
+_interface_interface_controller__WEBPACK_IMPORTED_MODULE_3__["default"], _cpu_cpu_controller__WEBPACK_IMPORTED_MODULE_0__["default"], _memory_memory_controller__WEBPACK_IMPORTED_MODULE_1__["default"], _harddisk_harddisk_controller__WEBPACK_IMPORTED_MODULE_2__["default"] // process
+]);
+
+/***/ }),
+
+/***/ "./src/pages/interface/interface.controller.js":
+/*!*****************************************************!*\
+  !*** ./src/pages/interface/interface.controller.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
+/* harmony import */ var _interface_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./interface.template.html */ "./src/pages/interface/interface.template.html");
+/* harmony import */ var _interface_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_interface_template_html__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var name = 'interface';
+controller.$inject = ['memMonitor', 'utils'];
+
+function controller(memMonitor, utils) {
+  var self = this;
+
+  self.$onInit = function () {
+    preProcess();
+    init();
+  };
+
+  self.chooseView = function (view) {
+    self.curView = view;
+  };
+
+  function preProcess() {// self.curView = 'all'
+    // //data
+    // self.allServer = []
+    // self.minMemServer = [] //min interface in each server at specific time
+    // self.maxMemServer = [] //max interface in each server at specific time
+    // self.currentMemInfo = [] //the latest interface in each server at specific time
+  }
+
+  function init() {}
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _interface_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+
+/***/ }),
+
+/***/ "./src/pages/interface/interface.template.html":
+/*!*****************************************************!*\
+  !*** ./src/pages/interface/interface.template.html ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div>Interface</div>";
 
 /***/ }),
 
@@ -37418,52 +37445,10 @@ function controller(memMonitor, utils) {
   };
 
   function preProcess() {
-    self.curView = 'all'; //data
-
-    self.allServer = [];
-    self.minMemServer = []; //min memory in each server at specific time
-
-    self.maxMemServer = []; //max memory in each server at specific time
-
-    self.currentMemInfo = []; //the latest memory in each server at specific time
-    //breadcrumb
-
-    self.breadcrumb = [{
-      path: 'all',
-      func: function func() {
-        return self.chooseView('all');
-      }
-    }, {
-      path: 'min',
-      func: function func() {
-        return self.chooseView('min');
-      }
-    }, {
-      path: 'max',
-      func: function func() {
-        return self.chooseView('max');
-      }
-    }];
+    self.curView = 'all';
   }
 
-  function init() {
-    memMonitor.getAll().then(function (val) {
-      return self.allServer = val;
-    }).then(function () {
-      return self.currentMemInfo = utils.findCurrentInfo(self.allServer);
-    }); // .then(() => console.log({
-    //     'mem-all': self.allServer,
-    //     'cur': self.currentMemInfo
-    // }))
-
-    memMonitor.getMinMax().then(function (val) {
-      self.minMemServer = val.min;
-      self.maxMemServer = val.max;
-    }); // .then(() => console.log({
-    //     minMemServer: self.minMemServer,
-    //     maxMemServer: self.maxMemServer
-    // }))
-  } // function findCurrentMemInfo() {
+  function init() {} // function findCurrentMemInfo() {
   //     return self.allServer.map(({serverName, fields}) => {
   //         if(fields)
   //     })
@@ -37482,94 +37467,7 @@ function controller(memMonitor, utils) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Available</th> <th>Buff</th> <th>Free</th> <th>Shared</th> <th>Used</th> <th>Total</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentMemInfo track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.available></td> <td ng-bind=server.buff></td> <td ng-bind=server.free></td> <td ng-bind=server.shared></td> <td ng-bind=server.used></td> <td ng-bind=server.total></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'max'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Max Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.maxMemServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.maxUsed></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'min'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Min Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.minMemServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.minUsed></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
-
-/***/ }),
-
-/***/ "./src/pages/process/process.controller.js":
-/*!*************************************************!*\
-  !*** ./src/pages/process/process.controller.js ***!
-  \*************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
-/* harmony import */ var _process_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./process.template.html */ "./src/pages/process/process.template.html");
-/* harmony import */ var _process_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_process_template_html__WEBPACK_IMPORTED_MODULE_1__);
-
-
-var name = 'process';
-controller.$inject = ['processMonitor', 'utils'];
-
-function controller(processMonitor, utils) {
-  var self = this;
-
-  self.$onInit = function () {
-    preProcess();
-    init();
-  };
-
-  self.chooseServer = function (server) {
-    self.curServer = server; // self.curServer = utils.findCurrentInfo(self.allServer)
-  };
-
-  self.round = function (num) {
-    return parseFloat(num).toFixed(2);
-  };
-
-  function preProcess() {
-    // self.curView = 'all'
-    //data
-    self.allServer = [];
-    self.curServer = {}; // self.minCpuServer = [] //min cpu in each server at specific time
-    // self.maxCpuServer = []  //min cpu in each server at specific time
-
-    self.currentProcessInServer = []; //the latest process in each server at specific time
-    // self.currentMinMaxCpusInfo = []
-    //breadcrumb
-    // self.breadcrumb = [
-    //     { path: 'all', func: () => self.chooseView('all') },
-    //     { path: 'min', func: () => self.chooseView('min') },
-    //     { path: 'max', func: () => self.chooseView('max') }
-    // ]
-  }
-
-  function init() {
-    processMonitor.getAll().then(function (val) {
-      return self.allServer = val;
-    }).then(function () {
-      return self.currentProcessInServer = utils.findCurrentInfo(self.allServer);
-    }); // .then(() => console.log({
-    //     'all-server': self.allServer,
-    //     'currentProcessInServer': self.currentProcessInServer
-    // }))
-    // processMonitor
-    //     .getCountMinMax()
-    //     .then(val => console.log({
-    //         'countMinMax': val
-    //     }))
-    // processMonitor
-    //     .getCpuMinMax()
-    //     .then(val => console.log({
-    //         cpuMinMax: val
-    //     }))
-  }
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _process_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
-
-/***/ }),
-
-/***/ "./src/pages/process/process.template.html":
-/*!*************************************************!*\
-  !*** ./src/pages/process/process.template.html ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Time</th> <th></th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentProcessInServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.fields[0].domain></td> <td ng-bind=server.fields[0].time></td> <td> <a class=\"btn hidden-sm-down btn-success\" style=cursor:pointer;color:#fff data-toggle=modal data-target=#__process_show_list_process ng-click=self.chooseServer(server)>Processes Detail </a> </td> </tr> </tbody> </table> </div> </div> </div> </div> </div> <div class=\"modal fade\" id=__process_show_list_process role=dialog> <div class=\"modal-dialog modal-lg\"> <div class=modal-content> <div class=modal-header> <h4 class=modal-title style=color:#55ce63 ng-bind=\"'Server: ' + self.curServer.serverName\"></h4> <button type=button class=close data-dismiss=modal>&times;</button> </div> <div class=modal-body> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table> <thead> <tr> <th>#</th> <th>Command</th> <th>Count</th> <th>CPU</th> <th>Memory</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.curServer.fields track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.command></td> <td ng-bind=server.count></td> <td ng-bind=self.round(server.cpu)></td> <td ng-bind=self.round(server.memory)></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> </div> </div> </div> </div>";
+module.exports = " <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Available</th> <th>Buff</th> <th>Free</th> <th>Shared</th> <th>Used</th> <th>Total</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentMemInfo track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.available></td> <td ng-bind=server.buff></td> <td ng-bind=server.free></td> <td ng-bind=server.shared></td> <td ng-bind=server.used></td> <td ng-bind=server.total></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'max'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Max Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.maxMemServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.maxUsed></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'min'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Min Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.minMemServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.minUsed></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -37588,7 +37486,9 @@ function config($stateProvider, $urlRouterProvider) {
     memory: 'memory',
     cpu: 'cpu',
     process: 'process',
-    login: 'login'
+    login: 'login',
+    interface: 'interface',
+    harddisk: 'harddisk'
   };
 
   function createUrl(view) {
@@ -37599,24 +37499,32 @@ function config($stateProvider, $urlRouterProvider) {
     return "<".concat(view, "></").concat(view, ">");
   }
 
-  $stateProvider.state(views.api, {
-    url: createUrl(views.api),
-    template: createComponent(views.api)
-  }).state(views.memory, {
+  $stateProvider.state(views.memory, {
     url: createUrl(views.memory),
     template: createComponent(views.memory)
   }).state(views.cpu, {
     url: createUrl(views.cpu),
     template: createComponent(views.cpu)
-  }).state(views.process, {
-    url: createUrl(views.process),
-    template: createComponent(views.process)
+  }).state(views.harddisk, {
+    url: createUrl(views.harddisk),
+    template: createComponent(views.harddisk)
+  }).state(views.interface, {
+    url: createUrl(views.interface),
+    template: createComponent(views.interface)
   }).state(views.login, {
     //just a fake url for login
     //because now i use browser hoc
     url: createUrl(views.login),
     template: '<div></div>'
-  }); // .state(login, {
+  }); // .state(views.api, {
+  //     url: createUrl(views.api),
+  //     template: createComponent(views.api)
+  // })
+  // .state(views.process, {
+  //     url: createUrl(views.process),
+  //     template: createComponent(views.process)            
+  // })
+  // .state(login, {
   //     url: createUrl(login),
   //     template: createComponent(login),
   //     controller: function($state) {
@@ -37626,14 +37534,14 @@ function config($stateProvider, $urlRouterProvider) {
   //     }
   // })
 
-  $urlRouterProvider.otherwise(createUrl(views.api));
+  $urlRouterProvider.otherwise(createUrl(views.interface));
 
   function goToLogin($state) {
     $state.go(views.login);
   }
 
   function goToDashboard($state) {
-    $state.go(views.api);
+    $state.go(views.cpu);
   }
 
   function isLogin() {
@@ -37979,8 +37887,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var name = 'utils';
+service.$inject = ['$http'];
 
-function service() {
+function service($http) {
   var groupByServer = function groupByServer(data) {
     var dict = {};
     var _iteratorNormalCompletion = true;
@@ -38059,10 +37968,27 @@ function service() {
     return '';
   };
 
+  function fetchPOST(url, data, success, fail) {
+    // const token = 'f82e62d7c3ea69cc12b5cdb8d621dab6';
+    // const token = localStorage.getItem('jwt-token')
+    console.log('some');
+    return $http({
+      url: url,
+      // headers: { 'Authorization': 'Bearer ' + token },
+      method: 'POST',
+      data: Object.assign({}, data)
+    }).then(function (resp) {
+      console.log('fetch');
+      console.log(resp);
+    });
+  }
+
+  fetchPOST('http://monitor.api.i2g.cloud/agent/list', {});
   return {
     groupByServer: groupByServer,
     findCurrentInfo: findCurrentInfo,
-    capitalize: capitalize
+    capitalize: capitalize,
+    fetchPOST: fetchPOST
   };
 }
 

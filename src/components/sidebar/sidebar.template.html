@@ -25,13 +25,22 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
-                <li>
+                <!-- <li>
                     <a 
                      ui-sref="api" 
                      class="waves-effect active"
                      ng-class="{'active': self.curView === 'api'}"
                      ng-click="self.handleViewClick('api')">
                         <i class="fa fa-wifi m-r-10" aria-hidden="true"></i>API
+                    </a>
+                </li> -->
+                <li>
+                    <a 
+                        ui-sref="interface" 
+                        class="waves-effect"
+                        ng-class="{'active': self.curView === 'interface'}"
+                        ng-click="self.handleViewClick('interface')">
+                        <i class="fa fa-microchip m-r-10" aria-hidden="true"></i>Interface
                     </a>
                 </li>
                 <li>
@@ -40,7 +49,7 @@
                      class="waves-effect"
                      ng-class="{'active': self.curView === 'cpu'}"
                      ng-click="self.handleViewClick('cpu')">
-                        <i class="fa fa-hdd-o m-r-10" aria-hidden="true"></i>CPU
+                        <i class="fa fa-server m-r-10" aria-hidden="true"></i>CPU
                     </a>
                 </li>
                 <li>
@@ -49,10 +58,20 @@
                      class="waves-effect"
                      ng-class="{'active': self.curView === 'memory'}"
                      ng-click="self.handleViewClick('memory')">
-                        <i class="fa fa-microchip m-r-10" aria-hidden="true"></i>Memory
+                        <i class="fa fa-archive m-r-10" aria-hidden="true"></i>Memory
                     </a>
                 </li>
                 <li>
+                    <a 
+                        ui-sref="harddisk" 
+                        class="waves-effect"
+                        ng-class="{'active': self.curView === 'harddisk'}"
+                        ng-click="self.handleViewClick('harddisk')">
+                        <i class="fa fa-hdd-o m-r-10" aria-hidden="true"></i>Harddisk
+                    </a>
+                </li>
+                
+                <!-- <li>
                     <a 
                      ui-sref="process" 
                      class="waves-effect"
@@ -60,7 +79,7 @@
                      ng-click="self.handleViewClick('process')">
                         <i class="fa fa-clone m-r-10" aria-hidden="true"></i>Process
                     </a>
-                </li>
+                </li> -->
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
