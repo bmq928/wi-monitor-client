@@ -36084,7 +36084,26 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "ol.breadcrumb .breadcrumb-item a {\n  cursor: pointer; }\n\nol.breadcrumb .breadcrumb-item a:hover {\n  text-decoration: underline;\n  color: #55ce63; }\n", ""]);
+exports.push([module.i, "ol.breadcrumb {\n  padding: 0; }\n  ol.breadcrumb .breadcrumb-item a {\n    cursor: pointer; }\n  ol.breadcrumb .breadcrumb-item a:hover {\n    text-decoration: underline;\n    color: #55ce63; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/tabs/tabs.style.scss":
+/*!****************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/sass-loader/lib/loader.js!./src/components/tabs/tabs.style.scss ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".tabs {\n  /***** REQUIRED STYLES *****/ }\n  .tabs .badge-labeled {\n    padding-top: 0;\n    padding-bottom: 0;\n    padding-right: 0.2rem;\n    margin-right: 3px; }\n  .tabs .badge-labeled i {\n    padding: 0.25em 0.3rem;\n    cursor: pointer;\n    position: relative;\n    display: inline-block;\n    right: -0.2em;\n    background-color: #000000;\n    background-color: rgba(0, 0, 0, 0.2);\n    border-left: solid 1px rgba(255, 255, 255, 0.5);\n    border-radius: 0 0.25rem 0.25rem 0; }\n", ""]);
 
 // exports
 
@@ -36794,7 +36813,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <div ui-view></div> </div> </div> </div>";
+module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <tabs></tabs> <div ui-view></div> </div> </div> </div>";
 
 /***/ }),
 
@@ -36886,11 +36905,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sidebar_sidebar_controller__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sidebar/sidebar.controller */ "./src/components/sidebar/sidebar.controller.js");
 /* harmony import */ var _navbar_navbar_controller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./navbar/navbar.controller */ "./src/components/navbar/navbar.controller.js");
 /* harmony import */ var _breadcrumb_breadcrumb_controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./breadcrumb/breadcrumb.controller */ "./src/components/breadcrumb/breadcrumb.controller.js");
+/* harmony import */ var _tabs_tabs_controller__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./tabs/tabs.controller */ "./src/components/tabs/tabs.controller.js");
 
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ([_app_app_controller__WEBPACK_IMPORTED_MODULE_0__["default"], _sidebar_sidebar_controller__WEBPACK_IMPORTED_MODULE_1__["default"], _navbar_navbar_controller__WEBPACK_IMPORTED_MODULE_2__["default"], _breadcrumb_breadcrumb_controller__WEBPACK_IMPORTED_MODULE_3__["default"]]);
+
+/* harmony default export */ __webpack_exports__["default"] = ([_app_app_controller__WEBPACK_IMPORTED_MODULE_0__["default"], _sidebar_sidebar_controller__WEBPACK_IMPORTED_MODULE_1__["default"], _navbar_navbar_controller__WEBPACK_IMPORTED_MODULE_2__["default"], _breadcrumb_breadcrumb_controller__WEBPACK_IMPORTED_MODULE_3__["default"], _tabs_tabs_controller__WEBPACK_IMPORTED_MODULE_4__["default"]]);
 
 /***/ }),
 
@@ -36981,6 +37002,81 @@ function controller() {
 /***/ (function(module, exports) {
 
 module.exports = "<aside class=left-sidebar style=padding:0> <header class=topbar> <nav class=\"navbar top-navbar navbar-toggleable-sm navbar-light\" style=background-color:#fff;vertical-align:middle> <div class=navbar-header style=\"border-bottom:2px solid #9999\"> <a class=navbar-brand href=index.html> <h2 style=color:#55ce63>WI-MONITOR</h2> </a> </div> </nav> </header> <div class=scroll-sidebar style=padding-top:5px> <nav class=sidebar-nav> <ul id=sidebarnav> <li> <a ui-sref=api class=\"waves-effect active\" ng-class=\"{'active': self.curView === 'api'}\" ng-click=\"self.handleViewClick('api')\"> <i class=\"fa fa-wifi m-r-10\" aria-hidden=true></i>API </a> </li> <li> <a ui-sref=cpu class=waves-effect ng-class=\"{'active': self.curView === 'cpu'}\" ng-click=\"self.handleViewClick('cpu')\"> <i class=\"fa fa-hdd-o m-r-10\" aria-hidden=true></i>CPU </a> </li> <li> <a ui-sref=memory class=waves-effect ng-class=\"{'active': self.curView === 'memory'}\" ng-click=\"self.handleViewClick('memory')\"> <i class=\"fa fa-microchip m-r-10\" aria-hidden=true></i>Memory </a> </li> <li> <a ui-sref=process class=waves-effect ng-class=\"{'active': self.curView === 'process'}\" ng-click=\"self.handleViewClick('process')\"> <i class=\"fa fa-clone m-r-10\" aria-hidden=true></i>Process </a> </li> </ul> </nav> </div> </aside>";
+
+/***/ }),
+
+/***/ "./src/components/tabs/tabs.controller.js":
+/*!************************************************!*\
+  !*** ./src/components/tabs/tabs.controller.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
+/* harmony import */ var _tabs_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tabs.template.html */ "./src/components/tabs/tabs.template.html");
+/* harmony import */ var _tabs_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_tabs_template_html__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _tabs_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tabs.style.scss */ "./src/components/tabs/tabs.style.scss");
+/* harmony import */ var _tabs_style_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_tabs_style_scss__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var name = 'tabs';
+controller.$inject = ['utils'];
+
+function controller(utils) {
+  var self = this;
+
+  self.capitalize = function (str) {
+    return utils.capitalize(str);
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _tabs_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller, {
+  listAgent: '<'
+}));
+
+/***/ }),
+
+/***/ "./src/components/tabs/tabs.style.scss":
+/*!*********************************************!*\
+  !*** ./src/components/tabs/tabs.style.scss ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/sass-loader/lib/loader.js!./tabs.style.scss */ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/tabs/tabs.style.scss");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/components/tabs/tabs.template.html":
+/*!************************************************!*\
+  !*** ./src/components/tabs/tabs.template.html ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=tabs> <div class=container> <div class=row> <span class=\"badge badge-default badge-labeled\">default<i class=\"fa fa-times\"></i></span> <span class=\"badge badge-default badge-labeled\">default<i class=\"fa fa-times\"></i></span> </div> </div> </div>";
 
 /***/ }),
 
