@@ -8,6 +8,8 @@ import agent from './agent'
 import events from './events'
 import cpu from './cpu'
 import harddisk from './harddisk'
+import memory from './memory'
+import interfaces from './interfaces'
 
 export default [
     // apiMonitor,
@@ -18,6 +20,8 @@ export default [
     agent,
     events,
     cpu,
-    harddisk
+    harddisk,
+    memory,
+    interfaces
     // processMonitor
 ]

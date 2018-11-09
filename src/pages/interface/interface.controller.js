@@ -3,32 +3,40 @@ import template from './interface.template.html'
 
 const name = 'interface'
 
-// controller.$inject = ['memMonitor', 'utils']
-function controller() {
-    const self = this
+controller.$inject = ['events', 'interfaces']
+function controller(events, interfaces) {
+  const self = this
 
-    self.$onInit = function () {
-        preProcess()
-        init()
-    }
+  self.$onInit = function() {
+    preProcess()
+    init()
 
-    self.chooseView = function(view) {
-        self.curView = view
-    }
+    events.onChangeAgent(id => {
+      self.idAgent = id
+      init()
+    })
+  }
 
-    function preProcess() {
-        // self.curView = 'all'
+  function preProcess() {
+    //agent
+    self.idAgent = -1
+    events.getAgent(id => {
+      self.idAgent = id
+    })
 
-        // //data
-        // self.allServer = []
-        // self.minMemServer = [] //min interface in each server at specific time
-        // self.maxMemServer = [] //max interface in each server at specific time
-        // self.currentMemInfo = [] //the latest interface in each server at specific time
-    }
+    //data
+    self.data = {}
+  }
 
-    function init() {
-        
-    }
+  function init() {
+    interfaces.interfaceInfo(self.idAgent).then(data => {
+        self.data = data
+    })
+    .catch(err => {
+        console.error('err from interfaces')
+        console.error(err)
+    })
+  }
 }
 
 export default new ComponentSchema(name, template, controller)

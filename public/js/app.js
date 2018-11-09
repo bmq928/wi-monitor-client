@@ -37448,29 +37448,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _interface_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_interface_template_html__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var name = 'interface'; // controller.$inject = ['memMonitor', 'utils']
+var name = 'interface';
+controller.$inject = ['events', 'interfaces'];
 
-function controller() {
+function controller(events, interfaces) {
   var self = this;
 
   self.$onInit = function () {
     preProcess();
     init();
+    events.onChangeAgent(function (id) {
+      self.idAgent = id;
+      init();
+    });
   };
 
-  self.chooseView = function (view) {
-    self.curView = view;
-  };
+  function preProcess() {
+    //agent
+    self.idAgent = -1;
+    events.getAgent(function (id) {
+      self.idAgent = id;
+    }); //data
 
-  function preProcess() {// self.curView = 'all'
-    // //data
-    // self.allServer = []
-    // self.minMemServer = [] //min interface in each server at specific time
-    // self.maxMemServer = [] //max interface in each server at specific time
-    // self.currentMemInfo = [] //the latest interface in each server at specific time
+    self.data = {};
   }
 
-  function init() {}
+  function init() {
+    interfaces.interfaceInfo(self.idAgent).then(function (data) {
+      self.data = data;
+    }).catch(function (err) {
+      console.error('err from interfaces');
+      console.error(err);
+    });
+  }
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _interface_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
@@ -37484,7 +37494,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>Interface</div>";
+module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -37502,25 +37512,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _memory_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_memory_template_html__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var name = 'memory'; // controller.$inject = ['memMonitor', 'utils']
+var name = 'memory';
+controller.$inject = ['events', 'memory'];
 
-function controller() {
+function controller(events, memory) {
   var self = this;
 
   self.$onInit = function () {
     preProcess();
     init();
-  };
-
-  self.chooseView = function (view) {
-    self.curView = view;
+    events.onChangeAgent(function (id) {
+      self.idAgent = id;
+      init();
+    });
   };
 
   function preProcess() {
-    self.curView = 'all';
+    //agent
+    self.idAgent = -1;
+    events.getAgent(function (id) {
+      self.idAgent = id;
+    }); //data
+
+    self.data = {};
   }
 
-  function init() {} // function findCurrentMemInfo() {
+  function init() {
+    memory.memInfo(self.idAgent).then(function (data) {
+      self.data = data;
+    }).catch(function (err) {
+      console.error('error from memory');
+      console.error(err);
+    });
+  } // function findCurrentMemInfo() {
   //     return self.allServer.map(({serverName, fields}) => {
   //         if(fields)
   //     })
@@ -37539,7 +37563,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = " <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Available</th> <th>Buff</th> <th>Free</th> <th>Shared</th> <th>Used</th> <th>Total</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentMemInfo track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.available></td> <td ng-bind=server.buff></td> <td ng-bind=server.free></td> <td ng-bind=server.shared></td> <td ng-bind=server.used></td> <td ng-bind=server.total></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'max'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Max Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.maxMemServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.maxUsed></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'min'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Min Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.minMemServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.minUsed></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
+module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -37857,6 +37881,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./events */ "./src/services/events.js");
 /* harmony import */ var _cpu__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./cpu */ "./src/services/cpu.js");
 /* harmony import */ var _harddisk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./harddisk */ "./src/services/harddisk.js");
+/* harmony import */ var _memory__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./memory */ "./src/services/memory.js");
+/* harmony import */ var _interfaces__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./interfaces */ "./src/services/interfaces.js");
 // import apiMonitor from './apiMonitor'
  // import cpuMonitor from './cpuMonitor'
 // import memMonitor from './memMonitor'
@@ -37867,11 +37893,89 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ([// apiMonitor,
 _constant__WEBPACK_IMPORTED_MODULE_0__["default"], // cpuMonitor,
 // memMonitor,
-_utils__WEBPACK_IMPORTED_MODULE_1__["default"], _agent__WEBPACK_IMPORTED_MODULE_2__["default"], _events__WEBPACK_IMPORTED_MODULE_3__["default"], _cpu__WEBPACK_IMPORTED_MODULE_4__["default"], _harddisk__WEBPACK_IMPORTED_MODULE_5__["default"] // processMonitor
+_utils__WEBPACK_IMPORTED_MODULE_1__["default"], _agent__WEBPACK_IMPORTED_MODULE_2__["default"], _events__WEBPACK_IMPORTED_MODULE_3__["default"], _cpu__WEBPACK_IMPORTED_MODULE_4__["default"], _harddisk__WEBPACK_IMPORTED_MODULE_5__["default"], _memory__WEBPACK_IMPORTED_MODULE_6__["default"], _interfaces__WEBPACK_IMPORTED_MODULE_7__["default"] // processMonitor
 ]);
+
+/***/ }),
+
+/***/ "./src/services/interfaces.js":
+/*!************************************!*\
+  !*** ./src/services/interfaces.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+
+var name = 'interfaces';
+service.$inject = ['utils', '$q', 'constant'];
+
+function service(utils, $q, constant) {
+  var interfaceInfo = function interfaceInfo(idAgent) {
+    var path = '/agent/interface/info';
+    var url = constant.backendUrl + path;
+    return $q(function (resolve, reject) {
+      utils.fetchPOST(url, {
+        idAgent: idAgent
+      }).then(function (data) {
+        return resolve(data);
+      }).catch(function (err) {
+        return reject(err);
+      });
+    });
+  };
+
+  return {
+    interfaceInfo: interfaceInfo
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+
+/***/ }),
+
+/***/ "./src/services/memory.js":
+/*!********************************!*\
+  !*** ./src/services/memory.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+
+var name = 'memory';
+service.$inject = ['utils', '$q', 'constant'];
+
+function service(utils, $q, constant) {
+  var memInfo = function memInfo(idAgent) {
+    var path = '/agent/memory/info';
+    var url = constant.backendUrl + path;
+    return $q(function (resolve, reject) {
+      utils.fetchPOST(url, {
+        idAgent: idAgent
+      }).then(function (data) {
+        return resolve(data);
+      }).catch(function (err) {
+        return reject(err);
+      });
+    });
+  };
+
+  return {
+    memInfo: memInfo
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
 
 /***/ }),
 
