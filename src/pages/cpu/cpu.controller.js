@@ -13,7 +13,8 @@ function controller(events, cpu) {
     init()
 
     events.onChangeAgent(id => {
-        self.idAgent = id
+      self.idAgent = id
+      init()
     })
   }
 
@@ -32,20 +33,11 @@ function controller(events, cpu) {
     cpu
       .cpuInfo(self.idAgent)
       .then(data => {
-        //if data is an array
-        if (data && data.length) {
-          self.data = data
-            .filter(d => (d.idAgent = self.idAgent)) //filter
-            .reduce((acc, cur) => cur) // change array to value
-        } else {
-            self.data = data
-        }
-
-        console.log({ 'cpu.self.data': self.data })
+        self.data = data
       })
       .catch(err => {
         console.error('err from cpu')
-        console.log({ err })
+        console.error(err)
       })
   }
 }

@@ -1,11 +1,11 @@
 import { ServiceSchema } from '../libs'
 
-const name = 'cpu'
+const name = 'harddisk'
 
 service.$inject = ['utils', '$q', 'constant']
 function service(utils, $q, constant) {
-  const cpuInfo = idAgent => {
-    const path = '/agent/cpu/info'
+  const harddiskInfo = idAgent => {
+    const path = '/agent/harddisk/info'
     const url = constant.backendUrl + path
 
     return $q((resolve, reject) => {
@@ -17,7 +17,7 @@ function service(utils, $q, constant) {
   }
 
   return {
-    cpuInfo
+    harddiskInfo
   }
 }
 

@@ -3,31 +3,52 @@ import template from './harddisk.template.html'
 
 const name = 'harddisk'
 
-// controller.$inject = ['memMonitor', 'utils']
-function controller() {
-    const self = this
+controller.$inject = ['events', 'harddisk']
+function controller(events, harddisk) {
+  const self = this
 
-    self.$onInit = function () {
-        preProcess()
-        init()
-    }
+  self.$onInit = function() {
+    preProcess()
+    init()
 
-    self.chooseView = function(view) {
-        self.curView = view
-    }
+    events.onChangeAgent(id => {
+      self.idAgent = id
+      init()
+    })
+  }
 
-    function preProcess() {
-        self.curView = 'all'
-    }
+  self.chooseView = function(view) {
+    self.curView = view
+  }
 
-    function init() {
-    }
+  function preProcess() {
+    //agent
+    self.idAgent = -1
+    events.getAgent(id => {
+      self.idAgent = id
+    })
 
-    // function findCurrentMemInfo() {
-    //     return self.allServer.map(({serverName, fields}) => {
-    //         if(fields)
-    //     })
-    // }
+    //data
+    self.data = {}
+  }
+
+  function init() {
+    harddisk
+      .harddiskInfo(self.idAgent)
+      .then(data => {
+        self.data = data
+      })
+      .catch(err => {
+        console.error('err from harrdisk')
+        console.error(err)
+      })
+  }
+
+  // function findCurrentMemInfo() {
+  //     return self.allServer.map(({serverName, fields}) => {
+  //         if(fields)
+  //     })
+  // }
 }
 
 export default new ComponentSchema(name, template, controller)

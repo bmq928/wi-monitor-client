@@ -37297,6 +37297,7 @@ function controller(events, cpu) {
     init();
     events.onChangeAgent(function (id) {
       self.idAgent = id;
+      init();
     });
   };
 
@@ -37312,26 +37313,10 @@ function controller(events, cpu) {
 
   function init() {
     cpu.cpuInfo(self.idAgent).then(function (data) {
-      //if data is an array
-      if (data && data.length) {
-        self.data = data.filter(function (d) {
-          return d.idAgent = self.idAgent;
-        }) //filter
-        .reduce(function (acc, cur) {
-          return cur;
-        }); // change array to value
-      } else {
-        self.data = data;
-      }
-
-      console.log({
-        'cpu.self.data': self.data
-      });
+      self.data = data;
     }).catch(function (err) {
       console.error('err from cpu');
-      console.log({
-        err: err
-      });
+      console.error(err);
     });
   }
 }
@@ -37365,14 +37350,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _harddisk_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_harddisk_template_html__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var name = 'harddisk'; // controller.$inject = ['memMonitor', 'utils']
+var name = 'harddisk';
+controller.$inject = ['events', 'harddisk'];
 
-function controller() {
+function controller(events, harddisk) {
   var self = this;
 
   self.$onInit = function () {
     preProcess();
     init();
+    events.onChangeAgent(function (id) {
+      self.idAgent = id;
+      init();
+    });
   };
 
   self.chooseView = function (view) {
@@ -37380,10 +37370,23 @@ function controller() {
   };
 
   function preProcess() {
-    self.curView = 'all';
+    //agent
+    self.idAgent = -1;
+    events.getAgent(function (id) {
+      self.idAgent = id;
+    }); //data
+
+    self.data = {};
   }
 
-  function init() {} // function findCurrentMemInfo() {
+  function init() {
+    harddisk.harddiskInfo(self.idAgent).then(function (data) {
+      self.data = data;
+    }).catch(function (err) {
+      console.error('err from harrdisk');
+      console.error(err);
+    });
+  } // function findCurrentMemInfo() {
   //     return self.allServer.map(({serverName, fields}) => {
   //         if(fields)
   //     })
@@ -37402,7 +37405,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>HARDdisk</div>";
+module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -37712,11 +37715,13 @@ var name = 'cpu';
 service.$inject = ['utils', '$q', 'constant'];
 
 function service(utils, $q, constant) {
-  var cpuInfo = function cpuInfo(id) {
-    var path = '/agent/list';
+  var cpuInfo = function cpuInfo(idAgent) {
+    var path = '/agent/cpu/info';
     var url = constant.backendUrl + path;
     return $q(function (resolve, reject) {
-      utils.fetchPOST(url, {}).then(function (data) {
+      utils.fetchPOST(url, {
+        idAgent: idAgent
+      }).then(function (data) {
         return resolve(data);
       }).catch(function (err) {
         return reject(err);
@@ -37799,6 +37804,44 @@ function service($rootScope) {
 
 /***/ }),
 
+/***/ "./src/services/harddisk.js":
+/*!**********************************!*\
+  !*** ./src/services/harddisk.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+
+var name = 'harddisk';
+service.$inject = ['utils', '$q', 'constant'];
+
+function service(utils, $q, constant) {
+  var harddiskInfo = function harddiskInfo(idAgent) {
+    var path = '/agent/harddisk/info';
+    var url = constant.backendUrl + path;
+    return $q(function (resolve, reject) {
+      utils.fetchPOST(url, {
+        idAgent: idAgent
+      }).then(function (data) {
+        return resolve(data);
+      }).catch(function (err) {
+        return reject(err);
+      });
+    });
+  };
+
+  return {
+    harddiskInfo: harddiskInfo
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+
+/***/ }),
+
 /***/ "./src/services/index.js":
 /*!*******************************!*\
   !*** ./src/services/index.js ***!
@@ -37813,6 +37856,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _agent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./agent */ "./src/services/agent.js");
 /* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./events */ "./src/services/events.js");
 /* harmony import */ var _cpu__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./cpu */ "./src/services/cpu.js");
+/* harmony import */ var _harddisk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./harddisk */ "./src/services/harddisk.js");
 // import apiMonitor from './apiMonitor'
  // import cpuMonitor from './cpuMonitor'
 // import memMonitor from './memMonitor'
@@ -37822,10 +37866,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ([// apiMonitor,
 _constant__WEBPACK_IMPORTED_MODULE_0__["default"], // cpuMonitor,
 // memMonitor,
-_utils__WEBPACK_IMPORTED_MODULE_1__["default"], _agent__WEBPACK_IMPORTED_MODULE_2__["default"], _events__WEBPACK_IMPORTED_MODULE_3__["default"], _cpu__WEBPACK_IMPORTED_MODULE_4__["default"] // processMonitor
+_utils__WEBPACK_IMPORTED_MODULE_1__["default"], _agent__WEBPACK_IMPORTED_MODULE_2__["default"], _events__WEBPACK_IMPORTED_MODULE_3__["default"], _cpu__WEBPACK_IMPORTED_MODULE_4__["default"], _harddisk__WEBPACK_IMPORTED_MODULE_5__["default"] // processMonitor
 ]);
 
 /***/ }),
