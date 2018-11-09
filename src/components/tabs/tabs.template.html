@@ -1,15 +1,22 @@
 <div class="tabs">
   <div class="container">
     <div class="row">
-      <span 
-       class="badge badge-default badge-labeled"
-       ng-repeat="agent in self.listAgent track by $index"
-       >
-        {{agent.name}}
-        <i class="fa fa-times"></i>
+      <span
+        class="badge badge-default badge-labeled"
+        ng-repeat="agent in self.listAgent track by $index"
+        ng-click="self.agentOnClick(agent.idAgent)"
+      >
+        <span class="title" ng-bind="agent.name"></span>
+        <i class="fa fa-times icon"></i>
       </span>
-      <!-- <span class="badge badge-default badge-labeled">default<i class="fa fa-times"></i></span>
-      <span class="badge badge-default badge-labeled">default<i class="fa fa-times"></i></span> -->
+
+      <span class="badge badge-success" style="cursor:pointer">
+        <i class="fa fa-plus"></i>
+      </span>
+      <!--
+        <span class="badge badge-default badge-labeled">default<i class="fa fa-times"></i></span>
+        <span class="badge badge-default badge-labeled">default<i class="fa fa-times"></i></span>
+      -->
     </div>
   </div>
 </div>

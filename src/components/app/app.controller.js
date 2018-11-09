@@ -3,13 +3,17 @@ import template from './app.template.html'
 
 const name = 'app'
 
-controller.$inject = ['agent']
-function controller(agent) {
+controller.$inject = ['agent', 'events']
+function controller(agent, events) {
   const self = this
 
   self.$onInit = function() {
     preProcess()
     init()
+
+    events.onRequestAgent(() => {
+      events.sendAgent(self.curAgentId)
+    })
   }
 
   self.changeView = function(view) {
@@ -17,7 +21,7 @@ function controller(agent) {
   }
 
   self.agentTabOnClick = function(id) {
-    
+    setCurAgentId(id)
   }
 
   function preProcess() {
@@ -25,7 +29,8 @@ function controller(agent) {
 
     //agents
     self.agents = []
-    self.curAgentId = null
+    self.curAgentId = -1
+    // setCurAgentId(null)
   }
 
   function init() {
@@ -36,9 +41,15 @@ function controller(agent) {
       .then(data => self.agents = data)
       .then(() => {
         if(self.agents && self.agents.length) {
-          self.curAgentId = self.agents[0].idAgent
+          // self.curAgentId = self.agents[0].idAgent
+          setCurAgentId(self.agents[0].idAgent)
         }
       })
+  }
+
+  function setCurAgentId(id) {
+    self.curAgentId = id
+    events.changeAgent(id)
   }
 }
 

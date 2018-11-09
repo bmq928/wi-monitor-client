@@ -1,5 +1,6 @@
 import { ComponentSchema } from '../../libs'
 import template from './sidebar.template.html'
+import './sidebar.style.scss'
 
 const name = 'sidebar'
 

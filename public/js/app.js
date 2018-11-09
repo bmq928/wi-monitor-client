@@ -36091,6 +36091,25 @@ exports.push([module.i, "ol.breadcrumb {\n  padding: 0; }\n  ol.breadcrumb .brea
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/sidebar/sidebar.style.scss":
+/*!**********************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/sass-loader/lib/loader.js!./src/components/sidebar/sidebar.style.scss ***!
+  \**********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".left-sidebar .tab-title {\n  font-size: 14px; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/tabs/tabs.style.scss":
 /*!****************************************************************************************************************!*\
   !*** ./node_modules/css-loader!./node_modules/sass-loader/lib/loader.js!./src/components/tabs/tabs.style.scss ***!
@@ -36103,7 +36122,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".tabs {\n  margin-bottom: 15px;\n  /***** REQUIRED STYLES *****/ }\n  .tabs .badge-labeled {\n    padding-top: 0;\n    padding-bottom: 0;\n    padding-right: 0.2rem;\n    margin-right: 3px;\n    cursor: pointer; }\n    .tabs .badge-labeled:active {\n      background-color: black; }\n  .tabs .badge-labeled i {\n    padding: 0.25em 0.3rem;\n    cursor: pointer;\n    position: relative;\n    display: inline-block;\n    right: -0.2em;\n    background-color: #000000;\n    background-color: rgba(0, 0, 0, 0.2);\n    border-left: solid 1px rgba(255, 255, 255, 0.5);\n    border-radius: 0 0.25rem 0.25rem 0; }\n", ""]);
+exports.push([module.i, ".tabs {\n  margin-bottom: 15px;\n  /***** REQUIRED STYLES *****/ }\n  .tabs .badge-labeled {\n    padding-top: 0;\n    padding-bottom: 0;\n    padding-right: 0.2rem;\n    margin-right: 3px;\n    cursor: pointer; }\n    .tabs .badge-labeled .title:active {\n      background-color: black; }\n    .tabs .badge-labeled .icon:active {\n      background-color: black; }\n  .tabs .badge-labeled i {\n    padding: 0.25em 0.3rem;\n    cursor: pointer;\n    position: relative;\n    display: inline-block;\n    right: -0.2em;\n    background-color: #000000;\n    background-color: rgba(0, 0, 0, 0.2);\n    border-left: solid 1px rgba(255, 255, 255, 0.5);\n    border-radius: 0 0.25rem 0.25rem 0; }\n", ""]);
 
 // exports
 
@@ -36741,27 +36760,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'app';
-controller.$inject = ['agent'];
+controller.$inject = ['agent', 'events'];
 
-function controller(agent) {
+function controller(agent, events) {
   var self = this;
 
   self.$onInit = function () {
     preProcess();
     init();
+    events.onRequestAgent(function () {
+      events.sendAgent(self.curAgentId);
+    });
   };
 
   self.changeView = function (view) {
     self.curView = view;
   };
 
-  self.agentTabOnClick = function (id) {};
+  self.agentTabOnClick = function (id) {
+    setCurAgentId(id);
+  };
 
   function preProcess() {
     self.curView = 'interface'; //agents
 
     self.agents = [];
-    self.curAgentId = null;
+    self.curAgentId = -1; // setCurAgentId(null)
   }
 
   function init() {
@@ -36770,9 +36794,15 @@ function controller(agent) {
       return self.agents = data;
     }).then(function () {
       if (self.agents && self.agents.length) {
-        self.curAgentId = self.agents[0].idAgent;
+        // self.curAgentId = self.agents[0].idAgent
+        setCurAgentId(self.agents[0].idAgent);
       }
     });
+  }
+
+  function setCurAgentId(id) {
+    self.curAgentId = id;
+    events.changeAgent(id);
   }
 }
 
@@ -36787,7 +36817,7 @@ function controller(agent) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <tabs list-agent=self.agents></tabs> <div ui-view></div> </div> </div> </div>";
+module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <tabs list-agent=self.agents agent-on-click=self.agentTabOnClick></tabs> <div ui-view></div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -36948,6 +36978,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
 /* harmony import */ var _sidebar_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sidebar.template.html */ "./src/components/sidebar/sidebar.template.html");
 /* harmony import */ var _sidebar_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_sidebar_template_html__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _sidebar_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sidebar.style.scss */ "./src/components/sidebar/sidebar.style.scss");
+/* harmony import */ var _sidebar_style_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_sidebar_style_scss__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 var name = 'sidebar';
@@ -36968,6 +37001,36 @@ function controller() {
 
 /***/ }),
 
+/***/ "./src/components/sidebar/sidebar.style.scss":
+/*!***************************************************!*\
+  !*** ./src/components/sidebar/sidebar.style.scss ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/sass-loader/lib/loader.js!./sidebar.style.scss */ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/sidebar/sidebar.style.scss");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./src/components/sidebar/sidebar.template.html":
 /*!******************************************************!*\
   !*** ./src/components/sidebar/sidebar.template.html ***!
@@ -36975,7 +37038,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<aside class=left-sidebar style=padding:0> <header class=topbar> <nav class=\"navbar top-navbar navbar-toggleable-sm navbar-light\" style=background-color:#fff;vertical-align:middle> <div class=navbar-header style=\"border-bottom:2px solid #9999\"> <a class=navbar-brand href=index.html> <h2 style=color:#55ce63>WI-MONITOR</h2> </a> </div> </nav> </header> <div class=scroll-sidebar style=padding-top:5px> <nav class=sidebar-nav> <ul id=sidebarnav> <li> <a ui-sref=interface class=waves-effect ng-class=\"{'active': self.curView === 'interface'}\" ng-click=\"self.handleViewClick('interface')\"> <i class=\"fa fa-microchip m-r-10\" aria-hidden=true></i>Interface </a> </li> <li> <a ui-sref=cpu class=waves-effect ng-class=\"{'active': self.curView === 'cpu'}\" ng-click=\"self.handleViewClick('cpu')\"> <i class=\"fa fa-server m-r-10\" aria-hidden=true></i>CPU </a> </li> <li> <a ui-sref=memory class=waves-effect ng-class=\"{'active': self.curView === 'memory'}\" ng-click=\"self.handleViewClick('memory')\"> <i class=\"fa fa-archive m-r-10\" aria-hidden=true></i>Memory </a> </li> <li> <a ui-sref=harddisk class=waves-effect ng-class=\"{'active': self.curView === 'harddisk'}\" ng-click=\"self.handleViewClick('harddisk')\"> <i class=\"fa fa-hdd-o m-r-10\" aria-hidden=true></i>Harddisk </a> </li> </ul> </nav> </div> </aside>";
+module.exports = "<aside class=left-sidebar style=padding:0> <header class=topbar> <nav class=\"navbar top-navbar navbar-toggleable-sm navbar-light\" style=background-color:#fff;vertical-align:middle> <div class=navbar-header style=\"border-bottom:2px solid #9999\"> <a class=navbar-brand href=index.html> <h2 style=color:#55ce63>WI-MONITOR</h2> </a> </div> </nav> </header> <div class=scroll-sidebar style=padding-top:5px> <nav class=sidebar-nav> <ul id=sidebarnav> <li> <a ui-sref=interface class=waves-effect ng-class=\"{'active': self.curView === 'interface'}\" ng-click=\"self.handleViewClick('interface')\"> <i class=\"fa fa-microchip m-r-10\" aria-hidden=true></i> <span class=tab-title>Interface</span> </a> </li> <li> <a ui-sref=cpu class=waves-effect ng-class=\"{'active': self.curView === 'cpu'}\" ng-click=\"self.handleViewClick('cpu')\"> <i class=\"fa fa-server m-r-10\" aria-hidden=true></i> <span class=tab-title>CPU</span> </a> </li> <li> <a ui-sref=memory class=waves-effect ng-class=\"{'active': self.curView === 'memory'}\" ng-click=\"self.handleViewClick('memory')\"> <i class=\"fa fa-archive m-r-10\" aria-hidden=true></i> <span class=tab-title>Memory</span> </a> </li> <li> <a ui-sref=harddisk class=waves-effect ng-class=\"{'active': self.curView === 'harddisk'}\" ng-click=\"self.handleViewClick('harddisk')\"> <i class=\"fa fa-hdd-o m-r-10\" aria-hidden=true></i> <span class=tab-title>Harddisk</span> </a> </li> </ul> </nav> </div> </aside>";
 
 /***/ }),
 
@@ -37016,7 +37079,8 @@ function controller(utils) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _tabs_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller, {
-  listAgent: '<'
+  listAgent: '<',
+  agentOnClick: '<'
 }));
 
 /***/ }),
@@ -37058,7 +37122,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=tabs> <div class=container> <div class=row> <span class=\"badge badge-default badge-labeled\" ng-repeat=\"agent in self.listAgent track by $index\"> {{agent.name}} <i class=\"fa fa-times\"></i> </span> </div> </div> </div>";
+module.exports = "<div class=tabs> <div class=container> <div class=row> <span class=\"badge badge-default badge-labeled\" ng-repeat=\"agent in self.listAgent track by $index\" ng-click=self.agentOnClick(agent.idAgent)> <span class=title ng-bind=agent.name></span> <i class=\"fa fa-times icon\"></i> </span> <span class=\"badge badge-success\" style=cursor:pointer> <i class=\"fa fa-plus\"></i> </span> </div> </div> </div> ";
 
 /***/ }),
 
@@ -37216,7 +37280,9 @@ __webpack_require__.r(__webpack_exports__);
 
 var name = 'cpu'; // controller.$inject = ['cpuMonitor', 'utils']
 
-function controller() {
+controller.$inject = ['rootData'];
+
+function controller(rootData) {
   var self = this;
 
   self.$onInit = function () {
@@ -37276,7 +37342,7 @@ function controller() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = " <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === 'all'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Current Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.currentCpusInfo track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.cpuUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'max'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Max Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.maxCpuServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.maxUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === 'min'\"> <thead> <tr> <th>#</th> <th>Server</th> <th>Domain</th> <th>Min Usage</th> <th>Time</th> </tr> </thead> <tbody> <tr ng-repeat=\"(i, server) in self.minCpuServer track by $index\"> <td ng-bind=\"i + 1\"></td> <td ng-bind=server.serverName></td> <td ng-bind=server.domain></td> <td ng-bind=server.minUsage></td> <td ng-bind=server.time></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>";
+module.exports = " <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> fds </div> </div> </div> </div> </div>";
 
 /***/ }),
 
@@ -37626,6 +37692,72 @@ function service() {
 
 /***/ }),
 
+/***/ "./src/services/events.js":
+/*!********************************!*\
+  !*** ./src/services/events.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+
+var name = 'events';
+service.$inject = ['$rootScope'];
+
+function service($rootScope) {
+  var emit = function emit(eventName, data) {
+    $rootScope.$emit(eventName, data);
+  };
+
+  var on = function on(eventName, handler) {
+    $rootScope.$on(eventName, function (e, data) {
+      return handler(data);
+    });
+  };
+
+  var CHANGE_AGENT = 'CHANGE_AGENT';
+
+  var onChangeAgent = function onChangeAgent(handler) {
+    on(CHANGE_AGENT, handler);
+  };
+
+  var changeAgent = function changeAgent(id) {
+    emit(CHANGE_AGENT, id);
+  };
+
+  var GET_AGENT_REQUEST = 'GET_AGENT_REQUEST';
+  var GET_AGENT_RESPONSE = 'GET_AGENT_RESPONSE';
+
+  var onRequestAgent = function onRequestAgent(handler) {
+    on(GET_AGENT_REQUEST, function () {
+      return handler;
+    });
+  };
+
+  var getAgent = function getAgent(handler) {
+    emit(GET_AGENT_REQUEST, {});
+    on(GET_AGENT_RESPONSE, handler);
+  };
+
+  var sendAgent = function sendAgent(id) {
+    emit(GET_AGENT_RESPONSE, id);
+  };
+
+  return {
+    onChangeAgent: onChangeAgent,
+    changeAgent: changeAgent,
+    onRequestAgent: onRequestAgent,
+    getAgent: getAgent,
+    sendAgent: sendAgent
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+
+/***/ }),
+
 /***/ "./src/services/index.js":
 /*!*******************************!*\
   !*** ./src/services/index.js ***!
@@ -37638,6 +37770,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constant */ "./src/services/constant.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./src/services/utils.js");
 /* harmony import */ var _agent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./agent */ "./src/services/agent.js");
+/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./events */ "./src/services/events.js");
 // import apiMonitor from './apiMonitor'
  // import cpuMonitor from './cpuMonitor'
 // import memMonitor from './memMonitor'
@@ -37645,10 +37778,11 @@ __webpack_require__.r(__webpack_exports__);
  // import processMonitor from './processMonitor'
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ([// apiMonitor,
 _constant__WEBPACK_IMPORTED_MODULE_0__["default"], // cpuMonitor,
 // memMonitor,
-_utils__WEBPACK_IMPORTED_MODULE_1__["default"], _agent__WEBPACK_IMPORTED_MODULE_2__["default"] // processMonitor
+_utils__WEBPACK_IMPORTED_MODULE_1__["default"], _agent__WEBPACK_IMPORTED_MODULE_2__["default"], _events__WEBPACK_IMPORTED_MODULE_3__["default"] // processMonitor
 ]);
 
 /***/ }),

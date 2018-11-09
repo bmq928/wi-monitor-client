@@ -1,12 +1,16 @@
 <div id="main-wrapper">
-    <sidebar
-     handle-view-click="self.changeView" 
-     cur-view="self.curView"></sidebar>
-    <div class="page-wrapper">
-        <div class="container-fluid">
-            <navbar cur-view="self.curView"></navbar>
-            <tabs list-agent="self.agents"></tabs>
-            <div ui-view></div>
-        </div>
+  <sidebar
+    handle-view-click="self.changeView"
+    cur-view="self.curView"
+  ></sidebar>
+  <div class="page-wrapper">
+    <div class="container-fluid">
+      <navbar cur-view="self.curView"></navbar>
+      <tabs
+        list-agent="self.agents"
+        agent-on-click="self.agentTabOnClick"
+      ></tabs>
+      <div ui-view></div>
     </div>
+  </div>
 </div>

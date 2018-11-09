@@ -4,7 +4,8 @@ import template from './cpu.template.html'
 const name = 'cpu'
 
 // controller.$inject = ['cpuMonitor', 'utils']
-function controller() {
+controller.$inject = ['rootData']
+function controller(rootData) {
     const self = this
 
     self.$onInit = function () {

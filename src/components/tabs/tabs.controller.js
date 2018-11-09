@@ -21,5 +21,6 @@ function controller(utils) {
 }
 
 export default new ComponentSchema(name, template, controller, {
-  listAgent: '<'
+  listAgent: '<',
+  agentOnClick: '<'
 })
