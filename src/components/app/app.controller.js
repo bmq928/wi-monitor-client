@@ -18,6 +18,7 @@ function controller(agent, events) {
 
   self.changeView = function(view) {
     self.curView = view
+    // self.curView = decideViewByUrl()
   }
 
   self.agentTabOnClick = function(id) {
@@ -25,7 +26,8 @@ function controller(agent, events) {
   }
 
   function preProcess() {
-    self.curView = 'interface'
+    // self.curView = 'interface'
+    self.curView = decideViewByUrl()
 
     //agents
     self.agents = []
@@ -50,6 +52,12 @@ function controller(agent, events) {
   function setCurAgentId(id) {
     self.curAgentId = id
     events.changeAgent(id)
+  }
+
+  function decideViewByUrl() {
+    const urlHash = location.hash
+    const view = urlHash.substring(3)
+    return view
   }
 }
 
