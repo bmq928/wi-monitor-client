@@ -37280,55 +37280,53 @@ __webpack_require__.r(__webpack_exports__);
 
 var name = 'cpu'; // controller.$inject = ['cpuMonitor', 'utils']
 
-controller.$inject = ['rootData'];
+controller.$inject = ['events', 'cpu'];
 
-function controller(rootData) {
+function controller(events, cpu) {
   var self = this;
 
   self.$onInit = function () {
     preProcess();
     init();
-  }; // self.currentCpusInfo = function () {
-  //     return self.allServer.map(({ serverName, fields }) => {
-  //         const nearestVal = fields.length ? fields[fields.length - 1] : null
-  //         return {
-  //             serverName,
-  //             ...nearestVal
-  //         }
-  //     })
-  // }
-
-
-  self.chooseView = function (view) {
-    self.curView = view;
+    events.onChangeAgent(function (id) {
+      self.idAgent = id;
+    });
   };
 
   function preProcess() {
-    self.curView = 'all';
+    //agent
+    self.idAgent = -1;
+    events.getAgent(function (id) {
+      self.idAgent = id;
+    }); //data
+
+    self.data = {};
   }
 
-  function init() {} // function findCurrentCpusInfo() {
-  //     return self.allServer.map(({ serverName, fields }) => {
-  //         if (!fields.length) return null
-  //         const latestVal = fields[fields.length - 1]
-  //         return {
-  //             serverName,
-  //             ...latestVal
-  //         }
-  //     })
-  // }
-  // function findCurrentMinMaxCpusInfo() {
-  //     const { min, max } = self.minMaxCpuServer
-  //     const results = []
-  //     for (const mi in min) {
-  //         const correspondingMax = max.filter(ma => ma.serverName === mi.serverName)[0]
-  //         results.push({
-  //             serverName: mi.serverName,
-  //         })
-  //     }
-  //     return results
-  // }
+  function init() {
+    cpu.cpuInfo(self.idAgent).then(function (data) {
+      //if data is an array
+      if (data && data.length) {
+        self.data = data.filter(function (d) {
+          return d.idAgent = self.idAgent;
+        }) //filter
+        .reduce(function (acc, cur) {
+          return cur;
+        }); // change array to value
+      } else {
+        self.data = data;
+      }
 
+      console.log({
+        'cpu.self.data': self.data
+      });
+    }).catch(function (err) {
+      console.error('err from cpu');
+      console.log({
+        err: err
+      });
+    });
+  }
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _cpu_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
@@ -37342,7 +37340,7 @@ function controller(rootData) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = " <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> fds </div> </div> </div> </div> </div>";
+module.exports = " <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -37692,6 +37690,42 @@ function service() {
 
 /***/ }),
 
+/***/ "./src/services/cpu.js":
+/*!*****************************!*\
+  !*** ./src/services/cpu.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libs */ "./src/libs/index.js");
+
+var name = 'cpu';
+service.$inject = ['utils', '$q', 'constant'];
+
+function service(utils, $q, constant) {
+  var cpuInfo = function cpuInfo(id) {
+    var path = '/agent/list';
+    var url = constant.backendUrl + path;
+    return $q(function (resolve, reject) {
+      utils.fetchPOST(url, {}).then(function (data) {
+        return resolve(data);
+      }).catch(function (err) {
+        return reject(err);
+      });
+    });
+  };
+
+  return {
+    cpuInfo: cpuInfo
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ServiceSchema"](name, service));
+
+/***/ }),
+
 /***/ "./src/services/events.js":
 /*!********************************!*\
   !*** ./src/services/events.js ***!
@@ -37771,6 +37805,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./src/services/utils.js");
 /* harmony import */ var _agent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./agent */ "./src/services/agent.js");
 /* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./events */ "./src/services/events.js");
+/* harmony import */ var _cpu__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./cpu */ "./src/services/cpu.js");
 // import apiMonitor from './apiMonitor'
  // import cpuMonitor from './cpuMonitor'
 // import memMonitor from './memMonitor'
@@ -37779,10 +37814,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ([// apiMonitor,
 _constant__WEBPACK_IMPORTED_MODULE_0__["default"], // cpuMonitor,
 // memMonitor,
-_utils__WEBPACK_IMPORTED_MODULE_1__["default"], _agent__WEBPACK_IMPORTED_MODULE_2__["default"], _events__WEBPACK_IMPORTED_MODULE_3__["default"] // processMonitor
+_utils__WEBPACK_IMPORTED_MODULE_1__["default"], _agent__WEBPACK_IMPORTED_MODULE_2__["default"], _events__WEBPACK_IMPORTED_MODULE_3__["default"], _cpu__WEBPACK_IMPORTED_MODULE_4__["default"] // processMonitor
 ]);
 
 /***/ }),

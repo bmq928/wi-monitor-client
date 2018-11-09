@@ -4,68 +4,50 @@ import template from './cpu.template.html'
 const name = 'cpu'
 
 // controller.$inject = ['cpuMonitor', 'utils']
-controller.$inject = ['rootData']
-function controller(rootData) {
-    const self = this
+controller.$inject = ['events', 'cpu']
+function controller(events, cpu) {
+  const self = this
 
-    self.$onInit = function () {
-        preProcess()
-        init()
-    }
+  self.$onInit = function() {
+    preProcess()
+    init()
 
-    // self.currentCpusInfo = function () {
+    events.onChangeAgent(id => {
+        self.idAgent = id
+    })
+  }
 
-    //     return self.allServer.map(({ serverName, fields }) => {
-    //         const nearestVal = fields.length ? fields[fields.length - 1] : null
-    //         return {
-    //             serverName,
-    //             ...nearestVal
-    //         }
-    //     })
+  function preProcess() {
+    //agent
+    self.idAgent = -1
+    events.getAgent(id => {
+      self.idAgent = id
+    })
 
-    // }
+    //data
+    self.data = {}
+  }
 
-    self.chooseView = function (view) {
-        self.curView = view
-    }
+  function init() {
+    cpu
+      .cpuInfo(self.idAgent)
+      .then(data => {
+        //if data is an array
+        if (data && data.length) {
+          self.data = data
+            .filter(d => (d.idAgent = self.idAgent)) //filter
+            .reduce((acc, cur) => cur) // change array to value
+        } else {
+            self.data = data
+        }
 
-    function preProcess() {
-
-        self.curView = 'all'
-
-    }
-
-    function init() {
-        
-    }
-
-    // function findCurrentCpusInfo() {
-    //     return self.allServer.map(({ serverName, fields }) => {
-
-    //         if (!fields.length) return null
-
-    //         const latestVal = fields[fields.length - 1]
-
-    //         return {
-    //             serverName,
-    //             ...latestVal
-    //         }
-    //     })
-    // }
-
-    // function findCurrentMinMaxCpusInfo() {
-    //     const { min, max } = self.minMaxCpuServer
-    //     const results = []
-
-    //     for (const mi in min) {
-    //         const correspondingMax = max.filter(ma => ma.serverName === mi.serverName)[0]
-    //         results.push({
-    //             serverName: mi.serverName,
-
-    //         })
-    //     }
-    //     return results
-    // }
+        console.log({ 'cpu.self.data': self.data })
+      })
+      .catch(err => {
+        console.error('err from cpu')
+        console.log({ err })
+      })
+  }
 }
 
 export default new ComponentSchema(name, template, controller)

@@ -1,77 +1,14 @@
 <!-- <breadcrumb path-and-func="self.breadcrumb"></breadcrumb> -->
 
 <div class="row">
-    <!-- column -->
-    <div class="col-sm-12">
-        <div class="card">
-            <div class="card-block">
-                <div class="table-responsive">
-                    <!-- <table class="table" ng-if="self.curView === 'all'">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Server</th>
-                                <th>Domain</th>
-                                <th>Current Usage</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="(i, server) in self.currentCpusInfo track by $index">
-                                <td ng-bind="i + 1"></td>
-                                <td ng-bind="server.serverName"></td>
-                                <td ng-bind="server.domain"></td>
-                                <td ng-bind="server.cpuUsage"></td>
-                                <td ng-bind="server.time"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table class="table" ng-if="self.curView === 'max'">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Server</th>
-                                <th>Domain</th>
-                                <th>Max Usage</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="(i, server) in self.maxCpuServer track by $index">
-                                <td ng-bind="i + 1"></td>
-                                <td ng-bind="server.serverName"></td>
-                                <td ng-bind="server.domain"></td>
-                                <td ng-bind="server.maxUsage"></td>
-                                <td ng-bind="server.time"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table class="table" ng-if="self.curView === 'min'">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Server</th>
-                                <th>Domain</th>
-                                <th>Min Usage</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="(i, server) in self.minCpuServer track by $index">
-                                <td ng-bind="i + 1"></td>
-                                <td ng-bind="server.serverName"></td>
-                                <td ng-bind="server.domain"></td>
-                                <td ng-bind="server.minUsage"></td>
-                                <td ng-bind="server.time"></td>
-                            </tr>
-                        </tbody>
-                    </table> -->
-fds
-
-                </div>
-            </div>
+  <!-- column -->
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-block">
+        <div class="table-responsive">
+          <pre>{{self.data | json:spacing}}</pre>
         </div>
+      </div>
     </div>
+  </div>
 </div>

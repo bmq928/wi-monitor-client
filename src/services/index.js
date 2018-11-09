@@ -6,6 +6,7 @@ import utils from './utils'
 // import processMonitor from './processMonitor'
 import agent from './agent'
 import events from './events'
+import cpu from './cpu'
 
 export default [
     // apiMonitor,
@@ -14,6 +15,7 @@ export default [
     // memMonitor,
     utils,
     agent,
-    events
+    events,
+    cpu
     // processMonitor
 ]
