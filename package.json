@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "rm -rf ./public/js",
     "build:dev": "export NODE_ENV=development && npm run clean && webpack -w",
+    "build": "export NODE_ENV=development && npm run clean && webpack",
     "build:prod": "export NODE_ENV=production && npm run clean && webpack",
     "start": "http-server ./public -p 8080"
   },
