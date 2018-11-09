@@ -36103,7 +36103,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".left-sidebar .tab-title {\n  font-size: 14px; }\n", ""]);
+exports.push([module.i, ".left-sidebar .tab-title {\n  font-size: 13px; }\n", ""]);
 
 // exports
 
