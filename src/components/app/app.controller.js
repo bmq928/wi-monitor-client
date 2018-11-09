@@ -56,9 +56,12 @@ function controller(agent, events) {
   }
 
   function decideViewByUrl() {
+    const defaultView = 'interface'
     const urlHash = location.hash
     const view = urlHash.substring(3)
-    return view
+    // console.log({view})
+    if(view) return view
+    return defaultView
   }
 }
 

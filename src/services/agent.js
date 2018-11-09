@@ -28,9 +28,22 @@ function service(utils, constant, $q) {
     })
   }
 
+  const agentInfo = idAgent => {
+    const path = '/agent/info'
+    const url = constant.backendUrl + path
+
+    return $q((resolve, reject) => {
+      utils
+        .fetchPOST(url, {idAgent})
+        .then(data => resolve(data))
+        .catch(err => reject(err))
+    })
+  }
+
   return {
     allAgents,
-    newAgent
+    newAgent,
+    agentInfo
   }
 }
 

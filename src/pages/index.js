@@ -3,6 +3,7 @@ import cpu from './cpu/cpu.controller'
 import memory from './memory/memory.controller'
 import harddisk from './harddisk/harddisk.controller'
 import interfacePage from './interface/interface.controller'
+import system from './system/system.controller'
 // import process from './process/process.controller'
 
 export default [
@@ -10,6 +11,7 @@ export default [
     interfacePage,
     cpu,
     memory,
-    harddisk
+    harddisk,
+    system
     // process
 ]

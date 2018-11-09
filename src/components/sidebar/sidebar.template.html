@@ -74,6 +74,16 @@
                         <span class="tab-title">Harddisk</span>
                     </a>
                 </li>
+                <li>
+                    <a 
+                        ui-sref="system" 
+                        class="waves-effect"
+                        ng-class="{'active': self.curView === 'system'}"
+                        ng-click="self.handleViewClick('system')">
+                        <i class="fa fa-tv m-r-10" aria-hidden="true"></i>
+                        <span class="tab-title">System</span>
+                    </a>
+                </li>
                 
                 <!-- <li>
                     <a 

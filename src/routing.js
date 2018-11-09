@@ -8,7 +8,8 @@ function config($stateProvider, $urlRouterProvider) {
         process: 'process',
         login: 'login',
         interface: 'interface',
-        harddisk: 'harddisk'
+        harddisk: 'harddisk',
+        system: 'system'
     }
 
     function createUrl(view) {
@@ -35,6 +36,10 @@ function config($stateProvider, $urlRouterProvider) {
         .state(views.interface, {
             url: createUrl(views.interface),
             template: createComponent(views.interface)
+        })
+        .state(views.system, {
+            url: createUrl(views.system),
+            template: createComponent(views.system)
         })
         .state(views.login, {
             //just a fake url for login

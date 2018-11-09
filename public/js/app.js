@@ -36807,9 +36807,12 @@ function controller(agent, events) {
   }
 
   function decideViewByUrl() {
+    var defaultView = 'interface';
     var urlHash = location.hash;
-    var view = urlHash.substring(3);
-    return view;
+    var view = urlHash.substring(3); // console.log({view})
+
+    if (view) return view;
+    return defaultView;
   }
 }
 
@@ -37045,7 +37048,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<aside class=left-sidebar style=padding:0> <header class=topbar> <nav class=\"navbar top-navbar navbar-toggleable-sm navbar-light\" style=background-color:#fff;vertical-align:middle> <div class=navbar-header style=\"border-bottom:2px solid #9999\"> <a class=navbar-brand href=index.html> <h2 style=color:#55ce63>WI-MONITOR</h2> </a> </div> </nav> </header> <div class=scroll-sidebar style=padding-top:5px> <nav class=sidebar-nav> <ul id=sidebarnav> <li> <a ui-sref=interface class=waves-effect ng-class=\"{'active': self.curView === 'interface'}\" ng-click=\"self.handleViewClick('interface')\"> <i class=\"fa fa-microchip m-r-10\" aria-hidden=true></i> <span class=tab-title>Interface</span> </a> </li> <li> <a ui-sref=cpu class=waves-effect ng-class=\"{'active': self.curView === 'cpu'}\" ng-click=\"self.handleViewClick('cpu')\"> <i class=\"fa fa-server m-r-10\" aria-hidden=true></i> <span class=tab-title>CPU</span> </a> </li> <li> <a ui-sref=memory class=waves-effect ng-class=\"{'active': self.curView === 'memory'}\" ng-click=\"self.handleViewClick('memory')\"> <i class=\"fa fa-archive m-r-10\" aria-hidden=true></i> <span class=tab-title>Memory</span> </a> </li> <li> <a ui-sref=harddisk class=waves-effect ng-class=\"{'active': self.curView === 'harddisk'}\" ng-click=\"self.handleViewClick('harddisk')\"> <i class=\"fa fa-hdd-o m-r-10\" aria-hidden=true></i> <span class=tab-title>Harddisk</span> </a> </li> </ul> </nav> </div> </aside>";
+module.exports = "<aside class=left-sidebar style=padding:0> <header class=topbar> <nav class=\"navbar top-navbar navbar-toggleable-sm navbar-light\" style=background-color:#fff;vertical-align:middle> <div class=navbar-header style=\"border-bottom:2px solid #9999\"> <a class=navbar-brand href=index.html> <h2 style=color:#55ce63>WI-MONITOR</h2> </a> </div> </nav> </header> <div class=scroll-sidebar style=padding-top:5px> <nav class=sidebar-nav> <ul id=sidebarnav> <li> <a ui-sref=interface class=waves-effect ng-class=\"{'active': self.curView === 'interface'}\" ng-click=\"self.handleViewClick('interface')\"> <i class=\"fa fa-microchip m-r-10\" aria-hidden=true></i> <span class=tab-title>Interface</span> </a> </li> <li> <a ui-sref=cpu class=waves-effect ng-class=\"{'active': self.curView === 'cpu'}\" ng-click=\"self.handleViewClick('cpu')\"> <i class=\"fa fa-server m-r-10\" aria-hidden=true></i> <span class=tab-title>CPU</span> </a> </li> <li> <a ui-sref=memory class=waves-effect ng-class=\"{'active': self.curView === 'memory'}\" ng-click=\"self.handleViewClick('memory')\"> <i class=\"fa fa-archive m-r-10\" aria-hidden=true></i> <span class=tab-title>Memory</span> </a> </li> <li> <a ui-sref=harddisk class=waves-effect ng-class=\"{'active': self.curView === 'harddisk'}\" ng-click=\"self.handleViewClick('harddisk')\"> <i class=\"fa fa-hdd-o m-r-10\" aria-hidden=true></i> <span class=tab-title>Harddisk</span> </a> </li> <li> <a ui-sref=system class=waves-effect ng-class=\"{'active': self.curView === 'system'}\" ng-click=\"self.handleViewClick('system')\"> <i class=\"fa fa-tv m-r-10\" aria-hidden=true></i> <span class=tab-title>System</span> </a> </li> </ul> </nav> </div> </aside>";
 
 /***/ }),
 
@@ -37420,14 +37423,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _memory_memory_controller__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./memory/memory.controller */ "./src/pages/memory/memory.controller.js");
 /* harmony import */ var _harddisk_harddisk_controller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./harddisk/harddisk.controller */ "./src/pages/harddisk/harddisk.controller.js");
 /* harmony import */ var _interface_interface_controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./interface/interface.controller */ "./src/pages/interface/interface.controller.js");
+/* harmony import */ var _system_system_controller__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./system/system.controller */ "./src/pages/system/system.controller.js");
 // import api from './api/api.controller'
+
 
 
 
  // import process from './process/process.controller'
 
 /* harmony default export */ __webpack_exports__["default"] = ([// api,
-_interface_interface_controller__WEBPACK_IMPORTED_MODULE_3__["default"], _cpu_cpu_controller__WEBPACK_IMPORTED_MODULE_0__["default"], _memory_memory_controller__WEBPACK_IMPORTED_MODULE_1__["default"], _harddisk_harddisk_controller__WEBPACK_IMPORTED_MODULE_2__["default"] // process
+_interface_interface_controller__WEBPACK_IMPORTED_MODULE_3__["default"], _cpu_cpu_controller__WEBPACK_IMPORTED_MODULE_0__["default"], _memory_memory_controller__WEBPACK_IMPORTED_MODULE_1__["default"], _harddisk_harddisk_controller__WEBPACK_IMPORTED_MODULE_2__["default"], _system_system_controller__WEBPACK_IMPORTED_MODULE_4__["default"] // process
 ]);
 
 /***/ }),
@@ -37565,6 +37570,75 @@ module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div cl
 
 /***/ }),
 
+/***/ "./src/pages/system/system.controller.js":
+/*!***********************************************!*\
+  !*** ./src/pages/system/system.controller.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
+/* harmony import */ var _system_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./system.template.html */ "./src/pages/system/system.template.html");
+/* harmony import */ var _system_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_system_template_html__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var name = 'system';
+controller.$inject = ['events', 'agent'];
+
+function controller(events, agent) {
+  var self = this;
+
+  self.$onInit = function () {
+    preProcess();
+    init();
+    events.onChangeAgent(function (id) {
+      self.idAgent = id;
+      init();
+    });
+  };
+
+  function preProcess() {
+    //agent
+    self.idAgent = -1;
+    events.getAgent(function (id) {
+      self.idAgent = id;
+    }); //data
+
+    self.data = {};
+  }
+
+  function init() {
+    agent.agentInfo(self.idAgent).then(function (data) {
+      return self.data = data;
+    }).catch(function (err) {
+      console.error('error from system');
+      console.error(err);
+    });
+  } // function findCurrentMemInfo() {
+  //     return self.allServer.map(({serverName, fields}) => {
+  //         if(fields)
+  //     })
+  // }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _system_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller));
+
+/***/ }),
+
+/***/ "./src/pages/system/system.template.html":
+/*!***********************************************!*\
+  !*** ./src/pages/system/system.template.html ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div>";
+
+/***/ }),
+
 /***/ "./src/routing.js":
 /*!************************!*\
   !*** ./src/routing.js ***!
@@ -37582,7 +37656,8 @@ function config($stateProvider, $urlRouterProvider) {
     process: 'process',
     login: 'login',
     interface: 'interface',
-    harddisk: 'harddisk'
+    harddisk: 'harddisk',
+    system: 'system'
   };
 
   function createUrl(view) {
@@ -37605,6 +37680,9 @@ function config($stateProvider, $urlRouterProvider) {
   }).state(views.interface, {
     url: createUrl(views.interface),
     template: createComponent(views.interface)
+  }).state(views.system, {
+    url: createUrl(views.system),
+    template: createComponent(views.system)
   }).state(views.login, {
     //just a fake url for login
     //because now i use browser hoc
@@ -37688,9 +37766,24 @@ function service(utils, constant, $q) {
     });
   };
 
+  var agentInfo = function agentInfo(idAgent) {
+    var path = '/agent/info';
+    var url = constant.backendUrl + path;
+    return $q(function (resolve, reject) {
+      utils.fetchPOST(url, {
+        idAgent: idAgent
+      }).then(function (data) {
+        return resolve(data);
+      }).catch(function (err) {
+        return reject(err);
+      });
+    });
+  };
+
   return {
     allAgents: allAgents,
-    newAgent: newAgent
+    newAgent: newAgent,
+    agentInfo: agentInfo
   };
 }
 
