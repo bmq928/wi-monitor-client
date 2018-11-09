@@ -24,12 +24,12 @@ function controller(events, cpu) {
     events.getAgent(id => {
       self.idAgent = id
     })
-
     //data
     self.data = {}
   }
 
   function init() {
+    console.log({'self.idAgent': self.idAgent})
     cpu
       .cpuInfo(self.idAgent)
       .then(data => {

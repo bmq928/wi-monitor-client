@@ -10,14 +10,10 @@ function controller(utils) {
   const self = this
 
   self.$onChanges = function({ listAgent }) {
-    
     if (listAgent) self.listAgent = listAgent.currentValue
-    console.log({'tabs.listAgents':self.listAgent})
   }
 
-  self.capitalize = function(str) {
-    return utils.capitalize(str)
-  }
+  self.modalClose = function() {}
 }
 
 export default new ComponentSchema(name, template, controller, {

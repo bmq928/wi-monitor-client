@@ -11,9 +11,10 @@ function controller(agent, events) {
     preProcess()
     init()
 
-    events.onRequestAgent(() => {
-      events.sendAgent(self.curAgentId)
-    })
+    // events.onRequestAgent(() => {
+    //   console.log('send agent')
+    //   events.sendAgent(self.curAgentId)
+    // })
   }
 
   self.changeView = function(view) {

@@ -36767,10 +36767,10 @@ function controller(agent, events) {
 
   self.$onInit = function () {
     preProcess();
-    init();
-    events.onRequestAgent(function () {
-      events.sendAgent(self.curAgentId);
-    });
+    init(); // events.onRequestAgent(() => {
+    //   console.log('send agent')
+    //   events.sendAgent(self.curAgentId)
+    // })
   };
 
   self.changeView = function (view) {
@@ -37075,14 +37075,9 @@ function controller(utils) {
   self.$onChanges = function (_ref) {
     var listAgent = _ref.listAgent;
     if (listAgent) self.listAgent = listAgent.currentValue;
-    console.log({
-      'tabs.listAgents': self.listAgent
-    });
   };
 
-  self.capitalize = function (str) {
-    return utils.capitalize(str);
-  };
+  self.modalClose = function () {};
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _tabs_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller, {
@@ -37129,7 +37124,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=tabs> <div class=container> <div class=row> <span class=\"badge badge-default badge-labeled\" ng-repeat=\"agent in self.listAgent track by $index\" ng-click=self.agentOnClick(agent.idAgent)> <span class=title ng-bind=agent.name></span> <i class=\"fa fa-times icon\"></i> </span> <span class=\"badge badge-success\" style=cursor:pointer> <i class=\"fa fa-plus\"></i> </span> </div> </div> </div> ";
+module.exports = "<div class=tabs> <div class=container> <div class=row> <span class=\"badge badge-default badge-labeled\" ng-repeat=\"agent in self.listAgent track by $index\" ng-click=self.agentOnClick(agent.idAgent)> <span class=title ng-bind=agent.name></span> <i class=\"fa fa-times icon\"></i> </span> <span class=\"badge badge-success\" style=cursor:pointer data-toggle=modal ng-disabled=self.myDisable data-target=#__tabs__modal__> <i class=\"fa fa-plus\"></i> </span> </div> </div> </div> <div class=\"modal fade\" id=__tabs__modal__ tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true data-backdrop=static> <div class=modal-dialog ng-class=self.ngClass role=document> <div class=modal-content> <div class=modal-header> <button type=button class=close data-dismiss=modal aria-label=Close ng-click=self.modalClose()> <span aria-hidden=true>&times;</span> </button> <h3 class=modal-title>New Agent</h3> </div> <div class=modal-body>aksdjflkjasdl</div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -37312,6 +37307,9 @@ function controller(events, cpu) {
   }
 
   function init() {
+    console.log({
+      'self.idAgent': self.idAgent
+    });
     cpu.cpuInfo(self.idAgent).then(function (data) {
       self.data = data;
     }).catch(function (err) {
@@ -37777,6 +37775,10 @@ var name = 'events';
 service.$inject = ['$rootScope'];
 
 function service($rootScope) {
+  $rootScope.data = {
+    idAgent: -1
+  };
+
   var emit = function emit(eventName, data) {
     $rootScope.$emit(eventName, data);
   };
@@ -37795,32 +37797,36 @@ function service($rootScope) {
 
   var changeAgent = function changeAgent(id) {
     emit(CHANGE_AGENT, id);
-  };
-
-  var GET_AGENT_REQUEST = 'GET_AGENT_REQUEST';
-  var GET_AGENT_RESPONSE = 'GET_AGENT_RESPONSE';
-
-  var onRequestAgent = function onRequestAgent(handler) {
-    on(GET_AGENT_REQUEST, function () {
-      return handler;
+    $rootScope.data.idAgent = id;
+    console.log({
+      id: id
     });
-  };
+  }; // const GET_AGENT_REQUEST = 'GET_AGENT_REQUEST'
+
+
+  var GET_AGENT = 'GET_AGENT_RESPONSE'; // const onRequestAgent = handler => {
+  //   on(GET_AGENT_REQUEST, () => handler)
+  // }
+  // const getAgentRequest = () =>{
+  //   emit(GET_AGENT_REQUEST, {})
+  //   console.log('getAgentRequest')
+  // }
 
   var getAgent = function getAgent(handler) {
-    emit(GET_AGENT_REQUEST, {});
-    on(GET_AGENT_RESPONSE, handler);
-  };
+    handler($rootScope.data.idAgent); // on(GET_AGENT, () => handler($rootScope.data.idAgent))
+  }; // const sendAgent = id => {
+  //   emit(GET_AGENT_RESPONSE, id)
+  //   console.log('sendAgent')
+  // }
 
-  var sendAgent = function sendAgent(id) {
-    emit(GET_AGENT_RESPONSE, id);
-  };
 
   return {
     onChangeAgent: onChangeAgent,
     changeAgent: changeAgent,
-    onRequestAgent: onRequestAgent,
-    getAgent: getAgent,
-    sendAgent: sendAgent
+    // onRequestAgent,
+    getAgent: getAgent // sendAgent,
+    // getAgentRequest
+
   };
 }
 

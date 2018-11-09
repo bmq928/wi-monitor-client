@@ -10,13 +10,44 @@
         <i class="fa fa-times icon"></i>
       </span>
 
-      <span class="badge badge-success" style="cursor:pointer">
+      <span
+        class="badge badge-success"
+        style="cursor:pointer"
+        data-toggle="modal"
+        ng-disabled="self.myDisable"
+        data-target="#__tabs__modal__"
+      >
         <i class="fa fa-plus"></i>
       </span>
-      <!--
-        <span class="badge badge-default badge-labeled">default<i class="fa fa-times"></i></span>
-        <span class="badge badge-default badge-labeled">default<i class="fa fa-times"></i></span>
-      -->
+    </div>
+  </div>
+</div>
+
+<!-- =================== modal ========================= -->
+<div
+  class="modal fade"
+  id="__tabs__modal__"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  data-backdrop="static"
+>
+  <div class="modal-dialog" ng-class="self.ngClass" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          ng-click="self.modalClose()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title">New Agent</h3>
+      </div>
+      <div class="modal-body">aksdjflkjasdl</div>
     </div>
   </div>
 </div>
