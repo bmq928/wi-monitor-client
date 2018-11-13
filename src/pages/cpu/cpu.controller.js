@@ -79,7 +79,7 @@ function controller(events, cpu) {
       .cpuInfo(self.idAgent)
       .then(data => {
         self.data = data
-        console.log({ 'self.data': self.data })
+        // console.log({ 'self.data': self.data })
       })
       .catch(err => {
         console.error('err from cpu')

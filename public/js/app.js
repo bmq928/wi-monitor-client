@@ -37410,10 +37410,7 @@ function controller(events, cpu) {
       'self.idAgent': self.idAgent
     });
     cpu.cpuInfo(self.idAgent).then(function (data) {
-      self.data = data;
-      console.log({
-        'self.data': self.data
-      });
+      self.data = data; // console.log({ 'self.data': self.data })
     }).catch(function (err) {
       console.error('err from cpu');
       console.error(err);
@@ -37651,6 +37648,21 @@ function controller(events, memory) {
     });
   };
 
+  self.showSummary = function () {
+    self.curView = self.listView.summary;
+  };
+
+  self.showMemory = function () {
+    self.curView = self.listView.memories;
+  }; // self.showStatic = function() {
+  //   self.curView = self.listView.static
+  // }
+
+
+  self.showChart = function () {
+    self.curView = self.listView.chart;
+  };
+
   function preProcess() {
     //agent
     self.idAgent = -1;
@@ -37658,12 +37670,38 @@ function controller(events, memory) {
       self.idAgent = id;
     }); //data
 
-    self.data = {};
+    self.data = {}; //current view
+
+    self.listView = {
+      summary: 'summary',
+      memories: 'memories',
+      // static: 'static',
+      chart: 'chart'
+    };
+    self.curView = self.listView.summary; //breadcrumb
+
+    self.breadcrumb = [{
+      path: self.listView.summary,
+      func: self.showSummary
+    }, {
+      path: self.listView.memories,
+      func: self.showMemory
+    }, // {
+    //   path: self.listView.static,
+    //   func: self.showStatic
+    // },
+    {
+      path: self.listView.chart,
+      func: self.showStatic
+    }];
   }
 
   function init() {
     memory.memInfo(self.idAgent).then(function (data) {
       self.data = data;
+      console.log({
+        'self.data': self.data
+      });
     }).catch(function (err) {
       console.error('error from memory');
       console.error(err);
@@ -37687,7 +37725,7 @@ function controller(events, memory) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div>";
+module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === self.listView.summary\"> <thead> <tr> <th>Create</th> <th>IdAgent</th> <th>IdMemInfo</th> <th>Update</th> <th>Total</th> </tr> </thead> <tbody> <tr> <td ng-bind=\"self.data.createdAt | date:'yyyy-MM-dd HH:mm:ss'\"></td> <td ng-bind=self.data.idAgent></td> <td ng-bind=self.data.idMemoryInfo></td> <td ng-bind=\"self.data.updatedAt | date:'yyyy-MM-dd HH:mm:ss'\"></td> <td ng-bind=self.data.summary.total></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 
