@@ -37462,8 +37462,16 @@ function controller(events, harddisk) {
     });
   };
 
-  self.chooseView = function (view) {
-    self.curView = view;
+  self.showSummary = function () {
+    self.curView = self.listView.summary;
+  };
+
+  self.showBlock = function () {
+    self.curView = self.listView.block;
+  };
+
+  self.showFs = function () {
+    self.curView = self.listView.fs;
   };
 
   function preProcess() {
@@ -37473,7 +37481,25 @@ function controller(events, harddisk) {
       self.idAgent = id;
     }); //data
 
-    self.data = {};
+    self.data = {}; //current view
+
+    self.listView = {
+      summary: 'summary',
+      block: 'block',
+      fs: 'fs'
+    };
+    self.curView = self.listView.summary; //breadcrumb
+
+    self.breadcrumb = [{
+      path: self.listView.summary,
+      func: self.showSummary
+    }, {
+      path: self.listView.block,
+      func: self.showBlock
+    }, {
+      path: self.listView.fs,
+      func: self.showFs
+    }];
   }
 
   function init() {
@@ -37502,7 +37528,7 @@ function controller(events, harddisk) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div> ";
+module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === self.listView.summary\"> <thead> <tr> <th>Create</th> <th>IdAgent</th> <th>IdHarddiskInfo</th> <th>Update</th> </tr> </thead> <tbody> <tr> <td ng-bind=\"self.data.createdAt | date:'yyyy-MM-dd HH:mm:ss'\"></td> <td ng-bind=self.data.idAgent></td> <td ng-bind=self.data.idHardDiskInfo></td> <td ng-bind=\"self.data.updatedAt | date:'yyyy-MM-dd HH:mm:ss'\"></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === self.listView.block\"> <thead> <tr> <th>Fstyle</th> <th>Label</th> <th>Model</th> <th>Mount</th> <th>Name</th> <th>Physical</th> <th>Protocol</th> <th>Removable</th> <th>Serial</th> <th>Size</th> <th>Type</th> <th>Uuid</th> </tr> </thead> <tbody> <tr ng-repeat=\"i in self.data.block track by $index\"> <td ng-bind=i.fstype></td> <td ng-bind=i.label></td> <td ng-bind=i.model></td> <td ng-bind=i.mount></td> <td ng-bind=i.name></td> <td ng-bind=i.physical></td> <td ng-bind=i.protocol></td> <td ng-bind=i.removable></td> <td ng-bind=i.serial></td> <td ng-bind=i.size></td> <td ng-bind=i.type></td> <td ng-bind=i.uuid></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === self.listView.fs\"> <thead> <tr> <th>Fs</th> <th>Mount</th> <th>Size</th> <th>Type</th> <th>Use</th> <th>Used</th> </tr> </thead> <tbody> <tr ng-repeat=\"i in self.data.fs track by $index\"> <td ng-bind=i.fs></td> <td ng-bind=i.mount></td> <td ng-bind=i.size></td> <td ng-bind=i.type></td> <td ng-bind=i.use></td> <td ng-bind=i.used></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -37698,10 +37724,7 @@ function controller(events, memory) {
 
   function init() {
     memory.memInfo(self.idAgent).then(function (data) {
-      self.data = data;
-      console.log({
-        'self.data': self.data
-      });
+      self.data = data; // console.log({'self.data': self.data})
     }).catch(function (err) {
       console.error('error from memory');
       console.error(err);

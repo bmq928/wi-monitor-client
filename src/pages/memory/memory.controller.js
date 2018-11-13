@@ -78,7 +78,7 @@ function controller(events, memory) {
       .memInfo(self.idAgent)
       .then(data => {
         self.data = data
-        console.log({'self.data': self.data})
+        // console.log({'self.data': self.data})
       })
       .catch(err => {
         console.error('error from memory')

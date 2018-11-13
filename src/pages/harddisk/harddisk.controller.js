@@ -17,8 +17,16 @@ function controller(events, harddisk) {
     })
   }
 
-  self.chooseView = function(view) {
-    self.curView = view
+  self.showSummary = function() {
+    self.curView = self.listView.summary
+  }
+
+  self.showBlock = function () {
+    self.curView = self.listView.block
+  }
+
+  self.showFs = function() {
+    self.curView = self.listView.fs
   }
 
   function preProcess() {
@@ -30,6 +38,30 @@ function controller(events, harddisk) {
 
     //data
     self.data = {}
+
+    //current view
+    self.listView = {
+      summary: 'summary',
+      block: 'block',
+      fs: 'fs'
+    }
+    self.curView = self.listView.summary
+
+    //breadcrumb
+    self.breadcrumb = [
+      {
+        path: self.listView.summary,
+        func: self.showSummary
+      },
+      {
+        path: self.listView.block,
+        func: self.showBlock
+      },
+      {
+        path: self.listView.fs,
+        func : self.showFs
+      }
+    ]
   }
 
   function init() {
