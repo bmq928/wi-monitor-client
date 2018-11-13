@@ -25,10 +25,6 @@ function controller(events, interfaces) {
     self.curView = self.listView.connections
   }
 
-  self.showChart = function() {
-    self.curView = self.listView.chart
-  }
-
   function preProcess() {
     //agent
     self.idAgent = -1
@@ -39,29 +35,26 @@ function controller(events, interfaces) {
     //data
     self.data = {}
 
-    //breadcrumb
-    self.breadcrumb = [
-      {
-        path: 'summary',
-        func: self.showSummary
-      },
-      {
-        path: 'connections',
-        func: self.showConnections
-      },
-      {
-        path: 'chart',
-        func: self.showChart
-      }
-    ]
-
     //current view
     self.listView = {
       summary: 'summary',
-      connections: 'connections',
-      chart: 'chart'
+      connections: 'connections'
     }
     self.curView = self.listView.summary
+
+    //breadcrumb
+    self.breadcrumb = [
+      {
+        path: self.listView.summary,
+        func: self.showSummary
+      },
+      {
+        path: self.listView.connections,
+        func: self.showConnections
+      }
+    ]
+
+    
   }
 
   function init() {
@@ -69,7 +62,6 @@ function controller(events, interfaces) {
       .interfaceInfo(self.idAgent)
       .then(data => {
         self.data = data
-        console.log({ 'self.data': self.data })
       })
       .catch(err => {
         console.error('err from interfaces')

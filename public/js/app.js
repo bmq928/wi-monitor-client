@@ -37357,6 +37357,22 @@ function controller(events, cpu) {
     });
   };
 
+  self.showSummary = function () {
+    self.curView = self.listView.summary;
+  };
+
+  self.showStatic = function () {
+    self.curView = self.listView.static;
+  };
+
+  self.showChart = function () {
+    self.curView = self.listView.chart;
+  };
+
+  self.showCpu = function () {
+    self.curView = self.listView.cpu;
+  };
+
   function preProcess() {
     //agent
     self.idAgent = -1;
@@ -37364,12 +37380,28 @@ function controller(events, cpu) {
       self.idAgent = id;
     }); //data
 
-    self.data = {}; //breadcrumb
+    self.data = {}; //current view
+
+    self.listView = {
+      summary: 'summary',
+      static: 'static',
+      cpu: 'cpu',
+      chart: 'chart'
+    };
+    self.curView = self.listView.summary; //breadcrumb
 
     self.breadcrumb = [{
-      path: 'sdalkf'
+      path: self.listView.summary,
+      func: self.showSummary
     }, {
-      path: 'sdalkfd'
+      path: self.listView.static,
+      func: self.showStatic
+    }, {
+      path: self.listView.cpu,
+      func: self.showCpu
+    }, {
+      path: self.listView.chart,
+      func: self.showChart
     }];
   }
 
@@ -37379,6 +37411,9 @@ function controller(events, cpu) {
     });
     cpu.cpuInfo(self.idAgent).then(function (data) {
       self.data = data;
+      console.log({
+        'self.data': self.data
+      });
     }).catch(function (err) {
       console.error('err from cpu');
       console.error(err);
@@ -37397,7 +37432,7 @@ function controller(events, cpu) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div> ";
+module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === self.listView.summary\"> <thead> <tr> <th>Brand</th> <th>Cores</th> <th>Family</th> <th>Manufacturer</th> <th>Model</th> <th>Revision</th> <th>Speed</th> <th>Stepping</th> <th>Vendor</th> <th>Voltage</th> </tr> </thead> <tbody> <tr> <td ng-bind=self.data.summary.brand></td> <td ng-bind=self.data.summary.cores></td> <td ng-bind=self.data.summary.family></td> <td ng-bind=self.data.summary.manufacturer></td> <td ng-bind=self.data.summary.model></td> <td ng-bind=self.data.summary.revision></td> <td ng-bind=self.data.summary.speed></td> <td ng-bind=self.data.summary.stepping></td> <td ng-bind=self.data.summary.vendor></td> <td ng-bind=self.data.summary.voltage></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === self.listView.static\"> <thead> <tr> <th>Create</th> <th>AgentId</th> <th>CpuId</th> <th>Update</th> <th>MaxSpeed</th> <th>MinSpeed</th> <th>Cache</th> </tr> </thead> <tbody> <tr> <td ng-bind=\"self.data.createdAt | date:'yyyy-MM-dd HH:mm:ss'\"></td> <td ng-bind=self.data.idAgent></td> <td ng-bind=self.data.idCpuInfo></td> <td ng-bind=\"self.data.updatedAt | date:'yyyy-MM-dd HH:mm:ss'\"></td> <td ng-bind=self.data.summary.speedmax></td> <td ng-bind=self.data.summary.speedmin></td> <td ng-bind=\"self.data.summary.cache | json:spacing\"></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === self.listView.cpu\"> <thead> <tr> <th>Model</th> <th>Speed</th> <th>Time.idle</th> <th>Time.irq</th> <th>Time.nice</th> <th>Time.sys</th> <th>Time.user</th> </tr> </thead> <tbody> <tr ng-repeat=\"i in self.data.cpus track by $index\"> <td ng-bind=i.model></td> <td ng-bind=i.speed></td> <td ng-bind=i.times.idle></td> <td ng-bind=i.times.irq></td> <td ng-bind=i.times.nice></td> <td ng-bind=i.times.sys></td> <td ng-bind=i.times.user></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -37538,10 +37573,6 @@ function controller(events, interfaces) {
     self.curView = self.listView.connections;
   };
 
-  self.showChart = function () {
-    self.curView = self.listView.chart;
-  };
-
   function preProcess() {
     //agent
     self.idAgent = -1;
@@ -37549,33 +37580,26 @@ function controller(events, interfaces) {
       self.idAgent = id;
     }); //data
 
-    self.data = {}; //breadcrumb
-
-    self.breadcrumb = [{
-      path: 'summary',
-      func: self.showSummary
-    }, {
-      path: 'connections',
-      func: self.showConnections
-    }, {
-      path: 'chart',
-      func: self.showChart
-    }]; //current view
+    self.data = {}; //current view
 
     self.listView = {
       summary: 'summary',
-      connections: 'connections',
-      chart: 'chart'
+      connections: 'connections'
     };
-    self.curView = self.listView.summary;
+    self.curView = self.listView.summary; //breadcrumb
+
+    self.breadcrumb = [{
+      path: self.listView.summary,
+      func: self.showSummary
+    }, {
+      path: self.listView.connections,
+      func: self.showConnections
+    }];
   }
 
   function init() {
     interfaces.interfaceInfo(self.idAgent).then(function (data) {
       self.data = data;
-      console.log({
-        'self.data': self.data
-      });
     }).catch(function (err) {
       console.error('err from interfaces');
       console.error(err);

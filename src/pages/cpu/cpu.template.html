@@ -3,12 +3,110 @@
 <div class="row">
   <!-- column -->
   <div class="col-sm-12">
-    <div class="card">
-      <div class="card-block">
-        <div class="table-responsive">
-          <pre>{{self.data | json:spacing}}</pre>
-        </div>
+      <div class="card">
+          <div class="card-block">
+              <div class="table-responsive">
+
+
+<!--============================ SUMMARY =============================-->
+
+
+                  <table class="table" ng-if="self.curView === self.listView.summary">
+                      <thead>
+                          <tr>
+                              <th>Brand</th>
+                              <th>Cores</th>
+                              <th>Family</th>
+                              <th>Manufacturer</th>
+                              <th>Model</th>
+                              <th>Revision</th>
+                              <th>Speed</th>
+                              <!-- <th>Speed-Max</th>
+                              <th>Speed-Min</th> -->
+                              <th>Stepping</th>
+                              <th>Vendor</th>
+                              <th>Voltage</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td ng-bind="self.data.summary.brand"></td>
+                              <td ng-bind="self.data.summary.cores"></td>
+                              <td ng-bind="self.data.summary.family"></td>
+                              <td ng-bind="self.data.summary.manufacturer"></td>
+                              <td ng-bind="self.data.summary.model"></td>
+                              <td ng-bind="self.data.summary.revision"></td>
+                              <td ng-bind="self.data.summary.speed"></td>
+                              <!-- <td ng-bind="self.data.summary.speedmax"></td>
+                              <td ng-bind="self.data.summary.speedmin"></td> -->
+                              <td ng-bind="self.data.summary.stepping"></td>
+                              <td ng-bind="self.data.summary.vendor"></td>
+                              <td ng-bind="self.data.summary.voltage"></td>
+                              
+                          </tr>
+                      </tbody>
+                  </table>
+
+
+<!--======================== STATIC ==========================-->
+
+
+                  <table class="table" ng-if="self.curView === self.listView.static">
+                    <thead>
+                        <tr>
+                            <th>Create</th>
+                            <th>AgentId</th>
+                            <th>CpuId</th>
+                            <th>Update</th>
+                            <th>MaxSpeed</th>
+                            <th>MinSpeed</th>
+                            <th>Cache</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td ng-bind="self.data.createdAt | date:'yyyy-MM-dd HH:mm:ss'"></td>
+                            <td ng-bind="self.data.idAgent"></td>
+                            <td ng-bind="self.data.idCpuInfo"></td>
+                            <td ng-bind="self.data.updatedAt | date:'yyyy-MM-dd HH:mm:ss'"></td>
+                            <td ng-bind="self.data.summary.speedmax"></td>
+                            <td ng-bind="self.data.summary.speedmin"></td>
+                            <td ng-bind="self.data.summary.cache | json:spacing"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+<!--===================================== CPU =======================-->
+
+              <table class="table" ng-if="self.curView === self.listView.cpu">
+                  <thead>
+                      <tr>
+                          <th>Model</th>
+                          <th>Speed</th>
+                          <th>Time.idle</th>
+                          <th>Time.irq</th>
+                          <th>Time.nice</th>
+                          <th>Time.sys</th>
+                          <th>Time.user</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="i in self.data.cpus track by $index">
+                          <td ng-bind="i.model"></td>
+                          <td ng-bind="i.speed"></td>
+                          <td ng-bind="i.times.idle"></td>
+                          <td ng-bind="i.times.irq"></td>
+                          <td ng-bind="i.times.nice"></td>
+                          <td ng-bind="i.times.sys"></td>
+                          <td ng-bind="i.times.user"></td>
+                      </tr>
+                  </tbody>
+              </table>
+
+
+              </div>
+          </div>
       </div>
-    </div>
   </div>
 </div>

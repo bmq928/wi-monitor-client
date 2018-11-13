@@ -18,6 +18,22 @@ function controller(events, cpu) {
     })
   }
 
+  self.showSummary = function() {
+    self.curView = self.listView.summary
+  }
+
+  self.showStatic = function() {
+    self.curView = self.listView.static
+  }
+
+  self.showChart = function() {
+    self.curView = self.listView.chart
+  }
+
+  self.showCpu = function() {
+    self.curView = self.listView.cpu
+  }
+
   function preProcess() {
     //agent
     self.idAgent = -1
@@ -26,23 +42,44 @@ function controller(events, cpu) {
     })
     //data
     self.data = {}
-    
+
+    //current view
+    self.listView = {
+      summary: 'summary',
+      static: 'static',
+      cpu: 'cpu',
+      chart: 'chart'
+    }
+    self.curView = self.listView.summary
+
     //breadcrumb
     self.breadcrumb = [
       {
-        path: 'sdalkf'
-      },{
-        path: 'sdalkfd'
+        path: self.listView.summary,
+        func: self.showSummary
+      },
+      {
+        path: self.listView.static,
+        func: self.showStatic
+      },
+      {
+        path: self.listView.cpu,
+        func: self.showCpu
+      },
+      {
+        path: self.listView.chart,
+        func: self.showChart
       }
     ]
   }
 
   function init() {
-    console.log({'self.idAgent': self.idAgent})
+    console.log({ 'self.idAgent': self.idAgent })
     cpu
       .cpuInfo(self.idAgent)
       .then(data => {
         self.data = data
+        console.log({ 'self.data': self.data })
       })
       .catch(err => {
         console.error('err from cpu')
