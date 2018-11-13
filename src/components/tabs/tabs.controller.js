@@ -9,8 +9,11 @@ controller.$inject = ['utils']
 function controller(utils) {
   const self = this
 
-  self.$onChanges = function({ listAgent }) {
+  self.$onChanges = function({ listAgent, curAgentId }) {
     if (listAgent) self.listAgent = listAgent.currentValue
+    if (curAgentId) self.curAgentId = curAgentId.currentValue
+
+    console.log({'self.listAgent': self.listAgent})
   }
 
   self.modalClose = function() {}
@@ -18,5 +21,6 @@ function controller(utils) {
 
 export default new ComponentSchema(name, template, controller, {
   listAgent: '<',
-  agentOnClick: '<'
+  agentOnClick: '<',
+  curAgentId: '<'
 })

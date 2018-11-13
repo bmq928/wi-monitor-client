@@ -36122,7 +36122,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".tabs {\n  margin-bottom: 15px;\n  /***** REQUIRED STYLES *****/ }\n  .tabs .badge-labeled {\n    padding-top: 0;\n    padding-bottom: 0;\n    padding-right: 0.2rem;\n    margin-right: 3px;\n    cursor: pointer; }\n    .tabs .badge-labeled .title:active {\n      background-color: black; }\n    .tabs .badge-labeled .icon:active {\n      background-color: black; }\n  .tabs .badge-labeled i {\n    padding: 0.25em 0.3rem;\n    cursor: pointer;\n    position: relative;\n    display: inline-block;\n    right: -0.2em;\n    background-color: #000000;\n    background-color: rgba(0, 0, 0, 0.2);\n    border-left: solid 1px rgba(255, 255, 255, 0.5);\n    border-radius: 0 0.25rem 0.25rem 0; }\n", ""]);
+exports.push([module.i, ".tabs {\n  margin-bottom: 15px;\n  /***** REQUIRED STYLES *****/ }\n  .tabs .tab-active {\n    background: greenyellow; }\n  .tabs .badge-labeled {\n    padding-top: 0;\n    padding-bottom: 0;\n    padding-right: 0.2rem;\n    margin-right: 3px;\n    cursor: pointer; }\n    .tabs .badge-labeled .title:active {\n      background-color: black; }\n    .tabs .badge-labeled .icon:active {\n      background-color: black; }\n  .tabs .badge-labeled i {\n    padding: 0.25em 0.3rem;\n    cursor: pointer;\n    position: relative;\n    display: inline-block;\n    right: -0.2em;\n    background-color: #000000;\n    background-color: rgba(0, 0, 0, 0.2);\n    border-left: solid 1px rgba(255, 255, 255, 0.5);\n    border-radius: 0 0.25rem 0.25rem 0; }\n\n.modal .form-group {\n  margin-bottom: 0; }\n", ""]);
 
 // exports
 
@@ -36827,7 +36827,7 @@ function controller(agent, events) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <tabs list-agent=self.agents agent-on-click=self.agentTabOnClick></tabs> <div ui-view></div> </div> </div> </div> ";
+module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <tabs list-agent=self.agents agent-on-click=self.agentTabOnClick cur-agent-id=self.curAgentId></tabs> <div ui-view></div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -36972,7 +36972,7 @@ function controller(utils) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row page-titles\"> <div class=\"col-md-6 col-8 align-self-center\"> <h3 class=\"text-themecolor m-b-0 m-t-0\" ng-bind=self.getView()></h3> </div> </div>";
+module.exports = "<div class=\"row page-titles\"> <div class=\"col-md-6 col-8 align-self-center\"> </div> </div>";
 
 /***/ }),
 
@@ -37076,8 +37076,13 @@ function controller(utils) {
   var self = this;
 
   self.$onChanges = function (_ref) {
-    var listAgent = _ref.listAgent;
+    var listAgent = _ref.listAgent,
+        curAgentId = _ref.curAgentId;
     if (listAgent) self.listAgent = listAgent.currentValue;
+    if (curAgentId) self.curAgentId = curAgentId.currentValue;
+    console.log({
+      'self.listAgent': self.listAgent
+    });
   };
 
   self.modalClose = function () {};
@@ -37085,7 +37090,8 @@ function controller(utils) {
 
 /* harmony default export */ __webpack_exports__["default"] = (new _libs__WEBPACK_IMPORTED_MODULE_0__["ComponentSchema"](name, _tabs_template_html__WEBPACK_IMPORTED_MODULE_1___default.a, controller, {
   listAgent: '<',
-  agentOnClick: '<'
+  agentOnClick: '<',
+  curAgentId: '<'
 }));
 
 /***/ }),
@@ -37127,7 +37133,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=tabs> <div class=container> <div class=row> <span class=\"badge badge-default badge-labeled\" ng-repeat=\"agent in self.listAgent track by $index\" ng-click=self.agentOnClick(agent.idAgent)> <span class=title ng-bind=agent.name></span> <i class=\"fa fa-times icon\"></i> </span> <span class=\"badge badge-success\" style=cursor:pointer data-toggle=modal ng-disabled=self.myDisable data-target=#__tabs__modal__> <i class=\"fa fa-plus\"></i> </span> </div> </div> </div> <div class=\"modal fade\" id=__tabs__modal__ tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true data-backdrop=static> <div class=modal-dialog ng-class=self.ngClass role=document> <div class=modal-content> <div class=modal-header> <button type=button class=close data-dismiss=modal aria-label=Close ng-click=self.modalClose()> <span aria-hidden=true>&times;</span> </button> <h3 class=modal-title>New Agent</h3> </div> <div class=modal-body>aksdjflkjasdl</div> </div> </div> </div> ";
+module.exports = "<div class=tabs> <div class=container> <div class=row> <span ng-repeat=\"agent in self.listAgent track by $index\" class=\"badge badge-default badge-labeled\" ng-class=\"{'tab-active': self.curAgentId === agent.idAgent}\" ng-click=self.agentOnClick(agent.idAgent)> <span class=title ng-bind=agent.name></span> <i class=\"fa fa-times icon\"></i> </span> <span class=\"badge badge-success\" style=cursor:pointer data-toggle=modal ng-disabled=self.myDisable data-target=#__tabs__modal__> <i class=\"fa fa-plus\"></i> </span> </div> </div> </div> <div class=\"modal fade\" id=__tabs__modal__ tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true data-backdrop=static> <div class=\"modal-dialog modal-lg\" ng-class=self.ngClass role=document> <div class=modal-content> <div class=modal-header> <button type=button class=close data-dismiss=modal aria-label=Close ng-click=self.modalClose()> <span aria-hidden=true>&times;</span> </button> <h3 class=modal-title>New Agent</h3> </div> <div class=modal-body> <div class=text-success ng-bind=self.sucMsg></div> <div class=text-danger ng-bind=self.errMsg></div> <form> <div class=form-group> <label class=col-form-label>Name</label> <input type=text class=form-control ng-model=self.company.name /> </div> <div class=form-group> <label class=col-form-label>IP</label> <input type=text class=form-control ng-model=self.company.description /> </div> <div class=form-group> <label class=col-form-label>Port</label> <input type=text class=form-control ng-model=self.company.location /> </div> <div class=form-group> <label class=col-form-label>Description</label> <input type=text class=form-control ng-model=self.company.location /> </div> <div class=form-group> <label class=col-form-label>Type</label> <input type=text class=form-control ng-model=self.company.location /> </div> </form> <div class=modal-footer> <button type=button class=\"btn btn-primary\" ng-click=self.onSubmit()> SUBMIT </button> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 
