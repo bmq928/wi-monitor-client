@@ -36072,6 +36072,25 @@ module.exports = angular;
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/app/app.style.scss":
+/*!**************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/sass-loader/lib/loader.js!./src/components/app/app.style.scss ***!
+  \**************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/breadcrumb/breadcrumb.style.scss":
 /*!****************************************************************************************************************************!*\
   !*** ./node_modules/css-loader!./node_modules/sass-loader/lib/loader.js!./src/components/breadcrumb/breadcrumb.style.scss ***!
@@ -36757,6 +36776,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libs */ "./src/libs/index.js");
 /* harmony import */ var _app_template_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.template.html */ "./src/components/app/app.template.html");
 /* harmony import */ var _app_template_html__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_app_template_html__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _app_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./app.style.scss */ "./src/components/app/app.style.scss");
+/* harmony import */ var _app_style_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_app_style_scss__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 var name = 'app';
@@ -36820,6 +36842,36 @@ function controller(agent, events) {
 
 /***/ }),
 
+/***/ "./src/components/app/app.style.scss":
+/*!*******************************************!*\
+  !*** ./src/components/app/app.style.scss ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/sass-loader/lib/loader.js!./app.style.scss */ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./src/components/app/app.style.scss");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./src/components/app/app.template.html":
 /*!**********************************************!*\
   !*** ./src/components/app/app.template.html ***!
@@ -36827,7 +36879,7 @@ function controller(agent, events) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <tabs list-agent=self.agents agent-on-click=self.agentTabOnClick cur-agent-id=self.curAgentId></tabs> <div ui-view></div> </div> </div> </div> ";
+module.exports = "<div id=main-wrapper> <sidebar handle-view-click=self.changeView cur-view=self.curView></sidebar> <div class=page-wrapper> <div class=container-fluid> <navbar cur-view=self.curView></navbar> <tabs list-agent=self.agents agent-on-click=self.agentTabOnClick cur-agent-id=self.curAgentId></tabs> <div class=view><div ui-view></div></div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -37312,7 +37364,13 @@ function controller(events, cpu) {
       self.idAgent = id;
     }); //data
 
-    self.data = {};
+    self.data = {}; //breadcrumb
+
+    self.breadcrumb = [{
+      path: 'sdalkf'
+    }, {
+      path: 'sdalkfd'
+    }];
   }
 
   function init() {
@@ -37339,7 +37397,7 @@ function controller(events, cpu) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = " <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div> ";
+module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 
@@ -37472,6 +37530,18 @@ function controller(events, interfaces) {
     });
   };
 
+  self.showSummary = function () {
+    self.curView = self.listView.summary;
+  };
+
+  self.showConnections = function () {
+    self.curView = self.listView.connections;
+  };
+
+  self.showChart = function () {
+    self.curView = self.listView.chart;
+  };
+
   function preProcess() {
     //agent
     self.idAgent = -1;
@@ -37479,12 +37549,33 @@ function controller(events, interfaces) {
       self.idAgent = id;
     }); //data
 
-    self.data = {};
+    self.data = {}; //breadcrumb
+
+    self.breadcrumb = [{
+      path: 'summary',
+      func: self.showSummary
+    }, {
+      path: 'connections',
+      func: self.showConnections
+    }, {
+      path: 'chart',
+      func: self.showChart
+    }]; //current view
+
+    self.listView = {
+      summary: 'summary',
+      connections: 'connections',
+      chart: 'chart'
+    };
+    self.curView = self.listView.summary;
   }
 
   function init() {
     interfaces.interfaceInfo(self.idAgent).then(function (data) {
       self.data = data;
+      console.log({
+        'self.data': self.data
+      });
     }).catch(function (err) {
       console.error('err from interfaces');
       console.error(err);
@@ -37503,7 +37594,7 @@ function controller(events, interfaces) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div> ";
+module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === self.listView.summary\"> <thead> <tr> <th>IFace</th> <th>Ipv4</th> <th>Ipv6</th> <th>Mac</th> <th>Internal</th> </tr> </thead> <tbody> <tr ng-repeat=\"i in self.data.summary track by $index\"> <td ng-bind=i.iface></td> <td ng-bind=i.ip4></td> <td ng-bind=i.ip6></td> <td ng-bind=i.mac></td> <td ng-bind=i.internal></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === self.listView.connections\"> <thead> <tr> <th>Protocol</th> <th>Local Address</th> <th>Local Port</th> <th>Peer Address</th> <th>Peer Port</th> <th>State</th> </tr> </thead> <tbody> <tr ng-repeat=\"i in self.data.connections track by $index\"> <td ng-bind=i.protocol></td> <td ng-bind=i.localaddress></td> <td ng-bind=i.localport></td> <td ng-bind=i.peeraddress></td> <td ng-bind=i.peerport></td> <td ng-bind=i.state></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 

@@ -1,5 +1,6 @@
 import { ComponentSchema } from '../../libs'
 import template from './app.template.html'
+import './app.style.scss'
 
 const name = 'app'
 

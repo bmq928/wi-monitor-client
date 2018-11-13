@@ -26,6 +26,15 @@ function controller(events, cpu) {
     })
     //data
     self.data = {}
+    
+    //breadcrumb
+    self.breadcrumb = [
+      {
+        path: 'sdalkf'
+      },{
+        path: 'sdalkfd'
+      }
+    ]
   }
 
   function init() {

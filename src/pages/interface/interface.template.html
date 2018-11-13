@@ -1,12 +1,80 @@
-<div class="row">
-  <!-- column -->
+<breadcrumb path-and-func="self.breadcrumb"></breadcrumb>
+
+<!-- <div class="row">
   <div class="col-sm-12">
     <div class="card">
       <div class="card-block">
         <div class="table-responsive">
-          <pre>{{self.data | json:spacing}}</pre>
+          <pre>{{ self.data | json: spacing }}</pre>
         </div>
       </div>
     </div>
+  </div>
+</div> -->
+
+
+
+<div class="row">
+  <!-- column -->
+  <div class="col-sm-12">
+      <div class="card">
+          <div class="card-block">
+              <div class="table-responsive">
+
+
+<!--============================ SUMMARY =============================-->
+
+
+                  <table class="table" ng-if="self.curView === self.listView.summary">
+                      <thead>
+                          <tr>
+                              <th>IFace</th>
+                              <th>Ipv4</th>
+                              <th>Ipv6</th>
+                              <th>Mac</th>
+                              <th>Internal</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr ng-repeat="i in self.data.summary track by $index">
+                              <td ng-bind="i.iface"></td>
+                              <td ng-bind="i.ip4"></td>
+                              <td ng-bind="i.ip6"></td>
+                              <td ng-bind="i.mac"></td>
+                              <td ng-bind="i.internal"></td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+
+<!--======================== CONNECTION ==========================-->
+
+
+                  <table class="table" ng-if="self.curView === self.listView.connections">
+                    <thead>
+                        <tr>
+                            <th>Protocol</th>
+                            <th>Local Address</th>
+                            <th>Local Port</th>
+                            <th>Peer Address</th>
+                            <th>Peer Port</th>
+                            <th>State</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="i in self.data.connections track by $index">
+                            <td ng-bind="i.protocol"></td>
+                            <td ng-bind="i.localaddress"></td>
+                            <td ng-bind="i.localport"></td>
+                            <td ng-bind="i.peeraddress"></td>
+                            <td ng-bind="i.peerport"></td>
+                            <td ng-bind="i.state"></td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+          </div>
+      </div>
   </div>
 </div>
