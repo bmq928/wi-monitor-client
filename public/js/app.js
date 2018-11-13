@@ -37781,6 +37781,23 @@ function controller(events, agent) {
     });
   };
 
+  self.showSummary = function () {
+    self.curView = self.listView.summary;
+  };
+
+  self.showOs = function () {
+    self.curView = self.listView.os;
+  };
+
+  self.showVersion = function () {
+    self.curView = self.listView.version;
+  };
+
+  self.keys = function (obj) {
+    if (!obj) return [];
+    return Object.keys(obj);
+  };
+
   function preProcess() {
     //agent
     self.idAgent = -1;
@@ -37788,15 +37805,32 @@ function controller(events, agent) {
       self.idAgent = id;
     }); //data
 
-    self.data = {};
+    self.data = {}; //current view
+
+    self.listView = {
+      summary: 'summary',
+      os: 'os',
+      version: 'version'
+    };
+    self.curView = self.listView.summary; //breadcrumb
+
+    self.breadcrumb = [{
+      path: self.listView.summary,
+      func: self.showSummary
+    }, {
+      path: self.listView.os,
+      func: self.showOs
+    }, {
+      path: self.listView.version,
+      func: self.showVersion
+    }];
   }
 
   function init() {
     agent.agentInfo(self.idAgent).then(function (data) {
-      return self.data = data;
-    }).catch(function (err) {
-      console.error('error from system');
-      console.error(err);
+      self.data = data; // console.log({ 'self.data': self.data })
+    }).catch(function (err) {// console.error('error from system')
+      // console.error(err)
     });
   } // function findCurrentMemInfo() {
   //     return self.allServer.map(({serverName, fields}) => {
@@ -37817,7 +37851,7 @@ function controller(events, agent) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <pre>{{self.data | json:spacing}}</pre> </div> </div> </div> </div> </div>";
+module.exports = "<breadcrumb path-and-func=self.breadcrumb></breadcrumb> <div class=row> <div class=col-sm-12> <div class=card> <div class=card-block> <div class=table-responsive> <table class=table ng-if=\"self.curView === self.listView.summary\"> <thead> <tr> <th>Create</th> <th>Desc</th> <th>Frequency</th> <th>IdAgent</th> <th>IP</th> <th>Name</th> <th>Port</th> <th>Status</th> <th>Token</th> <th>Type</th> <th>Update</th> <th>Watching</th> </tr> </thead> <tbody> <tr> <td ng-bind=\"self.data.createdAt | date:'yyyy-MM-dd HH:mm:ss'\"></td> <td ng-bind=self.data.description></td> <td ng-bind=self.data.frequency></td> <td ng-bind=self.data.idAgent></td> <td ng-bind=self.data.ip></td> <td ng-bind=self.data.name></td> <td ng-bind=self.data.port></td> <td ng-bind=self.data.status></td> <td ng-bind=self.data.token></td> <td ng-bind=self.data.type></td> <td ng-bind=\"self.data.updatedAt | date:'yyyy-MM-dd HH:mm:ss'\"></td> <td ng-bind=self.data.watching></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === self.listView.os\"> <thead> <tr> <th>Arch</th> <th>CodeName</th> <th>Distro</th> <th>Hostname</th> <th>Kernel</th> <th>Logofile</th> <th>Platform</th> <th>Release</th> </tr> </thead> <tbody> <tr> <td ng-bind=self.data.agent_infos[0].os.arch></td> <td ng-bind=self.data.agent_infos[0].os.codename></td> <td ng-bind=self.data.agent_infos[0].os.distro></td> <td ng-bind=self.data.agent_infos[0].os.hostname></td> <td ng-bind=self.data.agent_infos[0].os.kernel></td> <td ng-bind=self.data.agent_infos[0].os.logofile></td> <td ng-bind=self.data.agent_infos[0].os.platform></td> <td ng-bind=self.data.agent_infos[0].os.release></td> </tr> </tbody> </table> <table class=table ng-if=\"self.curView === self.listView.version\"> <thead> <tr> <th>Name</th> <th>Version</th> </tr> </thead> <tbody> <tr ng-repeat=\"i in self.keys(self.data.agent_infos[0].versions) track by $index\"> <td ng-bind=i></td> <td ng-bind=self.data.agent_infos[0].versions[i]></td> </tr> </tbody> </table> </div> </div> </div> </div> </div> ";
 
 /***/ }),
 

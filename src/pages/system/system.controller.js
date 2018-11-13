@@ -17,6 +17,24 @@ function controller(events, agent) {
     })
   }
 
+  self.showSummary = function() {
+    self.curView = self.listView.summary
+  }
+
+  self.showOs = function() {
+    self.curView = self.listView.os
+  }
+
+  self.showVersion = function() {
+    self.curView = self.listView.version
+  }
+
+  self.keys = function(obj) {
+    if(!obj) return []
+
+    return Object.keys(obj)
+  }
+
   function preProcess() {
     //agent
     self.idAgent = -1
@@ -26,15 +44,42 @@ function controller(events, agent) {
 
     //data
     self.data = {}
+
+    //current view
+    self.listView = {
+      summary: 'summary',
+      os: 'os',
+      version: 'version'
+    }
+    self.curView = self.listView.summary
+
+    //breadcrumb
+    self.breadcrumb = [
+      {
+        path: self.listView.summary,
+        func: self.showSummary
+      },
+      {
+        path: self.listView.os,
+        func: self.showOs
+      },
+      {
+        path: self.listView.version,
+        func: self.showVersion
+      }
+    ]
   }
 
   function init() {
     agent
       .agentInfo(self.idAgent)
-      .then(data => self.data = data)
+      .then(data => {
+        self.data = data
+        // console.log({ 'self.data': self.data })
+      })
       .catch(err => {
-        console.error('error from system')
-        console.error(err)
+        // console.error('error from system')
+        // console.error(err)
       })
   }
 
